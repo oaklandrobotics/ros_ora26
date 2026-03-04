@@ -178,6 +178,7 @@
 
       <!-- limits -->
       <max_linear_acceleration>2.0</max_linear_acceleration>
+      <min_linear_acceleration>-2.0</min_linear_acceleration>
 
       <!-- input -->
       <topic>/demo/cmd_vel</topic>

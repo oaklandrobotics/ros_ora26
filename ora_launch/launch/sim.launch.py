@@ -16,9 +16,13 @@ from ros_gz_sim.actions import GzServer
 
 def generate_launch_description():
   # Packages for launching
-  launch_pkg_share = get_package_share_directory('ora_launch')
   desc_pkg_share = get_package_share_directory('ora_description')
+
+  # This package is located at '/opt/ros/jazzy/ros_gz_sim/'
   ros_gz_sim_share = get_package_share_directory('ros_gz_sim')
+
+  # This package share is currently unused
+  #launch_pkg_share = get_package_share_directory('ora_launch')
   
   # Gazebo files
   world_path = os.path.join(desc_pkg_share, 'worlds', 'igvc_world.sdf')
@@ -53,6 +57,7 @@ def generate_launch_description():
     create_own_container='True',
     use_composition='True',
   )
+  
   ros_gz_bridge = RosGzBridge(
       bridge_name='ros_gz_bridge',
       config_file=bridge_config_path,
@@ -60,6 +65,7 @@ def generate_launch_description():
       create_own_container='False',
       use_composition='True',
   )
+
   spawn_entity = IncludeLaunchDescription(
       PythonLaunchDescriptionSource(gz_spawn_model_launch_source),
       launch_arguments={

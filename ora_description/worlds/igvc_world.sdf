@@ -9,14 +9,10 @@
     <plugin name='gz::sim::systems::UserCommands' filename='gz-sim-user-commands-system'/>
     <plugin name='gz::sim::systems::SceneBroadcaster' filename='gz-sim-scene-broadcaster-system'/>
     <plugin name='gz::sim::systems::Contact' filename='gz-sim-contact-system'/>
-    <plugin
-      filename="gz-sim-sensors-system"
-      name="gz::sim::systems::Sensors">
+    <plugin name='gz::sim::systems::Sensors' filename='gz-sim-sensors-system'>
       <render_engine>ogre2</render_engine>
     </plugin>
-    <plugin filename="gz-sim-imu-system"
-        name="gz::sim::systems::Imu">
-    </plugin>
+    <plugin name='gz::sim::systems::Imu' filename='gz-sim-imu-system'/>
     <gravity>0 0 -9.8000000000000007</gravity>
     <magnetic_field>5.5644999999999998e-06 2.2875799999999999e-05 -4.2388400000000002e-05</magnetic_field>
     <atmosphere type='adiabatic'/>
@@ -74,671 +70,101 @@
       <pose>0 0 0 0 0 0</pose>
       <self_collide>false</self_collide>
     </model>
-    <model name='Construction Barrel'>
-      <link name='link'>
-        <inertial>
-          <pose>0 0 0.40000000000000002 0 0 0</pose>
-          <mass>500</mass>
-          <inertia>
-            <ixx>51.209600000000002</ixx>
-            <iyy>51.209600000000002</iyy>
-            <izz>25</izz>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyz>0</iyz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <pose>0 0 0 0 0 0</pose>
-        <enable_wind>false</enable_wind>
-      </link>
-      <pose>0.82894492149346632 -3.7871732711792028 -5.1692453887533106e-08 3.2653684626391673e-07 -1.6779076135929261e-06 -0.071642802972097033</pose>
-      <static>false</static>
-      <self_collide>false</self_collide>
-    </model>
-    <model name='Construction Barrel_0'>
-      <link name='link'>
-        <inertial>
-          <pose>0 0 0.40000000000000002 0 0 0</pose>
-          <mass>500</mass>
-          <inertia>
-            <ixx>51.209600000000002</ixx>
-            <iyy>51.209600000000002</iyy>
-            <izz>25</izz>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyz>0</iyz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <pose>0 0 0 0 0 0</pose>
-        <enable_wind>false</enable_wind>
-      </link>
-      <pose>3.5435245037078613 -3.6146669387817632 -3.9997925497189122e-07 5.9892208924939326e-07 -4.9239663910625004e-07 -0.036135401293406019</pose>
-      <static>false</static>
-      <self_collide>false</self_collide>
-    </model>
-    <model name='Construction Barrel_1'>
-      <link name='link'>
-        <inertial>
-          <pose>0 0 0.40000000000000002 0 0 0</pose>
-          <mass>500</mass>
-          <inertia>
-            <ixx>51.209600000000002</ixx>
-            <iyy>51.209600000000002</iyy>
-            <izz>25</izz>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyz>0</iyz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <pose>0 0 0 0 0 0</pose>
-        <enable_wind>false</enable_wind>
-      </link>
-      <pose>-0.30774520337256278 -3.5079454160353163 -1.1823231491646255e-07 4.8949542791574528e-08 -6.3492295399756162e-08 -0.059055328822226742</pose>
-      <static>false</static>
-      <self_collide>false</self_collide>
-    </model>
-    <model name='Construction Barrel_2'>
-      <link name='link'>
-        <inertial>
-          <pose>0 0 0.40000000000000002 0 0 0</pose>
-          <mass>500</mass>
-          <inertia>
-            <ixx>51.209600000000002</ixx>
-            <iyy>51.209600000000002</iyy>
-            <izz>25</izz>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyz>0</iyz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <pose>0 0 0 0 0 0</pose>
-        <enable_wind>false</enable_wind>
-      </link>
-      <pose>-1.2518587829529151 -4.2396629426244612 -1.1706574240765507e-07 5.5881638899449312e-08 -7.8606006160291897e-08 -0.13533747136105015</pose>
-      <static>false</static>
-      <self_collide>false</self_collide>
-    </model>
-    <model name='Construction Barrel_3'>
-      <link name='link'>
-        <inertial>
-          <pose>0 0 0.40000000000000002 0 0 0</pose>
-          <mass>500</mass>
-          <inertia>
-            <ixx>51.209600000000002</ixx>
-            <iyy>51.209600000000002</iyy>
-            <izz>25</izz>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyz>0</iyz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <pose>0 0 0 0 0 0</pose>
-        <enable_wind>false</enable_wind>
-      </link>
-      <pose>-1.4375308746252442 -2.9139285080900503 -8.2791007681860363e-07 7.4873683904466822e-07 -9.8454555916183882e-07 0.047672626271119477</pose>
-      <static>false</static>
-      <self_collide>false</self_collide>
-    </model>
-    <model name='Construction Barrel_4'>
-      <link name='link'>
-        <inertial>
-          <pose>0 0 0.40000000000000002 0 0 0</pose>
-          <mass>500</mass>
-          <inertia>
-            <ixx>51.209600000000002</ixx>
-            <iyy>51.209600000000002</iyy>
-            <izz>25</izz>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyz>0</iyz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <pose>0 0 0 0 0 0</pose>
-        <enable_wind>false</enable_wind>
-      </link>
-      <pose>4.6320524215698207 -3.8547353744506889 -9.7778092011824428e-08 1.5111805195383789e-07 -1.1411625318449238e-07 0.003065110763818023</pose>
-      <static>false</static>
-      <self_collide>false</self_collide>
-    </model>
-    <model name='Construction Barrel_5'>
-      <link name='link'>
-        <inertial>
-          <pose>0 0 0.40000000000000002 0 0 0</pose>
-          <mass>500</mass>
-          <inertia>
-            <ixx>51.209600000000002</ixx>
-            <iyy>51.209600000000002</iyy>
-            <izz>25</izz>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyz>0</iyz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <pose>0 0 0 0 0 0</pose>
-        <enable_wind>false</enable_wind>
-      </link>
-      <pose>5.7027723820199663 -4.0634145160286197 -3.9345996616656973e-07 2.4650274923585332e-07 -1.1123121111789722e-07 -0.035713819097621821</pose>
-      <static>false</static>
-      <self_collide>false</self_collide>
-    </model>
-    <model name='Construction Barrel_6'>
-      <link name='link'>
-        <inertial>
-          <pose>0 0 0.40000000000000002 0 0 0</pose>
-          <mass>500</mass>
-          <inertia>
-            <ixx>51.209600000000002</ixx>
-            <iyy>51.209600000000002</iyy>
-            <izz>25</izz>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyz>0</iyz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <pose>0 0 0 0 0 0</pose>
-        <enable_wind>false</enable_wind>
-      </link>
-      <pose>6.990838051087418 -3.9160885811021053 -3.8999652823115506e-07 1.2701657406083142e-06 -1.046887794373159e-06 0.39015301659034662</pose>
-      <static>false</static>
-      <self_collide>false</self_collide>
-    </model>
-    <model name='Construction Barrel_7'>
-      <link name='link'>
-        <inertial>
-          <pose>0 0 0.40000000000000002 0 0 0</pose>
-          <mass>500</mass>
-          <inertia>
-            <ixx>51.209600000000002</ixx>
-            <iyy>51.209600000000002</iyy>
-            <izz>25</izz>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyz>0</iyz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <pose>0 0 0 0 0 0</pose>
-        <enable_wind>false</enable_wind>
-      </link>
-      <pose>5.0015652333013811 -1.3788674593561772 -3.8744746170063513e-11 1.7511582433241389e-11 -3.209388390952656e-11 5.7306049695438047e-20</pose>
-      <static>false</static>
-      <self_collide>false</self_collide>
-    </model>
-    <model name='Construction Barrel_8'>
-      <link name='link'>
-        <inertial>
-          <pose>0 0 0.40000000000000002 0 0 0</pose>
-          <mass>500</mass>
-          <inertia>
-            <ixx>51.209600000000002</ixx>
-            <iyy>51.209600000000002</iyy>
-            <izz>25</izz>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyz>0</iyz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <pose>0 0 0 0 0 0</pose>
-        <enable_wind>false</enable_wind>
-      </link>
-      <pose>0.54911936964161168 -0.94819235980579419 -3.8744746170063513e-11 1.7511582444405597e-11 -3.2093883910637141e-11 5.849826908260001e-20</pose>
-      <static>false</static>
-      <self_collide>false</self_collide>
-    </model>
-    <model name='Construction Barrel_9'>
-      <link name='link'>
-        <inertial>
-          <pose>0 0 0.40000000000000002 0 0 0</pose>
-          <mass>500</mass>
-          <inertia>
-            <ixx>51.209600000000002</ixx>
-            <iyy>51.209600000000002</iyy>
-            <izz>25</izz>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyz>0</iyz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <pose>0 0 0 0 0 0</pose>
-        <enable_wind>false</enable_wind>
-      </link>
-      <pose>3.6683045584650995 1.4488076916977657 -1.1831306603949644e-07 7.3755854051542592e-08 -1.1021725422868308e-07 0.024033909339615966</pose>
-      <static>false</static>
-      <self_collide>false</self_collide>
-    </model>
-    <model name='Construction Barrel_10'>
-      <link name='link'>
-        <inertial>
-          <pose>0 0 0.40000000000000002 0 0 0</pose>
-          <mass>500</mass>
-          <inertia>
-            <ixx>51.209600000000002</ixx>
-            <iyy>51.209600000000002</iyy>
-            <izz>25</izz>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyz>0</iyz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <pose>0 0 0 0 0 0</pose>
-        <enable_wind>false</enable_wind>
-      </link>
-      <pose>4.7537932560996436 1.3676997706528748 -8.7293290597967764e-07 3.5287391864022539e-07 -3.7683034763807702e-07 -0.0043203719852832126</pose>
-      <static>false</static>
-      <self_collide>false</self_collide>
-    </model>
-    <model name='Construction Barrel_11'>
-      <link name='link'>
-        <inertial>
-          <pose>0 0 0.40000000000000002 0 0 0</pose>
-          <mass>500</mass>
-          <inertia>
-            <ixx>51.209600000000002</ixx>
-            <iyy>51.209600000000002</iyy>
-            <izz>25</izz>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyz>0</iyz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <pose>0 0 0 0 0 0</pose>
-        <enable_wind>false</enable_wind>
-      </link>
-      <pose>5.8637589320961068 1.3336624544694686 -8.5864539652283654e-07 2.5227325272037787e-07 -4.40188955183764e-07 -0.0016419971789411506</pose>
-      <static>false</static>
-      <self_collide>false</self_collide>
-    </model>
-    <model name='Construction Barrel_12'>
-      <link name='link'>
-        <inertial>
-          <pose>0 0 0.40000000000000002 0 0 0</pose>
-          <mass>500</mass>
-          <inertia>
-            <ixx>51.209600000000002</ixx>
-            <iyy>51.209600000000002</iyy>
-            <izz>25</izz>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyz>0</iyz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <pose>0 0 0 0 0 0</pose>
-        <enable_wind>false</enable_wind>
-      </link>
-      <pose>3.8661973475167697 3.8077561854897257 -7.7025150161812928e-07 1.6524637612978616e-07 -1.7792677087441275e-07 0.0010585602546580065</pose>
-      <static>false</static>
-      <self_collide>false</self_collide>
-    </model>
-    <model name='Construction Barrel_13'>
-      <link name='link'>
-        <inertial>
-          <pose>0 0 0.40000000000000002 0 0 0</pose>
-          <mass>500</mass>
-          <inertia>
-            <ixx>51.209600000000002</ixx>
-            <iyy>51.209600000000002</iyy>
-            <izz>25</izz>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyz>0</iyz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <pose>0 0 0 0 0 0</pose>
-        <enable_wind>false</enable_wind>
-      </link>
-      <pose>2.7456431388836422 3.7332344055161473 -1.443807121565249e-07 1.4280476663241167e-07 -2.1507248770098769e-07 0.0033589709118325957</pose>
-      <static>false</static>
-      <self_collide>false</self_collide>
-    </model>
-    <model name='Construction Barrel_14'>
-      <link name='link'>
-        <inertial>
-          <pose>0 0 0.40000000000000002 0 0 0</pose>
-          <mass>500</mass>
-          <inertia>
-            <ixx>51.209600000000002</ixx>
-            <iyy>51.209600000000002</iyy>
-            <izz>25</izz>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyz>0</iyz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <pose>0 0 0 0 0 0</pose>
-        <enable_wind>false</enable_wind>
-      </link>
-      <pose>1.6754000186920042 3.6899700164794864 -2.6332918592831224e-07 1.9719715288823439e-07 -4.9963959786233652e-07 0.0017455400959019479</pose>
-      <static>false</static>
-      <self_collide>false</self_collide>
-    </model>
-    <model name='Construction Barrel_15'>
-      <link name='link'>
-        <inertial>
-          <pose>0 0 0.40000000000000002 0 0 0</pose>
-          <mass>500</mass>
-          <inertia>
-            <ixx>51.209600000000002</ixx>
-            <iyy>51.209600000000002</iyy>
-            <izz>25</izz>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyz>0</iyz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <pose>0 0 0 0 0 0</pose>
-        <enable_wind>false</enable_wind>
-      </link>
-      <pose>0.56876951455962121 3.6149520874013779 -4.3559315880029131e-07 6.2533038541782237e-07 -7.2220348225926681e-07 0.0013555700179013292</pose>
-      <static>false</static>
-      <self_collide>false</self_collide>
-    </model>
-    <model name='Construction Barrel_16'>
-      <link name='link'>
-        <inertial>
-          <pose>0 0 0.40000000000000002 0 0 0</pose>
-          <mass>500</mass>
-          <inertia>
-            <ixx>51.209600000000002</ixx>
-            <iyy>51.209600000000002</iyy>
-            <izz>25</izz>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyz>0</iyz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <pose>0 0 0 0 0 0</pose>
-        <enable_wind>false</enable_wind>
-      </link>
-      <pose>-0.23307131955753868 2.9599118459290672 -3.9803615629181351e-07 2.4958391198998589e-07 -1.362202628238715e-07 -0.00032013792516141602</pose>
-      <static>false</static>
-      <self_collide>false</self_collide>
-    </model>
-    <model name='Construction Barrel_17'>
-      <link name='link'>
-        <inertial>
-          <pose>0 0 0.40000000000000002 0 0 0</pose>
-          <mass>500</mass>
-          <inertia>
-            <ixx>51.209600000000002</ixx>
-            <iyy>51.209600000000002</iyy>
-            <izz>25</izz>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyz>0</iyz>
-          </inertia>
-        </inertial>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>https://fuel.gazebosim.org/1.0/openrobotics/models/construction barrel/4/files/meshes/construction_barrel.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <pose>0 0 0 0 0 0</pose>
-        <enable_wind>false</enable_wind>
-      </link>
-      <pose>-0.34188985846349912 4.2109475134425978 -8.76475028053858e-07 2.3531172919860226e-07 -4.2642900727434977e-07 -0.0023164995670753707</pose>
-      <static>false</static>
-      <self_collide>false</self_collide>
-    </model>
+    <include>
+      <uri>model://construction_barrel_simple_collision</uri>
+      <name>Construction Barrel_14</name>
+      <pose>2.2739500999450684 -2.518712043762207 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://construction_barrel_simple_collision</uri>
+      <name>Construction Barrel_15</name>
+      <pose>0.012034299783408642 -2.5594077110290527 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://construction_barrel_simple_collision</uri>
+      <name>Construction Barrel_16</name>
+      <pose>-2.576970100402832 -2.6403088569641113 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://construction_barrel_simple_collision</uri>
+      <name>Construction Barrel</name>
+      <pose>-2.8092402456475334 1.5247737058747231 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://construction_barrel_simple_collision</uri>
+      <name>Construction Barrel_0</name>
+      <pose>0.064790401555457677 1.5035301697993253 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://construction_barrel_simple_collision</uri>
+      <name>Construction Barrel_1</name>
+      <pose>2.4214716418158879 1.381447312996583 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://construction_barrel_simple_collision</uri>
+      <name>Construction Barrel_2</name>
+      <pose>5.918790740848701 0.37145520981621483 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://construction_barrel_simple_collision</uri>
+      <name>Construction Barrel_3</name>
+      <pose>7.7994563489413835 -2.4048667868682139 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://construction_barrel_simple_collision</uri>
+      <name>Construction Barrel_4</name>
+      <pose>7.0904139753966184 -6.1354870482145163 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://construction_barrel_simple_collision</uri>
+      <name>Construction Barrel_5</name>
+      <pose>4.5289036330345382 -8.3610377000417095 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://construction_barrel_simple_collision</uri>
+      <name>Construction Barrel_6</name>
+      <pose>1.090607552669189 -8.3401741766760882 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://construction_barrel_simple_collision</uri>
+      <name>Construction Barrel_7</name>
+      <pose>-2.2360473565992631 -7.9792754641436243 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://construction_barrel_simple_collision</uri>
+      <name>Construction Barrel_8</name>
+      <pose>-6.2776150018163337 -5.9289075923848014 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://construction_barrel_simple_collision</uri>
+      <name>Construction Barrel_9</name>
+      <pose>-8.3192286865269516 -2.7548176631546122 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://construction_barrel_simple_collision</uri>
+      <name>Construction Barrel_10</name>
+      <pose>-8.6299516159588379 1.6250471308545833 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://construction_barrel_simple_collision</uri>
+      <name>Construction Barrel_11</name>
+      <pose>-8.5606816393983216 5.8986888039361949 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://construction_barrel_simple_collision</uri>
+      <name>Construction Barrel_12</name>
+      <pose>-5.665417467371979 7.9834226855834718 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://construction_barrel_simple_collision</uri>
+      <name>Construction Barrel_13</name>
+      <pose>-1.9384172957360235 8.1742490095238356 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://construction_barrel_simple_collision</uri>
+      <name>Construction Barrel_17</name>
+      <pose>2.3304797811121212 7.954652082603098 0 0 0 0</pose>
+    </include>
     <light name='sun' type='directional'>
       <pose>0 0 10 0 0 0</pose>
       <cast_shadows>true</cast_shadows>

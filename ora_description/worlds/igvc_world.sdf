@@ -71,99 +71,169 @@
       <self_collide>false</self_collide>
     </model>
     <include>
-      <uri>model://construction_barrel_simple_collision</uri>
-      <name>Construction Barrel_14</name>
-      <pose>2.2739500999450684 -2.518712043762207 0 0 0 0</pose>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/lane_straight_pair_6m</uri>
+      <name>Lane Straight Pair 6m</name>
+      <pose>-4.9743023760252161 -7.9543228653201172 0 0 0 0</pose>
     </include>
     <include>
-      <uri>model://construction_barrel_simple_collision</uri>
-      <name>Construction Barrel_15</name>
-      <pose>0.012034299783408642 -2.5594077110290527 0 0 0 0</pose>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/lane_curve_pair_2m</uri>
+      <name>Lane Curve Pair 2m</name>
+      <pose>-1.8596299886703491 -4.9635100364685059 0 0 0 -1.5878100345629131</pose>
     </include>
     <include>
-      <uri>model://construction_barrel_simple_collision</uri>
-      <name>Construction Barrel_16</name>
-      <pose>-2.576970100402832 -2.6403088569641113 0 0 0 0</pose>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/lane_curve_pair_2m</uri>
+      <name>Lane Curve Pair 2m_0</name>
+      <pose>5.151710033416748 -4.9176301956176758 0 0 0 1.5749499858617302</pose>
     </include>
     <include>
-      <uri>model://construction_barrel_simple_collision</uri>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/lane_curve_pair_2m</uri>
+      <name>Lane Curve Pair 2m_1</name>
+      <pose>5.3723864555358887 2.0842623710632324 0 0 0 -1.5715100415395797</pose>
+    </include>
+    <include>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/lane_curve_pair_2m</uri>
+      <name>Lane Curve Pair 2m_2</name>
+      <pose>5.3652750708257138 2.1312479897817362 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/lane_straight_pair_2m</uri>
+      <name>Lane Straight Pair 2m</name>
+      <pose>4.2250572784419234 6.1160582391792992 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/simple_construction_barrel</uri>
       <name>Construction Barrel</name>
-      <pose>-2.8092402456475334 1.5247737058747231 0 0 0 0</pose>
+      <pose>0.58639429407612731 6.0435475723349548 0 0 0 0</pose>
     </include>
     <include>
-      <uri>model://construction_barrel_simple_collision</uri>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/simple_construction_barrel</uri>
       <name>Construction Barrel_0</name>
-      <pose>0.064790401555457677 1.5035301697993253 0 0 0 0</pose>
+      <pose>0.61198852491298972 5.0320776322510978 0 0 0 0</pose>
     </include>
     <include>
-      <uri>model://construction_barrel_simple_collision</uri>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/simple_construction_barrel</uri>
       <name>Construction Barrel_1</name>
-      <pose>2.4214716418158879 1.381447312996583 0 0 0 0</pose>
+      <pose>-1.9562499125425656 3.1332296910606665 0 0 0 0</pose>
     </include>
     <include>
-      <uri>model://construction_barrel_simple_collision</uri>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/simple_construction_barrel</uri>
       <name>Construction Barrel_2</name>
-      <pose>5.918790740848701 0.37145520981621483 0 0 0 0</pose>
+      <pose>-2.063938711802952 7.8544034418699678 0 0 0 0</pose>
     </include>
     <include>
-      <uri>model://construction_barrel_simple_collision</uri>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/simple_construction_barrel</uri>
       <name>Construction Barrel_3</name>
-      <pose>7.7994563489413835 -2.4048667868682139 0 0 0 0</pose>
+      <pose>-4.2875740529908235 6.0398459856191788 0 0 0 0</pose>
     </include>
     <include>
-      <uri>model://construction_barrel_simple_collision</uri>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/simple_construction_barrel</uri>
       <name>Construction Barrel_4</name>
-      <pose>7.0904139753966184 -6.1354870482145163 0 0 0 0</pose>
+      <pose>-4.3507464113368943 5.0252180286821675 0 0 0 0</pose>
     </include>
     <include>
-      <uri>model://construction_barrel_simple_collision</uri>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/simple_construction_barrel</uri>
       <name>Construction Barrel_5</name>
-      <pose>4.5289036330345382 -8.3610377000417095 0 0 0 0</pose>
+      <pose>-6.5006293277725007 3.2757657245021257 0 0 0 0</pose>
     </include>
     <include>
-      <uri>model://construction_barrel_simple_collision</uri>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/simple_construction_barrel</uri>
       <name>Construction Barrel_6</name>
-      <pose>1.090607552669189 -8.3401741766760882 0 0 0 0</pose>
+      <pose>-6.4134112966254264 7.8291542568465875 0 0 0 0</pose>
     </include>
     <include>
-      <uri>model://construction_barrel_simple_collision</uri>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/simple_construction_barrel</uri>
       <name>Construction Barrel_7</name>
-      <pose>-2.2360473565992631 -7.9792754641436243 0 0 0 0</pose>
+      <pose>-9.013859748840332 7.3118419647216797 0 0 0 0</pose>
     </include>
     <include>
-      <uri>model://construction_barrel_simple_collision</uri>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/lane_straight_single_6m</uri>
+      <name>Lane Straight Single 6m</name>
+      <pose>-1.5059652328491211 8.379969596862793 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/lane_straight_single_2m</uri>
+      <name>Lane Straight Single 2m</name>
+      <pose>-5.4587502479553223 8.3792400360107422 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/lane_straight_single_2m</uri>
+      <name>Lane Straight Single 2m_1</name>
+      <pose>-1.578258963538353 8.3844728309346408 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/lane_straight_single_6m</uri>
+      <name>Lane Straight Single 6m_0</name>
+      <pose>-1.283840460016572 2.5739677250667623 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/lane_straight_single_2m</uri>
+      <name>Lane Straight Single 2m_3</name>
+      <pose>-5.3543260887796773 2.563944547939871 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/lane_curve_pair_2m</uri>
+      <name>Lane Curve Pair 2m_3</name>
+      <pose>-9.3193235397338867 1.9721558094024658 0 0 0 1.5851899369630984</pose>
+    </include>
+    <include>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/simple_construction_barrel</uri>
       <name>Construction Barrel_8</name>
-      <pose>-6.2776150018163337 -5.9289075923848014 0 0 0 0</pose>
+      <pose>-9.1473598480224609 3.6684699058532715 0 0 0 0</pose>
     </include>
     <include>
-      <uri>model://construction_barrel_simple_collision</uri>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/simple_construction_barrel</uri>
       <name>Construction Barrel_9</name>
-      <pose>-8.3192286865269516 -2.7548176631546122 0 0 0 0</pose>
+      <pose>2.6355879121326105 -4.2796290970026689 0 0 0 0</pose>
     </include>
     <include>
-      <uri>model://construction_barrel_simple_collision</uri>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/simple_construction_barrel</uri>
       <name>Construction Barrel_10</name>
-      <pose>-8.6299516159588379 1.6250471308545833 0 0 0 0</pose>
+      <pose>3.2367786295229166 -3.2061159172251656 0 0 0 0</pose>
     </include>
     <include>
-      <uri>model://construction_barrel_simple_collision</uri>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/simple_construction_barrel</uri>
       <name>Construction Barrel_11</name>
-      <pose>-8.5606816393983216 5.8986888039361949 0 0 0 0</pose>
+      <pose>6.4345269802572744 -0.3674424867656958 0 0 0 0</pose>
     </include>
     <include>
-      <uri>model://construction_barrel_simple_collision</uri>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/simple_construction_barrel</uri>
       <name>Construction Barrel_12</name>
-      <pose>-5.665417467371979 7.9834226855834718 0 0 0 0</pose>
+      <pose>9.8175564654137322 2.1025644791143288 0 0 0 0</pose>
     </include>
     <include>
-      <uri>model://construction_barrel_simple_collision</uri>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/simple_construction_barrel</uri>
       <name>Construction Barrel_13</name>
-      <pose>-1.9384172957360235 8.1742490095238356 0 0 0 0</pose>
+      <pose>9.6934595477808045 3.2278495026598604 0 0 0 0</pose>
     </include>
     <include>
-      <uri>model://construction_barrel_simple_collision</uri>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/simple_construction_barrel</uri>
+      <name>Construction Barrel_14</name>
+      <pose>-3.4935438632965088 -1.3019000291824341 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/simple_construction_barrel</uri>
+      <name>Construction Barrel_15</name>
+      <pose>-3.5674098825761718 -0.39286215270728975 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/simple_construction_barrel</uri>
+      <name>Construction Barrel_16</name>
+      <pose>-14.963786648015278 0.081172800064652328 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/simple_construction_barrel</uri>
       <name>Construction Barrel_17</name>
-      <pose>2.3304797811121212 7.954652082603098 0 0 0 0</pose>
+      <pose>-11.031359787746917 0.070066492290644877 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/sawhorse</uri>
+      <name>Sawhorse</name>
+      <pose>6.537612362869071 3.9872117059888343 -0.3220026570352244 -3.0582751199476056e-05 -0.45989662883786236 -2.3812854460632491</pose>
+    </include>
+    <include>
+      <uri>file:///home/nolan/Projects/ros_ora26/install/ora_description/share/ora_description/models/sawhorse</uri>
+      <name>Sawhorse_0</name>
+      <pose>-12.657627266041271 5.1725731874992622 -0.32199882771196525 -2.7340617148317268e-05 -0.45989055615538149 2.368573634285644</pose>
     </include>
     <light name='sun' type='directional'>
       <pose>0 0 10 0 0 0</pose>

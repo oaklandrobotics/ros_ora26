@@ -5,6 +5,11 @@ launch:
     name: "world_name"
     default: "igvc_world.sdf"
 
+- executable:
+    cmd: "gz sim -g"
+    name: "Launch gazebo GUI"
+    output: "screen"
+
 # Launch Nodes
 - include:
     file: "$(find-pkg-share ros_gz_sim)/launch/gz_server.launch.py"

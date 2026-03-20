@@ -1,0 +1,22 @@
+# Launch ESP32 IMU Module
+launch:
+# Arguments
+- arg: 
+    name: "device_path"
+    default: "/dev/ttyUSB0"
+- arg:
+    name: "baud_rate"
+    default: "912600"
+
+- node:
+    pkg: "micro_ros_agent"
+    exec: "micro_ros_agent"
+    output: "screen"
+    args: "serial --dev $(var device_path) -b $(var baud_rate)"
+
+- node:
+    pkg: "tf2_ros"
+    exec: "static_transform_publisher"
+    output: "screen"
+    args: "0 0 0 0 0 0 base_link imu_link"
+          # x, y, z, yaw, pitch, roll, parent_frame_id, child_id

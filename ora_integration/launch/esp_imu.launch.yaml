@@ -13,10 +13,3 @@ launch:
     exec: "micro_ros_agent"
     output: "screen"
     args: "serial --dev $(var device_path) -b $(var baud_rate)"
-
-- node:
-    pkg: "tf2_ros"
-    exec: "static_transform_publisher"
-    output: "screen"
-    args: "0 0 0 0 0 0 base_link imu_link"
-          # x, y, z, yaw, pitch, roll, parent_frame_id, child_id

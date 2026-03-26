@@ -106,7 +106,7 @@
       <always_on>true</always_on>
       <update_rate>100</update_rate>
       <visualize>true</visualize>
-      <topic>demo/imu</topic>
+      <topic>sim/imu</topic>
       <gz_frame_id>imu_link</gz_frame_id>
 
       <imu>
@@ -181,10 +181,10 @@
       <min_linear_acceleration>-2.0</min_linear_acceleration>
 
       <!-- input -->
-      <topic>/demo/cmd_vel</topic>
+      <topic>/sim/cmd_vel</topic>
 
       <!-- output -->
-      <odom_topic>/demo/odom</odom_topic>
+      <odom_topic>/sim/odom</odom_topic>
       <tf_topic>/tf</tf_topic>
 
       <frame_id>odom</frame_id>

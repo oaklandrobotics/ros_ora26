@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="https://www.ros.org/wiki/xacro">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
   <xacro:include filename="dimensions.xacro"/>
   <xacro:include filename="inertia_macros.xacro"/>
 
@@ -32,7 +33,7 @@
     <origin xyz="${lidar_x_offset} 0 ${lidar_z_offset}" rpy="0 0 0"/>
   </joint>
 
-  <!-- Lidar Plugin -->
+  <!-- Lidar Gazebo plugin -->
   <gazebo reference="lidar_link">
     <sensor name="lidar" type="gpu_lidar">
       <always_on>true</always_on>
@@ -70,7 +71,6 @@
     </sensor>
   </gazebo>
 
-
   <!-- IMU -->
   <link name="imu_link">
     <inertial>
@@ -100,7 +100,7 @@
     <origin xyz="0 0 0.01" rpy="0 0 0"/>
   </joint>
 
-  <!-- IMU Plugin -->
+  <!-- IMU Gazebo plugin -->
   <gazebo reference="imu_link">
     <sensor name="imu_sensor" type="imu">
       <always_on>true</always_on>
@@ -111,89 +111,97 @@
 
       <imu>
         <angular_velocity>
-          <x>
-            <noise type="gaussian">
-              <mean>0.0</mean>
-              <stddev>2e-4</stddev>
-              <bias_mean>0.0000075</bias_mean>
-              <bias_stddev>0.0000008</bias_stddev>
-            </noise>
-          </x>
-          <y>
-            <noise type="gaussian">
-              <mean>0.0</mean>
-              <stddev>2e-4</stddev>
-              <bias_mean>0.0000075</bias_mean>
-              <bias_stddev>0.0000008</bias_stddev>
-            </noise>
-          </y>
-          <z>
-            <noise type="gaussian">
-                <mean>0.0</mean>
-                <stddev>2e-4</stddev>
-                <bias_mean>0.0000075</bias_mean>
-                <bias_stddev>0.0000008</bias_stddev>
-            </noise>
-          </z>
+          <x><noise type="gaussian"><mean>0.0</mean><stddev>2e-4</stddev><bias_mean>0.0000075</bias_mean><bias_stddev>0.0000008</bias_stddev></noise></x>
+          <y><noise type="gaussian"><mean>0.0</mean><stddev>2e-4</stddev><bias_mean>0.0000075</bias_mean><bias_stddev>0.0000008</bias_stddev></noise></y>
+          <z><noise type="gaussian"><mean>0.0</mean><stddev>2e-4</stddev><bias_mean>0.0000075</bias_mean><bias_stddev>0.0000008</bias_stddev></noise></z>
         </angular_velocity>
-      <linear_acceleration>
-          <x>
-            <noise type="gaussian">
-                <mean>0.0</mean>
-                <stddev>1.7e-2</stddev>
-                <bias_mean>0.1</bias_mean>
-                <bias_stddev>0.001</bias_stddev>
-            </noise>
-          </x>
-          <y>
-            <noise type="gaussian">
-                <mean>0.0</mean>
-                <stddev>1.7e-2</stddev>
-                <bias_mean>0.1</bias_mean>
-                <bias_stddev>0.001</bias_stddev>
-            </noise>
-          </y>
-          <z>
-            <noise type="gaussian">
-                <mean>0.0</mean>
-                <stddev>1.7e-2</stddev>
-                <bias_mean>0.1</bias_mean>
-                <bias_stddev>0.001</bias_stddev>
-            </noise>
-          </z>
+        <linear_acceleration>
+          <x><noise type="gaussian"><mean>0.0</mean><stddev>1.7e-2</stddev><bias_mean>0.1</bias_mean><bias_stddev>0.001</bias_stddev></noise></x>
+          <y><noise type="gaussian"><mean>0.0</mean><stddev>1.7e-2</stddev><bias_mean>0.1</bias_mean><bias_stddev>0.001</bias_stddev></noise></y>
+          <z><noise type="gaussian"><mean>0.0</mean><stddev>1.7e-2</stddev><bias_mean>0.1</bias_mean><bias_stddev>0.001</bias_stddev></noise></z>
         </linear_acceleration>
       </imu>
     </sensor>
   </gazebo>
 
-  <gazebo>
-    <plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">
-      <!-- wheels -->
-      <left_joint>left_wheel_joint</left_joint>
-      <right_joint>right_wheel_joint</right_joint>
+  <!-- USB Camera -->
+  <link name="camera_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.05"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+    </inertial>
 
-      <!-- kinematics -->
-      <wheel_separation>${base_width}</wheel_separation>
-      <wheel_radius>${main_wheel_radius}</wheel_radius>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.04 0.10 0.04"/>  <!-- slightly larger for better visibility in RViz/Gazebo -->
+      </geometry>
+      <material name="black"/>
+    </visual>
 
-      <!-- limits -->
-      <max_linear_acceleration>2.0</max_linear_acceleration>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.04 0.10 0.04"/>
+      </geometry>
+    </collision>
+  </link>
 
-      <!-- input -->
-      <topic>/demo/cmd_vel</topic>
+  <joint name="camera_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_link"/>
+    <!-- Suggested position: forward 20 cm, up 25 cm – adjust based on real mounting -->
+    <origin xyz="0.20 0.0 0.25" rpy="0 0 0"/>
+  </joint>
 
-      <!-- output -->
-      <odom_topic>/demo/odom</odom_topic>
-      <tf_topic>/tf</tf_topic>
+  <!-- Optical frame (ROS standard: z forward, x right, y down) -->
+  <link name="camera_optical_frame"/>
 
-      <frame_id>odom</frame_id>
-      <child_frame_id>base_link</child_frame_id>
-    </plugin>
+  <joint name="camera_optical_joint" type="fixed">
+    <parent link="camera_link"/>
+    <child link="camera_optical_frame"/>
+    <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
+  </joint>
 
-    <plugin
-      filename="gz-sim-joint-state-publisher-system"
-      name="gz::sim::systems::JointStatePublisher">
-      <topic>joint_states</topic>
-    </plugin>
+  <!-- Gazebo camera plugin (for simulation – matches real usb_cam topics) -->
+  <gazebo reference="camera_link">
+    <sensor name="ora_usb_camera" type="camera">
+      <always_on>true</always_on>
+      <visualize>true</visualize>
+      <update_rate>30.0</update_rate>
+      <camera>
+        <horizontal_fov>1.047</horizontal_fov>  <!-- ≈60 deg FOV – common for USB cams; adjust if known -->
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.05</near>
+          <far>100</far>
+        </clip>
+      </camera>
+      <plugin name="ora_camera_plugin" filename="libgazebo_ros_camera.so">
+        <ros>
+          <namespace>/ora_camera</namespace>
+          <remapping>image_raw:=image_raw</remapping>
+          <remapping>camera_info:=camera_info</remapping>
+        </ros>
+        <cameraName>ora_camera</cameraName>
+        <imageTopicName>image_raw</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>camera_optical_frame</frameName>
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <!-- Optional distortion (set to 0 if no calibration yet) -->
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
   </gazebo>
+
 </robot>

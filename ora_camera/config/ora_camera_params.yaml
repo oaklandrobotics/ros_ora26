@@ -1,0 +1,77 @@
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration, TextSubstitution
+from launch_ros.actions import Node
+from ament_index_python.packages import get_package_share_directory
+import os
+
+
+def generate_launch_description():
+    # Get package share directory
+    ora_camera_dir = get_package_share_directory('ora_camera')
+
+    # Launch arguments
+    declare_video_device_cmd = DeclareLaunchArgument(
+        name='video_device',
+        default_value='/dev/video0',
+        description='Path to the video device (e.g., /dev/video0, /dev/video2)'
+    )
+
+    declare_params_file_cmd = DeclareLaunchArgument(
+        name='params_file',
+        default_value=os.path.join(ora_camera_dir, 'config', 'ora_camera_params.yaml'),
+        description='Full path to the ROS2 parameters file to use'
+    )
+
+    declare_use_sim_time_cmd = DeclareLaunchArgument(
+        name='use_sim_time',
+        default_value='false',
+        description='Use simulation (Gazebo) clock if true'
+    )
+
+    # USB camera node
+    usb_cam_node = Node(
+        package='usb_cam',
+        executable='usb_cam_node_exe',
+        name='usb_cam',
+        namespace='ora_camera',
+        output='screen',
+        parameters=[
+            LaunchConfiguration('params_file'),
+            {'use_sim_time': LaunchConfiguration('use_sim_time')}
+        ],
+        remappings=[
+            ('image_raw', 'image_raw'),
+            ('camera_info', 'camera_info')
+        ],
+        arguments=['--ros-args', '--log-level', 'info']
+    )
+
+    # Optional: republish raw → compressed (saves bandwidth, especially over network/VM)
+    compress_node = Node(
+        package='image_transport',
+        executable='republish',
+        name='republish_compressed',
+        namespace='ora_camera',
+        output='screen',
+        arguments=['raw', 'compressed'],
+        remappings=[
+            ('in', '/ora_camera/image_raw'),
+            ('out', '/ora_camera/image_raw/compressed')
+        ],
+        parameters=[{'use_sim_time': LaunchConfiguration('use_sim_time')}],
+        condition=launch.conditions.IfCondition(
+            TextSubstitution(text='true')  # you can make this a launch arg later if you want to disable
+        )
+    )
+
+    # Assemble launch description
+    ld = LaunchDescription()
+
+    ld.add_action(declare_video_device_cmd)
+    ld.add_action(declare_params_file_cmd)
+    ld.add_action(declare_use_sim_time_cmd)
+    ld.add_action(usb_cam_node)
+    ld.add_action(compress_node)
+
+    return ld

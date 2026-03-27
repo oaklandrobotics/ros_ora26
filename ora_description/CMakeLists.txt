@@ -24,9 +24,11 @@ if(BUILD_TESTING)
 endif()
 
 
-install(
-  DIRECTORY description launch include rviz
-  DESTINATION share/${PROJECT_NAME}
+install(DIRECTORY 
+  description 
+  launch 
+  rviz 
+  DESTINATION share/${PROJECT_NAME}/
 )
 
 ament_package()

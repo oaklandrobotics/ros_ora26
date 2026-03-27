@@ -1,0 +1,20 @@
+launch:
+# Launch Arguments
+- arg:
+    name: "use_sim_time"
+    default: "true"
+
+# Launch Nodes
+- include:
+    file: "$(find-pkg-share ora_navigation)/launch/slam_toolbox.launch.yaml"
+    arg:
+      - name: "use_sim_time"
+        value: "$(var use_sim_time)"
+
+# - include:
+#     file: "$(find-pkg-share nav2_bringup)/launch/navigation_launch.py"
+#     arg:
+#       - name: "params_file"
+#         value: "$(find-pkg-share ora_navigation)/config/nav2_params.yaml"
+#       - name: "use_sim_time"
+#         value: "$(var use_sim_time)"

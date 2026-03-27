@@ -1,0 +1,18 @@
+twist_mux:
+  ros__parameters:
+    use_stamped: true
+
+    # Higher Priority -> Takes control over lower priority
+    topics:
+      nav2:
+        topic: cmd_vel_nav
+        timeout: 0.5
+        priority: 70
+      keyboard:
+        topic: cmd_vel_keyboard
+        timeout: 0.5
+        priority: 90
+      joystick:
+        topic: cmd_vel_joy
+        timeout: 0.5
+        priority: 100

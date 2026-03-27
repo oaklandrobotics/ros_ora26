@@ -38,4 +38,19 @@
   <xacro:property name="back_caster_y_offset" value="${26.9875 * cm_to_m}"/>
   <xacro:property name="back_caster_x_offset" value="${33.02 * cm_to_m}"/>
 
+  <!-- Lidar Dimensions -->
+  <xacro:property name="lidar_height" value="${71.7 * mm_to_m}"/>
+  <xacro:property name="lidar_radius" value="${103.3 * mm_to_m / 2}"/>
+
+  <!-- GPS Dimensions -->
+  <xacro:property name="gps_height" value="${20 * mm_to_m}"/>
+  <xacro:property name="gps_radius" value="${50 * mm_to_m / 2}"/>
+
+  <!-- Assorted Offset Values -->
+  <xacro:property name="base_x_offset" value="${(back_caster_x_offset / 4)}"/>
+  <xacro:property name="base_z_offset" value="${back_caster_radius / 4}"/>
+  <xacro:property name="lidar_x_offset" value="${(base_length / 2) - (lidar_radius / 2) + (base_x_offset / 2)}"/>
+  <xacro:property name="lidar_z_offset" value="${(base_height / 2) + (lidar_height / 2) + base_z_offset}"/>
+  <xacro:property name="gps_x_offset" value="${0}"/>
+  <xacro:property name="gps_z_offset" value="${(base_height / 2) + (gps_height / 2) + base_z_offset}"/>
 </robot>

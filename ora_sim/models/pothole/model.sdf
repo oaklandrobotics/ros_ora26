@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<sdf version="1.4">
+  <model name="Pothole">
+    <static>true</static>
+    <link name="link">
+      <collision name="collision">
+        <pose>0 0 -0.002 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.5 0.5 0.001</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="pothole">
+        <pose>0 0 0.001 0 0 0</pose>
+        <cast_shadows>false</cast_shadows>
+        <geometry>
+          <cylinder>
+            <radius>0.305</radius>
+            <length>0.001</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/White</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

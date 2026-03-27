@@ -32,7 +32,7 @@
 
   <link name="chassis_link">
     <visual>
-      <origin xyz="${0 + (back_caster_x_offset / 4)} 0 ${back_caster_radius / 4}" rpy="0 0 0"/>
+      <origin xyz="${base_x_offset} 0 ${base_z_offset}" rpy="0 0 0"/>
       <geometry>
         <box size="${base_length} ${base_width} ${base_height}"/>
       </geometry>
@@ -47,7 +47,7 @@
       </geometry>
     </collision>
 
-    <xacro:inertial_box mass="10.0" x="${base_length}" y="${base_width}" z="${base_height}">
+    <xacro:inertial_box mass="50.0" x="${base_length}" y="${base_width}" z="${base_height}">
       <origin xyz="0 0 0" rpy="0 0 0"/>
     </xacro:inertial_box>
   </link>

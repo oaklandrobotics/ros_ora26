@@ -35,7 +35,7 @@
       <axis xyz="0 1 0"/>
     </joint>
 
-    <gazebo reference="{prefix}_front_caster_link">
+    <gazebo reference="${prefix}_front_caster_link">
       <material>Gazebo/Black</material>
       
       <!-- Frictionless-ish -->
@@ -77,7 +77,7 @@
       <axis xyz="0 1 0"/>
     </joint>
 
-    <gazebo reference="{prefix}_back_caster_link">
+    <gazebo reference="${prefix}_back_caster_link">
       <material>Gazebo/Black</material>
       
       <!-- Frictionless-ish -->

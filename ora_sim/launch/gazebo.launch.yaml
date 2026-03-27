@@ -1,0 +1,50 @@
+# Launch Robot State Publisher
+launch:
+# Launch Arguments
+- arg:
+    name: "world_name"
+    default: "igvc_world.sdf"
+
+- executable:
+    cmd: "gz sim -g"
+    name: "Launch gazebo GUI"
+    output: "screen"
+
+# Launch Nodes
+- include:
+    file: "$(find-pkg-share ros_gz_sim)/launch/gz_server.launch.py"
+    arg:
+      - name: "world_sdf_file"
+        value: "$(find-pkg-share ora_sim)/worlds/$(var world_name)"
+      - name: "container_name"
+        value: "ros_gz_container"
+      - name: "create_own_container"
+        value: "True"
+      - name: "use_composition"
+        value: "True"
+
+- include:
+    file: "$(find-pkg-share ros_gz_bridge)/launch/ros_gz_bridge.launch.py"
+    arg:
+      - name: "bridge_name"
+        value: "ros_gz_bridge"
+      - name: "config_file"
+        value: "$(find-pkg-share ora_sim)/config/bridge_config.yaml"
+      - name: "container_name"
+        value: "ros_gz_container"
+      - name: "create_own_container"
+        value: "False"
+      - name: "use_composition"
+        value: "True"
+
+- include:
+    file: "$(find-pkg-share ros_gz_sim)/launch/gz_spawn_model.launch.py"
+    arg:
+      - name: "world"
+        value: "igvc_world"
+      - name: "topic"
+        value: "/robot_description"
+      - name: "entity_name"
+        value: "whoknows_bot"
+      - name: "z"
+        value: "0.65"

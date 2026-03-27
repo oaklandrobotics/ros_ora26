@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<sdf version="1.4">
+  <model name="Lane Straight Pair 6m">
+    <static>true</static>
+    <link name="link">
+      <collision name="collision">
+        <pose>0 0 -0.002 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.5 0.5 0.001</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="lane_0">
+        <pose>0 1 0.001 0 0 0</pose>
+        <cast_shadows>false</cast_shadows>
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>6 0.10</size>
+          </plane>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/White</name>
+          </script>
+        </material>
+      </visual>
+      <visual name="lane_1">
+        <pose>0 -2 0.001 0 0 0</pose>
+        <cast_shadows>false</cast_shadows>
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>6 0.10</size>
+          </plane>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/White</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

@@ -1,0 +1,39 @@
+# Launch Robot State Publisher
+launch:
+# Launch Arguments
+- arg:
+    name: "use_sim_time"
+    default: "True"
+
+# Launch Nodes
+- node:
+    pkg: "robot_localization"
+    executable: "ekf_node"
+    name: "ekf_filter_node_odom"
+    arg:
+      - name: "params_file"
+        value: "$(find-pkg-share ora_teleop)/config/sim_rl_gps_ekf.yaml"
+      - name: "use_sim_time"
+        value: "$(var use_sim_time)"
+    remap:
+      - from: "wheel/odometry"
+        to: "/sim/odom"
+      - from: "imu/data"
+        to: "/sim/imu/data"
+      - from: "odometry/filtered"
+        to: "odometry/local"
+
+- node:
+    pkg: "robot_localization"
+    exec: "ekf_node"
+    name: "ekf_filter_node_map"
+    arg:
+      - name: "params_file"
+        value: "$(find-pkg-share ora_teleop)/config/sim_rl_gps_ekf.yaml"
+    remap:
+      - from: "wheel/odometry"
+        to: "/sim/odom"
+      - from: "imu/data"
+        to: "/sim/imu/data"
+      - from: "odometry/filtered"
+        to: "odometry/global"

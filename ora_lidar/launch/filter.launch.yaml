@@ -1,0 +1,14 @@
+launch:
+# Launch Arguments
+- arg:
+    name: "use_sim_time"
+    default: "True"
+
+- node:
+    pkg: "laser_filters"
+    exec: "scan_to_scan_filter_chain"
+    name: "laser_filter"
+    param:
+      - from: "$(find-pkg-share ora_lidar)/config/laser_filter_config.yaml"
+      - name: "use_sim_time"
+        value: "$(var use_sim_time)"

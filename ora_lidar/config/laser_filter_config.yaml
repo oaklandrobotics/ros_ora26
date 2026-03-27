@@ -1,0 +1,8 @@
+laser_filter:
+  ros__parameters:
+    filter1:
+      name: robot_frame
+      type: laser_filters/LaserScanAngularBoundsFilterInPlace
+      params:
+        lower_angle: 1.57
+        upper_angle: 4.71

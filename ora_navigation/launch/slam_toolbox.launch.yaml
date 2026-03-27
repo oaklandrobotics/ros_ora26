@@ -1,0 +1,14 @@
+launch:
+# Launch Arguments
+- arg:
+    name: "use_sim_time"
+    default: "true"
+
+# Launch Nodes
+- include:
+    file: "$(find-pkg-share slam_toolbox)/launch/online_async_launch.py"
+    arg:
+      - name: "use_sim_time"
+        value: "$(var use_sim_time)"
+      - name: "params_file"
+        value: "$(find-pkg-share ora_navigation)/config/mapper_params_online_async.yaml"

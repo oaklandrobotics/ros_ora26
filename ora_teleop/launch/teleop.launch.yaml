@@ -1,0 +1,39 @@
+# Launch Robot State Publisher
+launch:
+# Launch Arguments
+- arg:
+    name: "use_sim_time"
+    default: "True"
+- arg:
+    name: "joy_config"
+    default: "wired_xbox.yaml"
+
+# Launch Nodes
+- node:
+    pkg: "joy"
+    exec: "joy_node"
+    name: "joy_node"
+    args: "--ros-args --params-file $(find-pkg-share ora_teleop)/config/$(var joy_config)"
+    param:
+    - name: "use_sim_time"
+      value: "$(var use_sim_time)"
+
+- node:
+    pkg: "teleop_twist_joy"
+    exec: "teleop_node"
+    name: "teleop_twist_joy_node"
+    args: "--ros-args --params-file $(find-pkg-share ora_teleop)/config/$(var joy_config)"
+    remap:
+      - from: "/cmd_vel"
+        to: "/cmd_vel_joy"
+
+- node:
+    pkg: "twist_mux"
+    exec: "twist_mux"
+    param:
+    - from: "$(find-pkg-share ora_teleop)/config/twist_mux.yaml"
+    - name: "use_sim_time"
+      value: "$(var use_sim_time)"
+    remap:
+    - from: "/cmd_vel_out"
+      to: "/sim/cmd_vel"

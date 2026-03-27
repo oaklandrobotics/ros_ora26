@@ -8,5 +8,6 @@
   <xacro:include filename="anteater_core.xacro"/>
   <xacro:include filename="caster.xacro"/>
   <xacro:include filename="wheel.xacro"/>
+  <xacro:include filename="sensors.xacro"/>
   
 </robot>

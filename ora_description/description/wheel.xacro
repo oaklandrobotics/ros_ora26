@@ -7,7 +7,7 @@
     <joint name="${prefix}_wheel_joint" type="continuous">
       <parent link="base_link"/>
       <child link="${prefix}_wheel_link"/>
-      <origin xyz="${x_reflect * main_wheel_x_offset} ${y_reflect * main_wheel_y_offset} ${main_wheel_z_offset}" rpy="-${pi / 2} 0.0 0.0"/>
+      <origin xyz="${x_reflect * main_wheel_x_offset} ${y_reflect * main_wheel_y_offset} ${main_wheel_z_offset}" rpy="${pi / 2} 0.0 0.0"/>
       <axis xyz="0 0 -1"/>
     </joint>
 
@@ -35,6 +35,6 @@
     </gazebo>
   </xacro:macro>
 
-  <xacro:wheel prefix="left" x_reflect="1" y_reflect="1" />
-  <xacro:wheel prefix="right" x_reflect="-1" y_reflect="-1" />
+  <xacro:wheel prefix="left" x_reflect="-1" y_reflect="1" />
+  <xacro:wheel prefix="right" x_reflect="1" y_reflect="-1" />
 </robot>

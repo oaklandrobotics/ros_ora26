@@ -1,0 +1,16 @@
+# Taken from https://github.com/ros-drivers/velodyne/blob/ros2/velodyne_driver/config/VLP16-velodyne_driver_node-params.yaml
+
+velodyne_driver_node:
+    ros__parameters:
+        device_ip: 10.42.0.201
+        gps_time: false
+        time_offset: 0.0
+        enabled: true
+        read_once: false
+        read_fast: false
+        repeat_delay: 0.0
+        frame_id: velodyne
+        model: VLP16
+        rpm: 600.0
+        port: 10940
+        timestamp_first_packet: false

@@ -1,57 +1,65 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="https://www.ros.org/wiki/xacro">
+  <!-- Args -->
+  <xacro:arg name="sim_mode" default="true"/>
 
-  <ros2_control name="GazeboSystem" type="system">
-    <hardware>
-      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
-    </hardware>
+  <xacro:if value="$(arg sim_mode)">
+    <ros2_control name="GazeboSystem" type="system">
+      <hardware>
+        <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+      </hardware>
 
-    <!-- Main Wheel Joints -->
-    <joint name="left_wheel_joint">
-      <command_interface name="velocity">
+      <!-- Main Wheel Joints -->
+      <joint name="left_wheel_joint">
+        <command_interface name="velocity">
+            <param name="min">-10</param>
+            <param name="max">10</param>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="right_wheel_joint">
+        <command_interface name="velocity">
           <param name="min">-10</param>
           <param name="max">10</param>
-      </command_interface>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-    <joint name="right_wheel_joint">
-      <command_interface name="velocity">
-        <param name="min">-10</param>
-        <param name="max">10</param>
-      </command_interface>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
+        </command_interface>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
 
-    <!-- Caster Joints -->
-    <joint name="left_front_caster_joint">
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
+      <!-- Caster Joints -->
+      <joint name="left_front_caster_joint">
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
 
-    <joint name="right_front_caster_joint">
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
+      <joint name="right_front_caster_joint">
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
 
-    <joint name="left_back_caster_joint">
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
+      <joint name="left_back_caster_joint">
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
 
-    <joint name="right_back_caster_joint">
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-  </ros2_control>
+      <joint name="right_back_caster_joint">
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+    </ros2_control>
 
-  <gazebo>
-    <plugin name="gz_ros2_control::GazeboSimROS2ControlPlugin" filename="libgz_ros2_control-system.so">
-      <robot_param>robot_description</robot_param>
-      <robot_param_node>robot_state_publisher</robot_param_node>
-      <parameters>$(find ora_sim)/config/sim_controller.yaml</parameters>
-    </plugin>
-  </gazebo>
+    <gazebo>
+      <plugin name="gz_ros2_control::GazeboSimROS2ControlPlugin" filename="libgz_ros2_control-system.so">
+        <robot_param>robot_description</robot_param>
+        <robot_param_node>robot_state_publisher</robot_param_node>
+        <parameters>$(find ora_sim)/config/sim_controller.yaml</parameters>
+      </plugin>
+    </gazebo>
+  </xacro:if>
+
+  <xacro:unless value="$(arg sim_mode)">
+    <!-- TODO: Add real hardware control -->
+  </xacro:unless>
 
 </robot>

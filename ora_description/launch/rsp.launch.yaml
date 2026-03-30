@@ -17,7 +17,7 @@ launch:
     exec: "robot_state_publisher"
     param:
     - name: "robot_description"
-      value: "$(command 'xacro $(find-pkg-share ora_description)/description/$(var model_name)')"
+      value: "$(command 'xacro $(find-pkg-share ora_description)/description/$(var model_name) sim_mode:=$(var use_sim_time)')"
     - name: "use_sim_time"
       value: "$(var use_sim_time)"
 

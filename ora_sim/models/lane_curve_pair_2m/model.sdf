@@ -21,10 +21,9 @@
           </plane>
         </geometry>
         <material>
-          <script>
-            <uri>file://media/materials/scripts/gazebo.material</uri>
-            <name>Gazebo/White</name>
-          </script>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>0.5 0.5 0.5 1</specular>
         </material>
       </visual>
       <visual name="lane_l15">
@@ -37,10 +36,9 @@
           </plane>
         </geometry>
         <material>
-          <script>
-            <uri>file://media/materials/scripts/gazebo.material</uri>
-            <name>Gazebo/White</name>
-          </script>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>0.5 0.5 0.5 1</specular>
         </material>
       </visual>
       <visual name="lane_l30">
@@ -53,10 +51,9 @@
           </plane>
         </geometry>
         <material>
-          <script>
-            <uri>file://media/materials/scripts/gazebo.material</uri>
-            <name>Gazebo/White</name>
-          </script>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>0.5 0.5 0.5 1</specular>
         </material>
       </visual>
       <visual name="lane_l45">
@@ -69,10 +66,9 @@
           </plane>
         </geometry>
         <material>
-          <script>
-            <uri>file://media/materials/scripts/gazebo.material</uri>
-            <name>Gazebo/White</name>
-          </script>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>0.5 0.5 0.5 1</specular>
         </material>
       </visual>
       <visual name="lane_l60">
@@ -85,10 +81,9 @@
           </plane>
         </geometry>
         <material>
-          <script>
-            <uri>file://media/materials/scripts/gazebo.material</uri>
-            <name>Gazebo/White</name>
-          </script>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>0.5 0.5 0.5 1</specular>
         </material>
       </visual>
       <visual name="lane_l75">
@@ -101,10 +96,9 @@
           </plane>
         </geometry>
         <material>
-          <script>
-            <uri>file://media/materials/scripts/gazebo.material</uri>
-            <name>Gazebo/White</name>
-          </script>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>0.5 0.5 0.5 1</specular>
         </material>
       </visual>
 
@@ -118,10 +112,9 @@
           </plane>
         </geometry>
         <material>
-          <script>
-            <uri>file://media/materials/scripts/gazebo.material</uri>
-            <name>Gazebo/White</name>
-          </script>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>0.5 0.5 0.5 1</specular>
         </material>
       </visual>
       <visual name="lane_r15">
@@ -134,10 +127,9 @@
           </plane>
         </geometry>
         <material>
-          <script>
-            <uri>file://media/materials/scripts/gazebo.material</uri>
-            <name>Gazebo/White</name>
-          </script>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>0.5 0.5 0.5 1</specular>
         </material>
       </visual>
       <visual name="lane_r30">
@@ -150,10 +142,9 @@
           </plane>
         </geometry>
         <material>
-          <script>
-            <uri>file://media/materials/scripts/gazebo.material</uri>
-            <name>Gazebo/White</name>
-          </script>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>0.5 0.5 0.5 1</specular>
         </material>
       </visual>
       <visual name="lane_r45">
@@ -166,10 +157,9 @@
           </plane>
         </geometry>
         <material>
-          <script>
-            <uri>file://media/materials/scripts/gazebo.material</uri>
-            <name>Gazebo/White</name>
-          </script>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>0.5 0.5 0.5 1</specular>
         </material>
       </visual>
       <visual name="lane_r60">
@@ -182,10 +172,9 @@
           </plane>
         </geometry>
         <material>
-          <script>
-            <uri>file://media/materials/scripts/gazebo.material</uri>
-            <name>Gazebo/White</name>
-          </script>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>0.5 0.5 0.5 1</specular>
         </material>
       </visual>
       <visual name="lane_r75">
@@ -198,10 +187,9 @@
           </plane>
         </geometry>
         <material>
-          <script>
-            <uri>file://media/materials/scripts/gazebo.material</uri>
-            <name>Gazebo/White</name>
-          </script>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>0.5 0.5 0.5 1</specular>
         </material>
       </visual>
     </link>

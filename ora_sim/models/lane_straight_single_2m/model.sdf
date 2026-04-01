@@ -21,10 +21,9 @@
           </plane>
         </geometry>
         <material>
-          <script>
-            <uri>file://media/materials/scripts/gazebo.material</uri>
-            <name>Gazebo/White</name>
-          </script>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>0.5 0.5 0.5 1</specular>
         </material>
       </visual>
     </link>

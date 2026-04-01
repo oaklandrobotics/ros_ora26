@@ -31,7 +31,11 @@
     </link>
         
     <gazebo reference="${prefix}_wheel_link">
-      <material>Gazebo/Black</material>
+      <material>
+        <ambient>0.1 0.1 0.1 1</ambient>
+        <diffuse>0.1 0.1 0.1 1</diffuse>
+        <specular>0.5 0.5 0.5 1</specular>
+      </material>
     </gazebo>
   </xacro:macro>
 

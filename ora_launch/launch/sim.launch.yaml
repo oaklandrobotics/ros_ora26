@@ -53,9 +53,3 @@ launch:
     arg:
       - name: "use_sim_time"
         value: "$(var use_sim_time)"
-
-- include:
-    file: "$(find-pkg-share ora_rgbd_camera)/launch/rgbd_camera_bridge.launch.xml"
-    arg:
-      - name: "use_sim_time"
-        value: "$(var use_sim_time)"

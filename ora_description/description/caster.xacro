@@ -13,7 +13,7 @@
         <geometry>
           <cylinder radius="${front_caster_radius}" length="${front_caster_width}"/>
         </geometry>
-        <material name="gray"/>
+        <material name="black"/>
       </visual>
 
       <collision>
@@ -36,16 +36,12 @@
     </joint>
 
     <gazebo reference="${prefix}_front_caster_link">
-      <material>
-        <ambient>0.1 0.1 0.1 1</ambient>
-        <diffuse>0.1 0.1 0.1 1</diffuse>
-        <specular>0.5 0.5 0.5 1</specular>
-      </material>
+      <material name="black"/>
       
       <!-- Frictionless-ish -->
       <!-- Stops the robot from jumping around -->
-      <mu1 value="0.001"/>
-      <mu2 value="0.001"/>
+      <mu1>0.001</mu1>
+      <mu2>0.001</mu2>
     </gazebo>
   </xacro:macro>
 
@@ -59,7 +55,7 @@
         <geometry>
           <cylinder radius="${back_caster_radius}" length="${back_caster_width}"/>
         </geometry>
-        <material name="gray"/>
+        <material name="black"/>
       </visual>
 
       <collision>
@@ -82,16 +78,12 @@
     </joint>
 
     <gazebo reference="${prefix}_back_caster_link">
-      <material>
-        <ambient>0.1 0.1 0.1 1</ambient>
-        <diffuse>0.1 0.1 0.1 1</diffuse>
-        <specular>0.5 0.5 0.5 1</specular>
-      </material>
+      <material name="black"/>
       
       <!-- Frictionless-ish -->
       <!-- Stops the robot from jumping around -->
-      <mu1 value="0.001"/>
-      <mu2 value="0.001"/>
+      <mu1>0.001</mu1>
+      <mu2>0.001</mu2>
     </gazebo>
   </xacro:macro>
 

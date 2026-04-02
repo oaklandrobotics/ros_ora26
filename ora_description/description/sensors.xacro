@@ -23,6 +23,7 @@
       <geometry>
         <cylinder radius="${lidar_radius}" length="${lidar_height}"/>
       </geometry>
+      <material name="dark_gray"/>
     </visual>
   </link>
 
@@ -90,6 +91,7 @@
       <geometry>
         <cylinder radius="${gps_radius}" length="${gps_height}"/>
       </geometry>
+      <material name="dark_gray"/>
     </visual>
   </link>
 
@@ -137,6 +139,7 @@
       <geometry>
         <box size="0.1 0.1 0.1"/>
       </geometry>
+      <material name="dark_gray"/>
     </visual>
 
     <collision>

@@ -5,7 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded: ~
       Splitter Ratio: 0.5029411911964417
-    Tree Height: 776
+    Tree Height: 755
 Visualization Manager:
   Class: ""
   Displays:
@@ -53,7 +53,17 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        camera_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         chassis_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        gps_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -117,7 +127,11 @@ Visualization Manager:
           Value: true
         base_link:
           Value: true
+        camera_link:
+          Value: true
         chassis_link:
+          Value: true
+        gps_link:
           Value: true
         imu_link:
           Value: true
@@ -145,31 +159,33 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        base_link:
-          base_footprint:
-            {}
-          chassis_link:
-            {}
-          imu_link:
-            {}
-          left_back_caster_link:
-            {}
-          left_front_caster_link:
-            {}
-          left_wheel_link:
-            {}
-          lidar_link:
-            {}
-          right_back_caster_link:
-            {}
-          right_front_caster_link:
-            {}
-          right_wheel_link:
-            {}
         map:
-          {}
-        odom:
-          {}
+          odom:
+            base_link:
+              base_footprint:
+                {}
+              camera_link:
+                {}
+              chassis_link:
+                {}
+              gps_link:
+                {}
+              imu_link:
+                {}
+              left_back_caster_link:
+                {}
+              left_front_caster_link:
+                {}
+              left_wheel_link:
+                {}
+              lidar_link:
+                {}
+              right_back_caster_link:
+                {}
+              right_front_caster_link:
+                {}
+              right_wheel_link:
+                {}
       Update Interval: 0
       Value: true
     - Alpha: 0.6000000238418579
@@ -337,6 +353,53 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /plan
       Value: true
+    - Class: rviz_default_plugins/Image
+      Enabled: true
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: Image
+      Normalize Range: true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /depth_camera/image_raw
+      Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz_default_plugins/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: PointCloud2
+      Position Transformer: XYZ
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.009999999776482582
+      Style: Flat Squares
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /depth_camera/points
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -375,33 +438,35 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 5.133893013000488
+      Distance: 5.439489364624023
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.37490928173065186
-        Y: -0.11280164122581482
-        Z: -0.1678052544593811
+        X: 5.30382776260376
+        Y: -0.21844176948070526
+        Z: 0.27979719638824463
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.6253979206085205
+      Pitch: 0.23039789497852325
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.129955291748047
+      Yaw: 2.8899528980255127
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 999
+  Height: 1495
   Hide Left Dock: false
   Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000001b000000391fc0200000001fb000000100044006900730070006c006100790073010000003b00000391000000c700ffffff000005be0000039100000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
-  Width: 1908
-  X: 0
-  Y: 232
+  Image:
+    collapsed: false
+  QMainWindow State: 000000ff00000000fd0000000100000000000002db00000581fc0200000003fb000000100044006900730070006c006100790073010000003b0000037c000000c700fffffffb0000000a0049006d00610067006501000003bd000001ff0000001600fffffffb0000000c00430061006d00650072006101000004320000018a0000000000000000000007130000058100000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Width: 2548
+  X: 1920
+  Y: 0

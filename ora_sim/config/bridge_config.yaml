@@ -11,7 +11,7 @@
   gz_type_name: "gz.msgs.IMU"
   direction: GZ_TO_ROS
 
-- topic_name: "sim/gps/fix"
+- topic_name: "/sim/gps/fix"
   ros_type_name: "sensor_msgs/msg/NavSatFix"
   gz_type_name: "gz.msgs.NavSat"
   direction: GZ_TO_ROS

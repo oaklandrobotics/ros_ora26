@@ -1,0 +1,3 @@
+[submodule "fusioncore"]
+	path = fusioncore
+	url = https://github.com/manankharwar/fusioncore

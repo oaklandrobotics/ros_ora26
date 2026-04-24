@@ -169,8 +169,8 @@
   <gazebo reference="gps_link">
     <sensor name="navsat" type="navsat">
       <always_on>true</always_on>
-      <update_rate>1</update_rate>
-      <topic>sim/gps/fix</topic>
+      <update_rate>8</update_rate>
+      <topic>/sim/gps/fix</topic>
       <gz_frame_id>gps_link</gz_frame_id>
       <navsat>
         <position_sensing>

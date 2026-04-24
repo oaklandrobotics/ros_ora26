@@ -1,0 +1,66 @@
+fusioncore:
+  ros__parameters:
+    base_frame: base_link
+    odom_frame: odom
+    publish_rate: 100.0
+
+    imu.gyro_noise: 0.005       # rad/s: from your IMU datasheet
+    imu.accel_noise: 0.1        # m/s²
+    imu.has_magnetometer: true # true for 9-axis IMUs (BNO08x, VectorNav, Xsens)
+                                # false for 6-axis: yaw from gyro integration drifts
+    imu.remove_gravitational_acceleration: false  # set true if robot drifts in Z while stationary
+                                                   # most IMUs report raw specific force (gravity included)
+                                                   # FusionCore removes gravity using current filter orientation
+
+    encoder.vel_noise: 0.05     # m/s
+    encoder.yaw_noise: 0.02     # rad/s
+
+    gnss.base_noise_xy: 1.0     # meters: scaled automatically by HDOP
+    gnss.base_noise_z: 2.0      # meters
+    gnss.heading_noise: 0.02    # rad: for dual antenna
+    gnss.max_hdop: 4.0          # reject fixes worse than this
+    gnss.min_satellites: 4
+    gnss.min_fix_type: 1        # minimum fix quality: 1=GPS, 2=DGPS, 3=RTK_FLOAT, 4=RTK_FIXED
+                                # note: sensor_msgs/NavSatFix status=2 maps to RTK_FIXED only.
+                                # RTK_FLOAT (3) is unreachable via NavSatFix: use 2 or 4.
+
+    # Antenna lever arm: offset from base_link to primary GPS antenna in body frame
+    # x=forward, y=left, z=up (meters). Leave at 0 if antenna is above base_link.
+    # Lever arm correction only activates when heading is independently validated.
+    gnss.lever_arm_x: 0.0
+    gnss.lever_arm_y: 0.0
+    gnss.lever_arm_z: 0.0
+
+    # Second GPS receiver lever arm (if using gnss.fix2_topic)
+    gnss.lever_arm2_x: 0.0
+    gnss.lever_arm2_y: 0.0
+    gnss.lever_arm2_z: 0.0
+
+    # Optional second GPS receiver
+    gnss.fix2_topic: ""
+
+    # Heading topics: pick one or both
+    gnss.heading_topic: "/gnss/heading"   # sensor_msgs/Imu
+    gnss.azimuth_topic: ""                # compass_msgs/Azimuth (preferred)
+
+    # Mahalanobis outlier rejection
+    outlier_rejection: true
+    outlier_threshold_gnss: 16.27   # chi2(3, 0.999): 3D position
+    outlier_threshold_hdg: 10.83    # chi2(1, 0.999): 1D heading
+    outlier_threshold_enc: 11.34    # chi2(3, 0.999): 3D encoder
+    outlier_threshold_imu: 15.09    # chi2(6, 0.999): 6D IMU
+
+    # Adaptive noise covariance
+    adaptive.imu: true
+    adaptive.encoder: true
+    adaptive.gnss: true
+    adaptive.window: 50
+    adaptive.alpha: 0.01
+
+    ukf.q_position: 0.01
+    ukf.q_orientation: 1.0e-9  # quaternion regularization only: do NOT increase this
+    ukf.q_velocity: 0.1
+    ukf.q_angular_vel: 0.1
+    ukf.q_acceleration: 1.0
+    ukf.q_gyro_bias: 1.0e-5
+    ukf.q_accel_bias: 1.0e-5

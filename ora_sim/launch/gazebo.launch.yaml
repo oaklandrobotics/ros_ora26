@@ -48,15 +48,3 @@ launch:
         value: "Erdferkel"
       - name: "z"
         value: "0.65"
-
-- node:
-    pkg: "controller_manager"
-    exec: "spawner"
-    name: "diff_drive_spawner"
-    args: "diff_cont --controller-ros-args \"-r /diff_cont/cmd_vel:=/sim/cmd_vel -r /diff_cont/odom:=/sim/odom\""
-
-- node:
-    pkg: "controller_manager"
-    exec: "spawner"
-    name: "joint_broad_spawner"
-    args: "joint_broad"

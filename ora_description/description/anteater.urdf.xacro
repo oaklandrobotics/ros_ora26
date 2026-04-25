@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="https://www.ros.org/wiki/xacro" name="robot_name">
+  <xacro:arg name="sim_mode" default="false"/>
+
   <!-- Include all of the pieces of the robot -->
   <xacro:include filename="anteater_core.xacro"/>
   <xacro:include filename="caster.xacro"/>

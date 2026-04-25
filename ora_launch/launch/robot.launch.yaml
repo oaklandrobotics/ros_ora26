@@ -29,12 +29,6 @@ launch:
         value: "$(var rviz_config)"
 
 - include:
-    file: "$(find-pkg-share ora_sim)/launch/gazebo.launch.yaml"
-    arg:
-      - name: "world_name"
-        value: "$(var world_name)"
-
-- include:
     file: "$(find-pkg-share ora_teleop)/launch/teleop.launch.yaml"
     arg:
       - name: "use_sim_time"
@@ -44,12 +38,6 @@ launch:
 
 - include:
     file: "$(find-pkg-share ora_lidar)/launch/filter.launch.yaml"
-    arg:
-      - name: "use_sim_time"
-        value: "$(var use_sim_time)"
-
-- include:
-    file: "$(find-pkg-share ora_navigation)/launch/nav.launch.yaml"
     arg:
       - name: "use_sim_time"
         value: "$(var use_sim_time)"

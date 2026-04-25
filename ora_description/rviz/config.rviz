@@ -3,9 +3,10 @@ Panels:
     Help Height: 78
     Name: Displays
     Property Tree Widget:
-      Expanded: ~
+      Expanded:
+        - /Global Options1
       Splitter Ratio: 0.5029411911964417
-    Tree Height: 755
+    Tree Height: 514
 Visualization Manager:
   Class: ""
   Displays:
@@ -159,33 +160,35 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
+        base_link:
+          base_footprint:
+            {}
+          camera_link:
+            {}
+          chassis_link:
+            {}
+          gps_link:
+            {}
+          imu_link:
+            {}
+          left_back_caster_link:
+            {}
+          left_front_caster_link:
+            {}
+          left_wheel_link:
+            {}
+          lidar_link:
+            {}
+          right_back_caster_link:
+            {}
+          right_front_caster_link:
+            {}
+          right_wheel_link:
+            {}
         map:
-          odom:
-            base_link:
-              base_footprint:
-                {}
-              camera_link:
-                {}
-              chassis_link:
-                {}
-              gps_link:
-                {}
-              imu_link:
-                {}
-              left_back_caster_link:
-                {}
-              left_front_caster_link:
-                {}
-              left_wheel_link:
-                {}
-              lidar_link:
-                {}
-              right_back_caster_link:
-                {}
-              right_front_caster_link:
-                {}
-              right_wheel_link:
-                {}
+          {}
+        odom:
+          {}
       Update Interval: 0
       Value: true
     - Alpha: 0.6000000238418579
@@ -438,35 +441,35 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 5.439489364624023
+      Distance: 5.347153663635254
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 5.30382776260376
-        Y: -0.21844176948070526
-        Z: 0.27979719638824463
+        X: 0.5143452882766724
+        Y: -0.050767019391059875
+        Z: 0.2917526364326477
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.23039789497852325
+      Pitch: 0.499796599149704
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 2.8899528980255127
+      Yaw: 3.1449527740478516
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 1495
+  Height: 1131
   Hide Left Dock: false
   Hide Right Dock: false
   Image:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000002db00000581fc0200000003fb000000100044006900730070006c006100790073010000003b0000037c000000c700fffffffb0000000a0049006d00610067006501000003bd000001ff0000001600fffffffb0000000c00430061006d00650072006101000004320000018a0000000000000000000007130000058100000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
-  Width: 2548
-  X: 1920
-  Y: 0
+  QMainWindow State: 000000ff00000000fd0000000100000000000002db0000040dfc0200000003fb000000100044006900730070006c006100790073010000003f00000290000000cc00fffffffb0000000a0049006d00610067006501000002d5000001770000001700fffffffb0000000c00430061006d00650072006101000004320000018a00000000000000000000045d0000040d00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Width: 1854
+  X: 66
+  Y: 32

@@ -56,18 +56,18 @@ launch:
 
 - node:
     pkg: "controller_manager"
-    exec: "ros2_control_node"
-    param:
-    - from: "$(find-pkg-share ora_sim)/config/sim_controller.yaml"
-
-- node:
-    pkg: "controller_manager"
     exec: "spawner"
     name: "diff_drive_spawner"
-    args: "diff_cont"
+    args: "diff_cont --controller-ros-args \"-r /diff_cont/cmd_vel:=/sim/cmd_vel -r /diff_cont/odom:=/sim/odom\""
+    param:
+    - name: "use_sim_time"
+      value: "$(var use_sim_time)"
 
 - node:
     pkg: "controller_manager"
     exec: "spawner"
     name: "joint_broad_spawner"
     args: "joint_broad"
+    param:
+    - name: "use_sim_time"
+      value: "$(var use_sim_time)"

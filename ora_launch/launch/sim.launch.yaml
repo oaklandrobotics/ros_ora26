@@ -3,7 +3,7 @@ launch:
 # Launch Arguments
 - arg:
     name: "use_sim_time"
-    default: "False"
+    default: "True"
 - arg:
     name: "model_name"
     default: "anteater.urdf.xacro"

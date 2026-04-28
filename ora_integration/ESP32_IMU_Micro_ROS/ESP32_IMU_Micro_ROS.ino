@@ -48,6 +48,10 @@ rcl_allocator_t allocator;
 rcl_node_t node;
 rcl_timer_t imuPublishTimer;
 rcl_timer_t ledTimer;
+rcl_service_t autonomousLedStateService;
+std_srvs__srv__SetBool_Request autonomousLedStateRequest;
+std_srvs__srv__SetBool_Response autonomousLedStateResponse;
+
 
 // ROS Client Library for C (RCLC)
 // Helper functions for easier use of RCL
@@ -60,6 +64,9 @@ sensor_msgs__msg__Imu ImuMsg;
 // IMU struct and object initialization
 IMU_t imu = {};
 MPU9250 mpu;
+
+// Application Variables
+bool autonomousLedState = false;
 
 /*
  **********************************************************************
@@ -89,8 +96,11 @@ void setup()
 {
     Serial.begin(115200);
 
-    pinMode(LED_PIN, OUTPUT);
-    digitalWrite(LED_PIN, HIGH);
+    pinMode(HEARTBEAT_LED_PIN, OUTPUT);
+    pinMode(AUTONOMOUS_LED_PIN, OUTPUT);
+
+    digitalWrite(HEARTBEAT_LED_PIN, HIGH);
+    digitalWrite(AUTONOMOUS_LED_PIN, HIGH);
 
     initIMU();
     initMicroRos();
@@ -187,10 +197,28 @@ void initMicroRos()
         ledTimerCallback)
     );
 
+    // Creating Services
+    // Autonomous LED State service
+    RCCHECK(rclc_service_init_default(
+    &autonomousLedStateService,
+    &node,
+    ROSIDL_GET_SRV_TYPE_SUPPORT(std_srvs, srv, SetBool),
+    "/set_autonomous_led_state")
+    );
+
     // Create executor
-    RCCHECK(rclc_executor_init(&executor, &support.context, 2, &allocator));
+    RCCHECK(rclc_executor_init(&executor, &support.context, 3, &allocator));
     RCCHECK(rclc_executor_add_timer(&executor, &imuPublishTimer));
     RCCHECK(rclc_executor_add_timer(&executor, &ledTimer));
+
+    // Adding Services with callback and request / response variables
+    RCCHECK(rclc_executor_add_service(
+        &executor,
+        &autonomousLedStateService,
+        &autonomousLedStateRequest,
+        &autonomousLedStateResponse,
+        autonomousLedStateServiceCallback)
+    );
 
     // Initializing IMU frame
     static char IMU_FRAME[] = "imu_frame";
@@ -234,8 +262,48 @@ void ledTimerCallback(rcl_timer_t * timer, int64_t last_call_time)
 
   if (timer != NULL) 
   {
-    digitalWrite(LED_PIN, !digitalRead(LED_PIN));
+    digitalWrite(HEARTBEAT_LED_PIN, !digitalRead(HEARTBEAT_LED_PIN));
   }
+}
+
+
+/*************************************************************************
+ * Function Name: autonomousLedStateServiceCallback
+ * Description: Service for autonomous LED state. This is called whenever
+ *              the client sends a request using this service.
+*************************************************************************/
+
+void autonomousLedStateServiceCallback(const void * request_msg, void * response_msg)
+{
+    // Cast generic pointers to the actual ROS service message types
+    const std_srvs__srv__SetBool_Request * req = (const std_srvs__srv__SetBool_Request *)request_msg;
+
+    std_srvs__srv__SetBool_Response * res = (std_srvs__srv__SetBool_Response *)response_msg;
+
+    // Update your firmware/application state
+    autonomousLedState = req->data;
+
+    // Fill response
+    res->success = true;
+
+    // Populating the response message going back to the client based on the state
+    // In addition, changing the AUTONOMOUS_LED_PIN to match up with the incoming service
+    if(autonomousLedState)
+    {
+        const char * msg = "Autonomous LED enabled";
+        res->message.data = (char *)msg;
+        res->message.size = strlen(msg);
+        res->message.capacity = res->message.size + 1;
+        digitalWrite(AUTONOMOUS_LED_PIN, HIGH);
+    }
+    else
+    {
+        const char * msg = "Autonomous LED disabled";
+        res->message.data = (char *)msg;
+        res->message.size = strlen(msg);
+        res->message.capacity = res->message.size + 1;
+        digitalWrite(AUTONOMOUS_LED_PIN, LOW);
+    }
 }
 
 
@@ -262,7 +330,7 @@ void setDiagonalCovariance()
     ImuMsg.angular_velocity_covariance[X_VARIANCE_INDEX] = GYRO_COV_DIAG.x;
     ImuMsg.angular_velocity_covariance[Y_VARIANCE_INDEX] = GYRO_COV_DIAG.y;
     ImuMsg.angular_velocity_covariance[Z_VARIANCE_INDEX] = GYRO_COV_DIAG.z;
-        
+    
     ImuMsg.orientation_covariance[X_VARIANCE_INDEX] = ORIENT_COV_DIAG.x;
     ImuMsg.orientation_covariance[Y_VARIANCE_INDEX] = ORIENT_COV_DIAG.y;
     ImuMsg.orientation_covariance[Z_VARIANCE_INDEX] = ORIENT_COV_DIAG.z;
@@ -408,7 +476,7 @@ void printImuData(bool accel, bool gyro, bool quat, bool temp)
 
 void restartSystem()
 {
-    digitalWrite(LED_PIN, LOW);
+    digitalWrite(HEARTBEAT_LED_PIN, LOW);
     delay(500);
 
     ESP.restart();

@@ -16,15 +16,19 @@
  ******************************************************************************
  */
 
+// IMU Specific Headers
 #include "MPU9250.h"
 
+// MicroROS Specific Headers
 #include <micro_ros_arduino.h>
 #include <rcl/rcl.h>
 #include <rcl/error_handling.h>
 #include <rclc/rclc.h>
 #include <rclc/executor.h>
 #include <sensor_msgs/msg/imu.h>
+#include <std_srvs/srv/set_bool.h>
 
+// General Headers
 #include <stdio.h>
 #include <Wire.h>
 
@@ -34,7 +38,8 @@
  ******************************************************************************
  */
 
-#define LED_PIN 2
+#define HEARTBEAT_LED_PIN 2
+#define AUTONOMOUS_LED_PIN 0
 #define IMU_SDA_PIN 21
 #define IMU_SCL_PIN 22
 
@@ -93,6 +98,7 @@ void initIMU();
 void initMicroRos();
 void imuTimerCallback(rcl_timer_t * timer, int64_t last_call_time);
 void ledTimerCallback(rcl_timer_t * timer, int64_t last_call_time);
+void autonomousLedStateServiceCallback(const void * request_msg, void * response_msg);
 void setDiagonalCovariance();
 void updateImuObject();
 void fillImuMsgFromImuStruct();

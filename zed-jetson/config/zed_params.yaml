@@ -1,0 +1,11 @@
+/**:
+  ros__parameters:
+    general:
+      grab_resolution: 'HD720'
+      grab_frame_rate: 15
+      pub_frame_rate: 15.0
+
+  depth:
+    depth_mode: 'NEURAL_LIGHT'
+    depth_stabilization: 80
+    

@@ -15,6 +15,17 @@ services:
       - /usr/local/zed/resources/:/usr/local/zed/resources/
       - /usr/local/zed/settings/:/usr/local/zed/settings/
 
+      #ZED ROS2 Params
+      - ./config/zed_override.yaml:/config/zed_override.yaml:ro
+
+    command: >
+      bash -lc "
+        . install/local_setup.sh &&
+        ros2 launch zed_wrapper zed_camera.launch.py
+          camera_model:=zed2i
+          ros_params_override_path:=/config/zed_override.yaml
+      "
+
     healthcheck:
       test:
         [

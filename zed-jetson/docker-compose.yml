@@ -1,0 +1,29 @@
+services:
+  ora_zed:
+    image: dmocnik/ora_zed:latest
+    container_name: ora_zed
+    runtime: nvidia
+    network_mode: host
+    privileged: true
+    environment:
+      DISPLAY: ${DISPLAY}
+      NVIDIA_DRIVER_CAPABILITIES: all
+
+    volumes:
+      - /tmp:/tmp
+      - /dev:/dev
+      - /usr/local/zed/resources/:/usr/local/zed/resources/
+      - /usr/local/zed/settings/:/usr/local/zed/settings/
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "source /opt/ros/$${ROS_DISTRO:-jazzy}/setup.bash && timeout 5s ros2 topic echo --once /zed/zed_node/status/heartbeat >/dev/null 2>&1"
+        ]
+      interval: 10s
+      timeout: 8s
+      retries: 3
+      start_period: 30s
+
+    restart: unless-stopped

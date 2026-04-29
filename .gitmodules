@@ -2,3 +2,6 @@
 	path = uros_agent
 	url = https://github.com/micro-ROS/micro-ROS-Agent
 	branch = jazzy
+[submodule "zed-ros2-interfaces"]
+	path = zed-ros2-interfaces
+	url = https://github.com/stereolabs/zed-ros2-interfaces

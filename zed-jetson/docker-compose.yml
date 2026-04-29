@@ -1,3 +1,6 @@
+# TODO make this compose automatically brought up as a systemd service
+# TODO document everything being done here
+
 services:
   ora_zed:
     image: dmocnik/ora_zed:latest
@@ -16,17 +19,14 @@ services:
       - /usr/local/zed/settings/:/usr/local/zed/settings/
 
       #ZED ROS2 Params
-      - ./config/zed_override.yaml:/config/zed_override.yaml:ro
+      - ./config/zed_params.yaml:/config/zed_params.yaml:ro
 
     command: >
-      bash -lc "
-        . install/local_setup.sh &&
-        ros2 launch zed_wrapper zed_camera.launch.py
-          camera_model:=zed2i
-          ros_params_override_path:=/config/zed_override.yaml
-      "
+      bash -lc
+        ". install/local_setup.bash &&
+        ros2 launch zed_wrapper zed_camera.launch.py camera_model:=zed2i ros_params_override_path:=/config/zed_params.yaml"
 
-    healthcheck:
+    healthcheck: #TODO this doesn't seem to be working, need to investigate
       test:
         [
           "CMD-SHELL",

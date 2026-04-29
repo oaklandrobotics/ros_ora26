@@ -1,11 +1,15 @@
+# https://github.com/stereolabs/zed-ros-wrapper/tree/master/zed_wrapper/params
+# https://stereolabs.com/docs/ros2/zed-node#configuration-parameters
+
 /**:
   ros__parameters:
+
     general:
       grab_resolution: 'HD720'
       grab_frame_rate: 15
       pub_frame_rate: 15.0
 
-  depth:
-    depth_mode: 'NEURAL_LIGHT'
-    depth_stabilization: 80
-    
+    depth:
+      depth_mode: 'NEURAL_LIGHT'
+      depth_stabilization: 80
+      point_cloud_freq: 15.0

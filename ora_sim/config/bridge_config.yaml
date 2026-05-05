@@ -5,20 +5,20 @@
   gz_type_name: "gz.msgs.Clock"
   direction: GZ_TO_ROS
 
-- ros_topic_name: "/sim/imu"
-  gz_topic_name: "/sim/imu"
+- ros_topic_name: "/imu"
+  gz_topic_name: "/imu"
   ros_type_name: "sensor_msgs/msg/Imu"
   gz_type_name: "gz.msgs.IMU"
   direction: GZ_TO_ROS
 
-- topic_name: "/sim/gps/fix"
+- topic_name: "/gnss/fix"
   ros_type_name: "sensor_msgs/msg/NavSatFix"
   gz_type_name: "gz.msgs.NavSat"
   direction: GZ_TO_ROS
 
 # Topic published by DiffDrive plugin
-- ros_topic_name: "/sim/odom"
-  gz_topic_name: "/sim/odom"
+- ros_topic_name: "/diff_cont/odom"
+  gz_topic_name: "/diff_cont/odom"
   ros_type_name: "nav_msgs/msg/Odometry"
   gz_type_name: "gz.msgs.Odometry"
   direction: GZ_TO_ROS
@@ -31,8 +31,8 @@
   direction: GZ_TO_ROS
 
 # Topic subscribed to by DiffDrive plugin
-- ros_topic_name: "/sim/cmd_vel"
-  gz_topic_name: "/sim/cmd_vel"
+- ros_topic_name: "/diff_cont/cmd_vel"
+  gz_topic_name: "/diff_cont/cmd_vel"
   ros_type_name: "geometry_msgs/msg/TwistStamped"
   gz_type_name: "gz.msgs.Twist"
   direction: ROS_TO_GZ

@@ -17,8 +17,8 @@ launch:
         value: "$(var use_sim_time)"
     remap:
       - from: "/imu/data"
-        to: "/sim/imu"
+        to: "/imu"
       - from: "/odom/wheels"
-        to: "/sim/odom"
+        to: "/diff_cont/odom"
       - from: "/gnss/fix"
-        to: "/sim/gps/fix"
+        to: "/gnss/fix"

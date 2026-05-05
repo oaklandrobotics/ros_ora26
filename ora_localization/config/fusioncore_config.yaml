@@ -1,66 +1,85 @@
+# Hardware config: Oakland Robotics Erdferkel
+#
+# Platform:  Oakland Robotics Erdferkel (Differential Drive)
+# IMU:       Bosch BNO085 (9-axis: accel + gyro + magnetometer)
+#            Datasheet: Gyro noise 0.014 dps/√Hz → σ ≈ 0.005 rad/s at 100Hz
+#                       Accel noise 120 μg/√Hz → σ ≈ 0.1 m/s² at 100Hz
+# GPS:       u-blox F9P (standard GPS defaults; see RTK block below)
+# Tested:    datasheet-tuned, not yet field-validated: contributions welcome
+#
+# Launch with topic remaps:
+#
+#   /odom/wheels:=/diff_cont/odom
+#   /imu/data:=/imu
+
+
 fusioncore:
   ros__parameters:
     base_frame: base_link
     odom_frame: odom
     publish_rate: 100.0
+    publish.force_2d: true # Ground Robot
 
-    imu.gyro_noise: 0.005       # rad/s: from your IMU datasheet
-    imu.accel_noise: 0.1        # m/s²
-    imu.has_magnetometer: true # true for 9-axis IMUs (BNO08x, VectorNav, Xsens)
-                                # false for 6-axis: yaw from gyro integration drifts
-    imu.remove_gravitational_acceleration: false  # set true if robot drifts in Z while stationary
-                                                   # most IMUs report raw specific force (gravity included)
-                                                   # FusionCore removes gravity using current filter orientation
+    # ── IMU: Bosch BNO08X ──────────────────────────────────────────
+    # Has onboard magnetometer, but interference is likely to make it unreliable
+    # Yaw will be initialized from GPS motion after ~5m of travel
+    imu.has_magnetometer: false     # Disable because of possible interference
+    imu.gyro_noise: 0.005           # rad/s : derived from 0.014 dps/√Hz at 100Hz
+    imu.accel_noise: 0.01           # m/s²  : conservative for MEMS on a vibrating platform
+    imu.remove_gravitational_acceleration: false  # Microstrain driver publishes raw
+    imu.frame_id: "imu_link"
 
-    encoder.vel_noise: 0.05     # m/s
-    encoder.yaw_noise: 0.02     # rad/s
+    # ── Wheel encoders: TODO ────────────────────────────────────────────
+    # 500 CPR optical encoders through a 24:1 gearbox, 0.1651m wheel radius.
+    # Tighter than the default: Husky's encoders are high quality.
+    encoder.vel_noise: 0.02         # m/s
+    encoder.yaw_noise: 0.01         # rad/s
 
-    gnss.base_noise_xy: 1.0     # meters: scaled automatically by HDOP
-    gnss.base_noise_z: 2.0      # meters
-    gnss.heading_noise: 0.02    # rad: for dual antenna
-    gnss.max_hdop: 4.0          # reject fixes worse than this
+    # ── GPS: u-blox F9P (standard autonomous GPS defaults) ───────────────────
+    # F9P autonomous CEP: 2.0m (1σ ≈ 2.4m). Conservative 2.5m set here.
+    # For RTK float  (CEP 0.4m):  set base_noise_xy: 0.5,  min_fix_type: 3
+    # For RTK fixed  (CEP 0.01m): set base_noise_xy: 0.015, min_fix_type: 4
+    gnss.base_noise_xy: 2.5         # m : standard GPS (no RTK)
+    gnss.base_noise_z: 5.0          # m
+    gnss.heading_noise: 0.02
+    gnss.max_hdop: 3.5              # F9P tracks many constellations: HDOP is usually good
     gnss.min_satellites: 4
-    gnss.min_fix_type: 1        # minimum fix quality: 1=GPS, 2=DGPS, 3=RTK_FLOAT, 4=RTK_FIXED
-                                # note: sensor_msgs/NavSatFix status=2 maps to RTK_FIXED only.
-                                # RTK_FLOAT (3) is unreachable via NavSatFix: use 2 or 4.
+    gnss.min_fix_type: 1            # 1=GPS, 2=DGPS, 3=RTK_FLOAT, 4=RTK_FIXED
 
-    # Antenna lever arm: offset from base_link to primary GPS antenna in body frame
-    # x=forward, y=left, z=up (meters). Leave at 0 if antenna is above base_link.
-    # Lever arm correction only activates when heading is independently validated.
+    # F9P antenna lever arm: measure from base_link to antenna center
+    # x=forward, y=left, z=up (meters). Set to your actual mounting position.
     gnss.lever_arm_x: 0.0
     gnss.lever_arm_y: 0.0
     gnss.lever_arm_z: 0.0
 
-    # Second GPS receiver lever arm (if using gnss.fix2_topic)
-    gnss.lever_arm2_x: 0.0
-    gnss.lever_arm2_y: 0.0
-    gnss.lever_arm2_z: 0.0
+    gnss.fix2_topic: ""             # set to second antenna topic for dual-antenna heading
+    gnss.heading_topic: ""          # set to /gnss/heading if using u-blox F9H dual-antenna
+    gnss.azimuth_topic: ""
 
-    # Optional second GPS receiver
-    gnss.fix2_topic: ""
-
-    # Heading topics: pick one or both
-    gnss.heading_topic: "/gnss/heading"   # sensor_msgs/Imu
-    gnss.azimuth_topic: ""                # compass_msgs/Azimuth (preferred)
-
-    # Mahalanobis outlier rejection
+    # ── Outlier rejection ─────────────────────────────────────────────────────
     outlier_rejection: true
-    outlier_threshold_gnss: 16.27   # chi2(3, 0.999): 3D position
-    outlier_threshold_hdg: 10.83    # chi2(1, 0.999): 1D heading
-    outlier_threshold_enc: 11.34    # chi2(3, 0.999): 3D encoder
-    outlier_threshold_imu: 15.09    # chi2(6, 0.999): 6D IMU
+    outlier_threshold_gnss: 16.27   # chi2(3, 0.001): standard GPS, permissive
+    outlier_threshold_imu: 15.09    # chi2(6, 0.001)
+    outlier_threshold_enc: 11.34    # chi2(3, 0.001)
+    outlier_threshold_hdg: 10.83    # chi2(1, 0.001)
 
-    # Adaptive noise covariance
+    # ── Adaptive noise ────────────────────────────────────────────────────────
     adaptive.imu: true
     adaptive.encoder: true
     adaptive.gnss: true
     adaptive.window: 50
     adaptive.alpha: 0.01
 
+    # ── UKF process noise ─────────────────────────────────────────────────────
     ukf.q_position: 0.01
-    ukf.q_orientation: 1.0e-9  # quaternion regularization only: do NOT increase this
+    ukf.q_orientation: 1.0e-9
     ukf.q_velocity: 0.1
     ukf.q_angular_vel: 0.1
     ukf.q_acceleration: 1.0
     ukf.q_gyro_bias: 1.0e-5
     ukf.q_accel_bias: 1.0e-5
+
+    input.gnss_crs: "EPSG:4326"
+    output.crs: "EPSG:4978"
+    output.convert_to_enu_at_reference: true
+    reference.use_first_fix: true

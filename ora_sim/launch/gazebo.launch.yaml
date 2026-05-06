@@ -46,22 +46,3 @@ launch:
         value: "Erdferkel"
       - name: "z"
         value: "0.65"
-
-
-- node:
-    pkg: "controller_manager"
-    exec: "spawner"
-    name: "diff_drive_spawner"
-    args: "diff_cont"
-    param:
-    - name: "use_sim_time"
-      value: "$(var use_sim_time)"
-
-- node:
-    pkg: "controller_manager"
-    exec: "spawner"
-    name: "joint_broad_spawner"
-    args: "joint_broad"
-    param:
-    - name: "use_sim_time"
-      value: "$(var use_sim_time)"

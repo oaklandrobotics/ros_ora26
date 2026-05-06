@@ -141,6 +141,39 @@ def generate_launch_description():
   )
 
   ####################
+  #      Nodes       #
+  ####################
+  diff_drive_node = Node(
+    package='controller_manager',
+    executable='spawner',
+    name='diff_drive_spawner',
+    output='screen',
+    arguments=[
+      'diff_cont'
+    ],
+    parameters=[
+      {
+        'use_sim_time': use_sim_time
+      }
+    ]
+  )
+
+  joint_broad_node = Node(
+    package='controller_manager',
+    executable='spawner',
+    name='joint_broad_spawner',
+    output='screen',
+    arguments=[
+      'joint_broad'
+    ],
+    parameters=[
+      {
+        'use_sim_time': use_sim_time
+      }
+    ]
+  )
+
+  ####################
   #   PreReq Nodes   #
   ####################
   filter_prereq_node = Node(
@@ -233,15 +266,23 @@ def generate_launch_description():
     declare_joy_config,
     declare_fusioncore_config,
 
+    # Generic
     rsp_launch,
     teleop_launch,
 
+    # Sim Specific
     gazebo_launch,
 
+    # Ros2 Control
+    diff_drive_node,
+    joint_broad_node,
+
+    # Prerequisite Nodes
     filter_prereq_node,
     localization_prereq_node,
     nav_prereq_node,
 
+    # Launch Events on Prereq Exit
     filter_launch_event,
     localization_launch_event,
     nav_launch_event

@@ -45,7 +45,7 @@
       <lidar>
         <scan>
           <horizontal>
-            <samples>1875</samples>
+            <samples>720</samples>
             <resolution>1.000000</resolution>
             <min_angle>0.000000</min_angle>
             <max_angle>6.280000</max_angle>
@@ -106,7 +106,7 @@
     <sensor name="depth_camera" type="rgbd_camera">
       <always_on>true</always_on>
       <visualize>true</visualize>
-      <update_rate>30.0</update_rate>
+      <update_rate>15.0</update_rate>
       <topic>depth_camera</topic>
       <gz_frame_id>camera_link</gz_frame_id>
       <camera>
@@ -177,13 +177,13 @@
           <horizontal>
             <noise type="gaussian">
               <mean>0.0</mean>
-              <stddev>0.0</stddev>
+              <stddev>0.5</stddev>
             </noise>
           </horizontal>
           <vertical>
             <noise type="gaussian">
               <mean>0.0</mean>
-              <stddev>0.0</stddev>
+              <stddev>1.0</stddev>
             </noise>
           </vertical>
         </position_sensing>

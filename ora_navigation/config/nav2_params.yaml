@@ -25,13 +25,13 @@
 bt_navigator:
   ros__parameters:
     use_sim_time: true
-    global_frame: map
+    global_frame: odom
     robot_base_frame: base_link
     odom_topic: /fusion/odom         # must point to FusionCore's odometry output
     bt_loop_duration: 10
     default_server_timeout: 20
-    default_nav_to_pose_bt_xml: ""   # leave empty to use Nav2 default BT
-    default_nav_through_poses_bt_xml: ""
+    default_nav_to_pose_bt_xml: "/opt/ros/jazzy/share/nav2_bt_navigator/behavior_trees/navigate_to_pose_w_replanning_and_recovery.xml"
+    default_nav_through_poses_bt_xml: "/opt/ros/jazzy/share/nav2_bt_navigator/behavior_trees/navigate_through_poses_w_replanning_and_recovery.xml"
     navigators: ['navigate_to_pose', 'navigate_through_poses']
     navigate_to_pose:
       plugin: "nav2_bt_navigator::NavigateToPoseNavigator"
@@ -114,7 +114,7 @@ velocity_smoother:
     odom_duration: 0.1
     deadband_velocity: [0.0, 0.0, 0.0]
     velocity_timeout: 1.0
-    max_velocity:     [ 0.5, 0.0,  1.0]  # [x m/s, y m/s, yaw rad/s]
+    max_velocity:     [ 2.2, 0.0,  2.2]  # [x m/s, y m/s, yaw rad/s]
     min_velocity:     [-0.5, 0.0, -1.0]
     max_accel:        [ 0.5, 0.0,  1.5]
     max_decel:        [-0.5, 0.0, -1.5]
@@ -133,13 +133,11 @@ local_costmap:
       global_frame: odom
       robot_base_frame: base_link
       rolling_window: true
-      width:  6        # m: local planning window
-      height: 6
+      width:  8        # m: local planning window
+      height: 8
       resolution: 0.05
-      robot_radius: 0.55   # m: Husky half-width. Replace with your robot's.
-      # footprint: "[[0.5, 0.35], [0.5, -0.35], [-0.5, -0.35], [-0.5, 0.35]]"
+      footprint: "[[0.54, 0.34], [0.54, -0.34], [-0.331, -0.34], [-0.331, 0.34]]"
       plugins: ["obstacle_layer", "inflation_layer"]
-      # If you have lidar, add: plugins: ["obstacle_layer", "inflation_layer"]
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         observation_sources: scan
@@ -165,17 +163,15 @@ global_costmap:
       use_sim_time: true
       update_frequency: 1.0
       publish_frequency: 1.0
-      global_frame: map
+      global_frame: odom
       robot_base_frame: base_link
+      rolling_window: true
+      width: 60
+      height: 60
       robot_radius: 0.55
       resolution: 0.05
-      track_unknown_space: true     # true = plan through unknown (GPS-nav mode)
-      plugins: ["static_layer", "inflation_layer"]
-      static_layer:
-        plugin: "nav2_costmap_2d::StaticLayer"
-        map_subscribe_transient_local: true
-        # No map server needed for GPS-only: publish an empty map or remove this layer
-        # and set track_unknown_space: true + allow_unknown: true in the planner.
+      track_unknown_space: false     # true = plan through unknown (GPS-nav mode)
+      plugins: ["inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 3.0
@@ -209,7 +205,7 @@ behavior_server:
     wait:
       plugin: "nav2_behaviors::Wait"
     local_frame: odom
-    global_frame: map
+    global_frame: odom
     robot_base_frame: base_link
     transform_tolerance: 0.1
     simulate_ahead_time: 2.0

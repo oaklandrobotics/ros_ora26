@@ -50,7 +50,7 @@ fusioncore:
     # x=forward, y=left, z=up (meters). Set to your actual mounting position.
     gnss.lever_arm_x: 0.0
     gnss.lever_arm_y: 0.0
-    gnss.lever_arm_z: 0.0
+    gnss.lever_arm_z: 0.156
 
     gnss.fix2_topic: ""             # set to second antenna topic for dual-antenna heading
     gnss.heading_topic: ""          # set to /gnss/heading if using u-blox F9H dual-antenna

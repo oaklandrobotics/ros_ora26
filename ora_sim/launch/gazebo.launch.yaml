@@ -46,3 +46,12 @@ launch:
         value: "Erdferkel"
       - name: "z"
         value: "0.65"
+
+- node:
+    pkg: "ora_launch"
+    exec: "gz_pose_to_gps"
+    name: "gz_pose_to_gps"
+    output: "screen"
+    param:
+    - name: "use_sim_time"
+      value: "true"

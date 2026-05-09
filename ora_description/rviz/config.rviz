@@ -72,7 +72,7 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        gps_link:
+        gnss_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -140,7 +140,7 @@ Visualization Manager:
           Value: true
         chassis_link:
           Value: true
-        gps_link:
+        gnss_link:
           Value: true
         imu_link:
           Value: true
@@ -174,7 +174,7 @@ Visualization Manager:
               {}
             chassis_link:
               {}
-            gps_link:
+            gnss_link:
               {}
             imu_link:
               {}

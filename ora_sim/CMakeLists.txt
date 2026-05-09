@@ -31,6 +31,12 @@ install(DIRECTORY
   DESTINATION share/${PROJECT_NAME}/
 )
 
+install(PROGRAMS
+  launch/gz_pose_to_gps.py
+  DESTINATION lib/${PROJECT_NAME}
+  RENAME gz_pose_to_gps
+)
+
 # Add hook to helper file which will export the model file path
 ament_environment_hooks("${CMAKE_CURRENT_SOURCE_DIR}/env_config/${PROJECT_NAME}_gz_path.sh.in")
 

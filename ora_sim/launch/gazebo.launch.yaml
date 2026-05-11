@@ -27,15 +27,13 @@ launch:
     file: "$(find-pkg-share ros_gz_bridge)/launch/ros_gz_bridge.launch.py"
     arg:
       - name: "bridge_name"
-        value: "ros_gz_bridge"
+        value: "ora_ros_gz_bridge"
       - name: "config_file"
         value: "$(find-pkg-share ora_sim)/config/bridge_config.yaml"
-      - name: "container_name"
-        value: "ros_gz_container"
       - name: "create_own_container"
-        value: "False"
-      - name: "use_composition"
         value: "True"
+      - name: "use_composition"
+        value: "False"
 
 - include:
     file: "$(find-pkg-share ros_gz_sim)/launch/gz_spawn_model.launch.py"
@@ -50,13 +48,10 @@ launch:
         value: "0.65"
 
 - node:
-    pkg: "controller_manager"
-    exec: "spawner"
-    name: "diff_drive_spawner"
-    args: "diff_cont --controller-ros-args \"-r /diff_cont/cmd_vel:=/sim/cmd_vel -r /diff_cont/odom:=/sim/odom\""
-
-- node:
-    pkg: "controller_manager"
-    exec: "spawner"
-    name: "joint_broad_spawner"
-    args: "joint_broad"
+    pkg: "ora_launch"
+    exec: "gz_pose_to_gps"
+    name: "gz_pose_to_gps"
+    output: "screen"
+    param:
+    - name: "use_sim_time"
+      value: "true"

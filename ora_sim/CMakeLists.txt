@@ -25,10 +25,16 @@ endif()
 
 install(DIRECTORY
   config
-  launch 
+  launch
   models
   worlds
   DESTINATION share/${PROJECT_NAME}/
+)
+
+install(PROGRAMS
+  launch/gz_pose_to_gps.py
+  DESTINATION lib/${PROJECT_NAME}
+  RENAME gz_pose_to_gps
 )
 
 # Add hook to helper file which will export the model file path

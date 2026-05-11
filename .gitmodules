@@ -1,3 +1,7 @@
 [submodule "fusioncore"]
 	path = fusioncore
 	url = https://github.com/manankharwar/fusioncore
+[submodule "uros_agent"]
+	path = uros_agent
+	url = https://github.com/micro-ROS/micro-ROS-Agent
+	branch = jazzy

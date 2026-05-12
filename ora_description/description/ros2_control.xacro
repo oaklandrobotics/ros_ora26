@@ -1,8 +1,5 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="https://www.ros.org/wiki/xacro">
-  <!-- Args -->
-  <xacro:arg name="sim_mode" default="true"/>
-
   <xacro:if value="$(arg sim_mode)">
     <ros2_control name="GazeboSystem" type="system">
       <hardware>
@@ -59,7 +56,29 @@
   </xacro:if>
 
   <xacro:unless value="$(arg sim_mode)">
-    <!-- TODO: Add real hardware control -->
-  </xacro:unless>
+    <ros2_control name="RealRobot" type="system">
+      <hardware>
+        <plugin>roboteq_ros2_control_plugin/RoboteqHardwareInterface</plugin>
+        <param name="can">can0</param>
+      </hardware>
 
+      <joint name="left_wheel_joint">
+        <param name="node_id">1</param>
+        <param name="gear_ratio">7.3</param>
+
+        <command_interface name="velocity"/>
+        <state_interface name="velocity"/>
+        <state_interface name="position"/>
+      </joint>
+
+      <joint name="right_wheel_joint">
+        <param name="node_id">2</param>
+        <param name="gear_ratio">7.3</param>
+
+        <command_interface name="velocity"/>
+        <state_interface name="velocity"/>
+        <state_interface name="position"/>
+      </joint>
+    </ros2_control>
+  </xacro:unless>
 </robot>

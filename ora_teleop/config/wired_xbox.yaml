@@ -10,17 +10,17 @@ teleop_twist_joy_node:
     axis_linear:
       x: 1
     scale_linear:
-      x: 5.0
+      x: 1.0
     scale_linear_turbo:
-      x: 7.5
+      x: 1.5
 
     # Right stick X axis is left/right
     axis_angular:
       yaw: 3
     scale_angular:
-      yaw: 5.0
+      yaw: 1.0
     scale_angular_turbo:
-      yaw: 7.5
+      yaw: 1.5
 
     # Left bumper is normal enable button
     # Right bumper is turbo enable button

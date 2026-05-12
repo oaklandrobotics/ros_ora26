@@ -36,4 +36,4 @@ launch:
       value: "$(var use_sim_time)"
     remap:
     - from: "/cmd_vel_out"
-      to: "/sim/cmd_vel"
+      to: "/diff_cont/cmd_vel"

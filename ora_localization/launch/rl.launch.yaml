@@ -17,9 +17,9 @@ launch:
         value: "$(var use_sim_time)"
     remap:
       - from: "wheel/odometry"
-        to: "/sim/odom"
+        to: "/diff_cont/odom"
       - from: "imu/data"
-        to: "/sim/imu/data"
+        to: "/imu"
       - from: "odometry/filtered"
         to: "odometry/local"
 
@@ -34,8 +34,8 @@ launch:
         value: "$(var use_sim_time)"
     remap:
       - from: "wheel/odometry"
-        to: "/sim/odom"
+        to: "/diff_cont/odom"
       - from: "imu/data"
-        to: "/sim/imu/data"
+        to: "/imu"
       - from: "odometry/filtered"
         to: "odometry/global"

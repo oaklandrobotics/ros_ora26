@@ -11,8 +11,10 @@ ORIGIN_LON = -83.21899847120743
 ORIGIN_ALT = 269.7
 A  = 6378137.0
 E2 = 0.00669437999014
-NOISE_H = 0.5   # 1-sigma horizontal GPS noise (m)
-NOISE_V = 0.3   # 1-sigma vertical GPS noise (m)
+
+FIX_HZ = 8
+NOISE_H = 0.0   # 5 cm horizontal 1-sigma
+NOISE_V = 0.0   # 10 cm vertical 1-sigma
 
 def enu_to_lla(x, y, z):
     lat0 = math.radians(ORIGIN_LAT)
@@ -37,10 +39,9 @@ def enu_to_lla(x, y, z):
     alt = p/math.cos(lat)-N
     return math.degrees(lat), math.degrees(math.atan2(Yp,Xp)), alt
 
-def _is_base_link(frame_id):
-    # Matches "base_link", "fusioncore_robot::base_link", "fusioncore_robot/base_link"
+def _is_gnss_link(frame_id):
     tail = frame_id.rsplit("::", 1)[-1].rsplit("/", 1)[-1]
-    return tail == "base_link"
+    return tail == "gnss_link"
 
 class GzPoseToGps(Node):
     def __init__(self):
@@ -60,6 +61,9 @@ class GzPoseToGps(Node):
         self.ref_published = False
         self.get_logger().info(f"GPS publisher ready. Origin: {ORIGIN_LAT}, {ORIGIN_LON}")
 
+        self.latest_body_translation = None
+        self.timer = self.create_timer((1.0 / FIX_HZ), self.publish_fix)
+
     def _find_body(self, msg):
         """Return the translation of the robot body link.
 
@@ -77,9 +81,8 @@ class GzPoseToGps(Node):
                         return t
             # If the sticky frame is no longer present / out of z range, fall through
 
-        # 2. Name-based: find "base_link" regardless of namespace prefix
         for tf in msg.transforms:
-            if _is_base_link(tf.child_frame_id):
+            if _is_gnss_link(tf.child_frame_id):
                 t = tf.transform.translation
                 if 0.05 < t.z < 0.4:
                     self.body_frame_id = tf.child_frame_id
@@ -107,6 +110,14 @@ class GzPoseToGps(Node):
         if best is None:
             return
 
+        self.latest_body_translation = best
+    
+    def publish_fix(self):
+        if (self.latest_body_translation is None):
+            return
+
+        best = self.latest_body_translation
+
         x = best.x + random.gauss(0, NOISE_H)
         y = best.y + random.gauss(0, NOISE_H)
         # First publish: use exact z so fusion_node's altitude reference has no bias.
@@ -126,8 +137,13 @@ class GzPoseToGps(Node):
         fix.status.status  = NavSatStatus.STATUS_FIX
         fix.status.service = NavSatStatus.SERVICE_GPS
         fix.latitude = lat; fix.longitude = lon; fix.altitude = alt
-        fix.position_covariance = [NOISE_H**2,0,0, 0,NOISE_H**2,0, 0,0,NOISE_V**2]
+        fix.position_covariance = [
+            NOISE_H**2, 0, 0,
+            0, NOISE_H**2, 0,
+            0, 0, NOISE_V**2
+        ]
         fix.position_covariance_type = NavSatFix.COVARIANCE_TYPE_DIAGONAL_KNOWN
+
         self.pub.publish(fix)
 
 def main():

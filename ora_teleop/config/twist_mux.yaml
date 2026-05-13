@@ -5,7 +5,7 @@ twist_mux:
     # Higher Priority -> Takes control over lower priority
     topics:
       nav2:
-        topic: cmd_vel_nav
+        topic: cmd_vel_nav_out
         timeout: 0.5
         priority: 70
       keyboard:

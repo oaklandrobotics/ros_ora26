@@ -24,7 +24,7 @@ fusioncore:
     # Has onboard magnetometer, but interference is likely to make it unreliable
     # Yaw will be initialized from GPS motion after ~5m of travel
     imu.has_magnetometer: false     # Disable because of possible interference
-    imu.gyro_noise: 0.005           # rad/s : derived from 0.014 dps/√Hz at 100Hz
+    imu.gyro_noise: 0.1           # rad/s : derived from 0.014 dps/√Hz at 100Hz
     imu.accel_noise: 0.1           # m/s²  : conservative for MEMS on a vibrating platform
     imu.remove_gravitational_acceleration: false  # Microstrain driver publishes raw
     imu.frame_id: "imu_link"
@@ -33,7 +33,7 @@ fusioncore:
     # 500 CPR optical encoders through a 24:1 gearbox, 0.1651m wheel radius.
     # Tighter than the default: Husky's encoders are high quality.
     encoder.vel_noise: 0.02         # m/s
-    encoder.yaw_noise: 0.01         # rad/s
+    encoder.yaw_noise: 0.005         # rad/s
 
     # ── GPS: u-blox F9P (standard autonomous GPS defaults) ───────────────────
     # F9P autonomous CEP: 2.0m (1σ ≈ 2.4m). Conservative 2.5m set here.
@@ -66,7 +66,7 @@ fusioncore:
     # ── Adaptive noise ────────────────────────────────────────────────────────
     adaptive.imu: true
     adaptive.encoder: true
-    adaptive.gnss: true
+    adaptive.gnss: false
     adaptive.window: 50
     adaptive.alpha: 0.01
 
@@ -78,6 +78,8 @@ fusioncore:
     ukf.q_acceleration: 1.0
     ukf.q_gyro_bias: 1.0e-5
     ukf.q_accel_bias: 1.0e-5
+
+    init.stationary_window: 2.0
 
     input.gnss_crs: "EPSG:4326"
     output.crs: "EPSG:4978"

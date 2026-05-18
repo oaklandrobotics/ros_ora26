@@ -19,6 +19,9 @@ BLUR_KERNEL_SIZE = 5
 LINE_LOWER_BOUND = 200
 LINE_UPPER_BOUND = 255
 
+MIN_DEPTH = 1
+MAX_DEPTH = 8
+
 class EdgeDetectionNode(Node):
     def __init__(self):
         super().__init__("edge_detection_node")
@@ -93,7 +96,7 @@ class EdgeDetectionNode(Node):
         # Filter out invalid depth (0 or NaN)
         # Increases performance by only rendering points that are part of a 'line'
         # Adjust (depths > NUM) to change the minimum depth (stop robot from appearing as a line)
-        valid_mask = (depths > 1) & (~np.isnan(depths))
+        valid_mask = (depths > MIN_DEPTH) & (depths < MAX_DEPTH) & np.isfinite(depths)
         z = depths[valid_mask]
         u = u_indices[valid_mask]
         v = v_indices[valid_mask]
@@ -110,7 +113,7 @@ class EdgeDetectionNode(Node):
         y = (v - cy) * z / fy
 
         # Create a stack of points for pointcloud2 to display
-        points = np.column_stack((x, y, z))
+        points = np.column_stack((x, y, z)).astype(np.float32)
 
         # Create and Publish PointCloud2
         pc_msg = pc2.create_cloud_xyz32(image_depth.header, points)

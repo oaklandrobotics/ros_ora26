@@ -7,10 +7,12 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(rclcpp REQUIRED)
 
+add_executable(gps_waypoint_follower src/gps_waypoint_follower.cpp)
+ament_target_dependencies(gps_waypoint_follower
+  rclcpp
+)
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
@@ -27,6 +29,11 @@ install(DIRECTORY
   config
   launch
   DESTINATION share/${PROJECT_NAME}/
+)
+
+install(TARGETS
+  gps_waypoint_follower
+  DESTINATION lib/${PROJECT_NAME}
 )
 
 ament_package()

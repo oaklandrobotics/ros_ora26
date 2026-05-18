@@ -8,6 +8,7 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(rclcpp_action REQUIRED)
 find_package(ament_index_cpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
@@ -19,8 +20,9 @@ find_package(yaml-cpp REQUIRED)
 
 add_executable(gps_waypoint_follower src/gps_waypoint_follower.cpp)
 ament_target_dependencies(gps_waypoint_follower
-  rclcpp ament_index_cpp std_msgs std_srvs fusioncore_ros geographic_msgs geometry_msgs
+  rclcpp rclcpp_action ament_index_cpp std_msgs std_srvs  geographic_msgs geometry_msgs
   nav2_msgs
+  fusioncore_ros
 )
 
 target_link_libraries(gps_waypoint_follower

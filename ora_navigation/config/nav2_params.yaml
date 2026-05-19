@@ -1,27 +1,6 @@
 # nav2_params.yaml: FusionCore + Nav2 reference configuration
-#
-# Designed for: outdoor GPS navigation, differential-drive robot
-# Tested with:  Clearpath Husky A200, ROS 2 Jazzy, Nav2 Jazzy
-#
-# FusionCore publishes:
-#   /fusion/odom         (nav_msgs/Odometry, 100 Hz)
-#   TF: odom → base_link (100 Hz, GPS-corrected: odom origin anchored to first GPS fix)
-#
-# What to change for your robot:
-#   robot_radius          → half the widest dimension (or use footprint polygon)
-#   max_vel_x             → your platform's max forward speed
-#   min_vel_x_backwards   → set 0.0 to prevent reversing
-#   base_frame_id         → must match fusioncore.yaml base_frame
-#
-# Usage:
-#   ros2 launch fusioncore_ros fusioncore_nav2.launch.py \
-#     fusioncore_config:=<your_robot>.yaml \
-#     nav2_params:=$(ros2 pkg prefix fusioncore_ros)/share/fusioncore_ros/config/nav2_params.yaml
-#
-# For Clearpath Husky, also remap:
-#   --ros-args -r /odom/wheels:=/husky_velocity_controller/odom -r /gnss/fix:=/fix
 
-# ── Behaviour Tree navigator ───────────────────────────────────────────────────
+# ── Behaviour Tree Navigator ──────────────────────────────────────────────────
 bt_navigator:
   ros__parameters:
     use_sim_time: true
@@ -38,7 +17,7 @@ bt_navigator:
     navigate_through_poses:
       plugin: "nav2_bt_navigator::NavigateThroughPosesNavigator"
 
-# ── Planner: NavFn (global A* path) ───────────────────────────────────────────
+# ── Planner: NavFn (Global A*) ────────────────────────────────────────────────
 planner_server:
   ros__parameters:
     use_sim_time: true
@@ -49,9 +28,8 @@ planner_server:
       use_astar: true         # A* over Dijkstra for outdoor long-range
       allow_unknown: true     # plan through unexplored space (GPS-nav, no lidar map needed)
 
-# ── Controller: Regulated Pure Pursuit ────────────────────────────────────────
-# RPP works well outdoors with GPS: smooth, predictable, handles long straight runs.
-# For tight indoor spaces, switch to DWB (plugin: "dwb_core::DWBLocalPlanner").
+# ── Controller Server (RPP) ───────────────────────────────────────────────────
+# 
 controller_server:
   ros__parameters:
     use_sim_time: true
@@ -62,7 +40,7 @@ controller_server:
     min_theta_velocity_threshold: 0.001
     failure_tolerance: 0.3
     progress_checker_plugin: "progress_checker"
-    goal_checker_plugins: ["general_goal_checker"]
+    goal_checker_plugins: ["position_goal_checker"]
     controller_plugins: ["FollowPath"]
 
     progress_checker:
@@ -70,20 +48,20 @@ controller_server:
       required_movement_radius: 0.5
       movement_time_allowance: 10.0
 
-    general_goal_checker:
+    position_goal_checker:
       stateful: true
-      plugin: "nav2_controller::SimpleGoalChecker"
-      xy_goal_tolerance: 0.5      # m: relax for GPS-accuracy navigation
-      yaw_goal_tolerance: 0.25    # rad
+      plugin: "nav2_controller::PositionGoalChecker"
+      xy_goal_tolerance: 0.5      # Tolerance to meet goal completion criteria (m).
+      path_length_tolerance: 0.5  # Tolerance to meet goal completion criteria (m).
 
     FollowPath:
       plugin: "nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController"
-      desired_linear_vel: 0.5     # m/s: set to your comfortable cruise speed
-      lookahead_dist: 1.5         # m: increase for faster/smoother outdoor driving
+      desired_linear_vel: 1.0     # m/s: set to your comfortable cruise speed
+      lookahead_dist: 3.0         # m: increase for faster/smoother outdoor driving
       min_lookahead_dist: 0.8
       max_lookahead_dist: 3.0
       lookahead_time: 1.5
-      rotate_to_heading_angular_vel: 0.5   # rad/s
+      rotate_to_heading_angular_vel: 1.5
       transform_tolerance: 0.1
       use_velocity_scaled_lookahead_dist: true
       min_approach_linear_velocity: 0.05
@@ -99,10 +77,11 @@ controller_server:
       use_rotate_to_heading: true     # rotate in place before starting: safe for GPS nav
       allow_reversing: false
       rotate_to_heading_min_angle: 0.785  # ~45 deg: only rotate if heading error > this
-      max_angular_accel: 1.5
+      max_angular_accel: 3.0
       max_robot_pose_search_dist: 10.0
 
 # ── Smoother ──────────────────────────────────────────────────────────────────
+# Smooth velocity outputs from Nav
 velocity_smoother:
   ros__parameters:
     use_sim_time: true
@@ -110,20 +89,17 @@ velocity_smoother:
     smoothing_frequency: 20.0
     scale_velocities: false
     feedback: "OPEN_LOOP"
-    odom_topic: /fusion/odom        # must point to FusionCore's odometry output
+    odom_topic: /fusion/odom
     odom_duration: 0.1
     deadband_velocity: [0.0, 0.0, 0.0]
     velocity_timeout: 1.0
     max_velocity:     [ 2.2, 0.0,  2.2]  # [x m/s, y m/s, yaw rad/s]
-    min_velocity:     [-0.5, 0.0, -1.0]
+    min_velocity:     [-1.0, 0.0, -2.2]
     max_accel:        [ 0.5, 0.0,  1.5]
     max_decel:        [-0.5, 0.0, -1.5]
 
-# ── Costmaps ──────────────────────────────────────────────────────────────────
-# GPS-only navigation: no static map, no lidar.
-# Both costmaps use only the robot's footprint (inflation) and optional sensor layers.
-# If you have a lidar, add an obstacle_layer: see comment below.
-
+# ── Local Costmap ────────────────────────────────────────────────────────────
+# Used for local plan
 local_costmap:
   local_costmap:
     ros__parameters:
@@ -133,9 +109,10 @@ local_costmap:
       global_frame: odom
       robot_base_frame: base_link
       rolling_window: true
-      width:  8        # m: local planning window
+      width:  8
       height: 8
       resolution: 0.05
+      # TODO: Update footprint to match robot
       footprint: "[[0.54, 0.34], [0.54, -0.34], [-0.331, -0.34], [-0.331, 0.34]]"
       plugins: ["obstacle_layer", "inflation_layer"]
       obstacle_layer:
@@ -155,9 +132,11 @@ local_costmap:
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 3.0
-        inflation_radius: 0.4   # m: pad around robot for obstacle clearance
+        inflation_radius: 0.4
       always_send_full_costmap: true
 
+# ── Global Costmap ────────────────────────────────────────────────────────────
+# Used to create global plan
 global_costmap:
   global_costmap:
     ros__parameters:
@@ -167,11 +146,12 @@ global_costmap:
       global_frame: odom
       robot_base_frame: base_link
       rolling_window: true
-      width: 40
-      height: 40
+      width: 80
+      height: 80
       resolution: 0.1
+      # TODO: Update footprint to match robot
       footprint: "[[0.54, 0.34], [0.54, -0.34], [-0.331, -0.34], [-0.331, 0.34]]"
-      track_unknown_space: false     # true = plan through unknown (GPS-nav mode)
+      track_unknown_space: false
       plugins: ["obstacle_layer", "inflation_layer"]
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
@@ -192,16 +172,15 @@ global_costmap:
         inflation_radius: 0.5
       always_send_full_costmap: false
 
-# ── Map server (empty map for GPS-only navigation) ────────────────────────────
-# FusionCore provides absolute GPS positioning: no lidar map needed.
-# This publishes a 100m × 100m empty costmap as the global map.
-# If you have a real map (pgm/yaml), point map_server here instead.
+# ── Map Server ────────────────────────────────────────────────────────────────
+# No map available 
 map_server:
   ros__parameters:
     use_sim_time: true
-    yaml_filename: ""      # leave empty: map_server not needed for GPS-only nav
+    yaml_filename: ""
 
-# ── Behaviour server (recovery behaviours) ────────────────────────────────────
+# ── Behavior Server ───────────────────────────────────────────────────────────
+# Recovery behaviors
 behavior_server:
   ros__parameters:
     use_sim_time: true
@@ -209,24 +188,27 @@ behavior_server:
     costmap_topic: local_costmap/costmap_raw
     footprint_topic: local_costmap/published_footprint
     cycle_frequency: 10.0
-    behavior_plugins: ["backup", "spin", "drive_on_heading", "wait"]
+    behavior_plugins: ["backup", "drive_on_heading", "wait", "spin"]
     backup:
       plugin: "nav2_behaviors::BackUp"
-    spin:
-      plugin: "nav2_behaviors::Spin"
     drive_on_heading:
       plugin: "nav2_behaviors::DriveOnHeading"
     wait:
       plugin: "nav2_behaviors::Wait"
+    spin:
+      plugin: "nav2_behaviors::Spin"
     local_frame: odom
     global_frame: odom
     robot_base_frame: base_link
     transform_tolerance: 0.1
     simulate_ahead_time: 2.0
-    max_rotational_vel: 0.5
-    min_rotational_vel: 0.1
-    rotational_acc_lim: 1.5
+    max_rotational_vel: 1.2
+    min_rotational_vel: 0.2
+    rotational_acc_lim: 3.0
 
+# ── Collision Monitor ─────────────────────────────────────────────────────────
+# Checks whether the robot is going to collide with an obstacle
+# Using lidar and lane lines as collidables
 collision_monitor:
   ros__parameters:
     base_frame_id: "base_link"
@@ -239,8 +221,6 @@ collision_monitor:
     source_timeout: 1.0
     base_shift_correction: True
     stop_pub_timeout: 2.0
-    # Polygons represent zone around the robot for "stop", "slowdown" and "limit" action types,
-    # and robot footprint for "approach" action type.
     polygons: ["FootprintApproach"]
     FootprintApproach:
       type: "polygon"
@@ -259,6 +239,10 @@ collision_monitor:
       max_height: 2.0
       enabled: True
 
+# ── Docking Server ────────────────────────────────────────────────────────────
+# Unused
+# Nav2 required the docking server to be in the nav2_params file to launch the
+# bringup.
 docking_server:
   ros__parameters:
     controller_frequency: 50.0
@@ -273,7 +257,6 @@ docking_server:
     dock_backwards: false
     dock_prestaging_tolerance: 0.5
 
-    # Types of docks
     dock_plugins: ['simple_charging_dock']
     simple_charging_dock:
       plugin: 'opennav_docking::SimpleChargingDock'
@@ -291,14 +274,6 @@ docking_server:
       external_detection_rotation_yaw: 0.0
       filter_coef: 0.1
 
-    # Dock instances
-    # The following example illustrates configuring dock instances.
-    # docks: ['home_dock']  # Input your docks here
-    # home_dock:
-    #   type: 'simple_charging_dock'
-    #   frame: map
-    #   pose: [0.0, 0.0, 0.0]
-
     controller:
       k_phi: 3.0
       k_delta: 2.0
@@ -312,7 +287,7 @@ docking_server:
       simulation_step: 0.1
       dock_collision_threshold: 0.3
 
-# ── Lifecycle managers ────────────────────────────────────────────────────────
+# ── Lifecycle Manager ─────────────────────────────────────────────────────────
 lifecycle_manager_navigation:
   ros__parameters:
     use_sim_time: true

@@ -1,0 +1,8 @@
+[Unit]
+Description=Update repo from GitHub
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/ora/ros_ora26/zed-jetson/update-repo/update-repo.sh

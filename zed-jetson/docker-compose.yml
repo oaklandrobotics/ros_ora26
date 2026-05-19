@@ -1,4 +1,3 @@
-# TODO make this compose automatically brought up as a systemd service
 # TODO document everything being done here
 
 services:
@@ -11,6 +10,9 @@ services:
     environment:
       DISPLAY: ${DISPLAY}
       NVIDIA_DRIVER_CAPABILITIES: all
+      
+    labels:
+      - autoheal=true
 
     volumes:
       - /tmp:/tmp
@@ -26,15 +28,24 @@ services:
         ". install/local_setup.bash &&
         ros2 launch zed_wrapper zed_camera.launch.py camera_model:=zed2i ros_params_override_path:=/config/zed_params.yaml"
 
-    healthcheck: #TODO this doesn't seem to be working, need to investigate
+    healthcheck: #Monitor the container based on whether or not the ZED is physically connected
       test:
         [
           "CMD-SHELL",
-          "source /opt/ros/$${ROS_DISTRO:-jazzy}/setup.bash && timeout 5s ros2 topic echo --once /zed/zed_node/status/heartbeat >/dev/null 2>&1"
+          "grep -Riq 'stereolabs' /sys/bus/usb/devices/*/manufacturer /sys/bus/usb/devices/*/product"
         ]
       interval: 10s
-      timeout: 8s
-      retries: 3
+      timeout: 5s
+      retries: 1
       start_period: 30s
 
     restart: unless-stopped
+    
+  autoheal:
+    image: willfarrell/autoheal:latest
+    container_name: autoheal
+    restart: unless-stopped
+    environment:
+      AUTOHEAL_CONTAINER_LABEL: autoheal
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

@@ -1,0 +1,17 @@
+[Unit]
+Description=ORA ZED ROS2 Wrapper Docker container
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ora
+WorkingDirectory=/home/ora/ros_ora26/zed-jetson
+ExecStart=/usr/bin/docker compose up
+ExecStop=/usr/bin/docker compose down
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

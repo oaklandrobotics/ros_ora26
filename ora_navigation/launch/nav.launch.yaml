@@ -12,3 +12,11 @@ launch:
         value: "$(find-pkg-share ora_navigation)/config/nav2_params.yaml"
       - name: "use_sim_time"
         value: "$(var use_sim_time)"
+
+- node:
+    pkg: "ora_navigation"
+    exec: "gps_waypoint_follower"
+    output: "screen"
+    param:
+      - name: "use_sim_time"
+        value: "$(var use_sim_time)"

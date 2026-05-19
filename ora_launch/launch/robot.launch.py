@@ -173,6 +173,17 @@ def generate_launch_description():
     ]
   )
 
+  edge_detection_node = Node(
+    package='ora_edge_detection',
+    executable='edge_detection',
+    name='ora_edge_detection',
+    parameters=[
+      {
+        'use_sim_time': use_sim_time
+      }
+    ]
+  )
+
   ####################
   #   PreReq Nodes   #
   ####################
@@ -276,6 +287,9 @@ def generate_launch_description():
     # Ros2 Control
     diff_drive_node,
     joint_broad_node,
+
+    # Edge/line detection
+    edge_detection_node,
 
     # Prerequisite Nodes
     filter_prereq_node,

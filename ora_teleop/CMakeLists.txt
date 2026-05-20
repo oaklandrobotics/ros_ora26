@@ -7,10 +7,15 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(std_srvs REQUIRED)
 
+add_executable(controller_node src/controller_node.cpp)
+ament_target_dependencies(
+  controller_node
+  rclcpp sensor_msgs std_srvs
+)
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
@@ -24,8 +29,15 @@ if(BUILD_TESTING)
 endif()
 
 install(
-  DIRECTORY config launch
+  DIRECTORY
+  config
+  launch
   DESTINATION share/${PROJECT_NAME}
+)
+
+install(TARGETS
+  controller_node
+  DESTINATION lib/${PROJECT_NAME}
 )
 
 ament_package()

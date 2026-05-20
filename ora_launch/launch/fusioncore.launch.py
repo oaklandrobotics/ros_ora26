@@ -32,7 +32,7 @@ def generate_launch_description():
     output='screen',
     parameters=[
       PathJoinSubstitution([
-        FindPackageShare('ora_localization'), 'config', 'fusioncore_config.yaml',
+        FindPackageShare('ora_launch'), 'config', 'fusioncore_config.yaml',
       ]),
       {
         'use_sim_time': use_sim_time,

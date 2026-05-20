@@ -121,7 +121,7 @@ def generate_launch_description():
   fusioncore_launch = IncludeLaunchDescription(
     AnyLaunchDescriptionSource(
       PathJoinSubstitution([
-        FindPackageShare('ora_localization'), 'launch', 'fusioncore.launch.py',
+        FindPackageShare('ora_launch'), 'launch', 'fusioncore.launch.py',
       ])
     ),
     launch_arguments={

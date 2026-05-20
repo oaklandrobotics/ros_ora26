@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import rclpy
 import message_filters
 from rclpy.node import Node 

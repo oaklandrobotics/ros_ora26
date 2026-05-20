@@ -109,7 +109,7 @@ def generate_launch_description():
   filter_launch = IncludeLaunchDescription(
     AnyLaunchDescriptionSource(
       PathJoinSubstitution([
-        FindPackageShare('ora_lidar'), 'launch', 'filter.launch.yaml',
+        FindPackageShare('ora_perception'), 'launch', 'filter.launch.yaml',
       ])
     ),
     launch_arguments={
@@ -174,9 +174,9 @@ def generate_launch_description():
   )
 
   edge_detection_node = Node(
-    package='ora_edge_detection',
+    package='ora_perception',
     executable='edge_detection',
-    name='ora_edge_detection',
+    name='edge_detection',
     parameters=[
       {
         'use_sim_time': use_sim_time

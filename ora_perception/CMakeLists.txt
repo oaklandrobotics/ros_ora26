@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(ora_lidar)
+project(ora_perception)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -27,6 +27,12 @@ install(DIRECTORY
   launch
   config
   DESTINATION share/${PROJECT_NAME}/
+)
+
+install(PROGRAMS
+  ora_perception/edge_detection.py
+  DESTINATION lib/${PROJECT_NAME}
+  RENAME edge_detection
 )
 
 ament_package()

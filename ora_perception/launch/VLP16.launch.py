@@ -42,7 +42,7 @@ import launch_ros.actions
 
 
 def generate_launch_description():
-    driver_share_dir = ament_index_python.packages.get_package_share_directory('ora_lidar') # Use our own params for the driver instead of the defaults
+    driver_share_dir = ament_index_python.packages.get_package_share_directory('ora_perception') # Use our own params for the driver instead of the defaults
     driver_params_file = os.path.join(driver_share_dir, 'config', 'VLP16.yaml')
     velodyne_driver_node = launch_ros.actions.Node(package='velodyne_driver',
                                                    executable='velodyne_driver_node',

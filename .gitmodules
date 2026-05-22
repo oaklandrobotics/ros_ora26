@@ -1,10 +1,13 @@
 [submodule "fusioncore"]
-	path = fusioncore
+	path = third_party/fusioncore
 	url = https://github.com/manankharwar/fusioncore
 [submodule "uros_agent"]
-	path = uros_agent
+	path = third_party/uros_agent
 	url = https://github.com/micro-ROS/micro-ROS-Agent
 	branch = jazzy
 [submodule "zed-ros2-interfaces"]
-	path = zed-ros2-interfaces
+	path = third_party/zed-ros2-interfaces
 	url = https://github.com/stereolabs/zed-ros2-interfaces
+[submodule "roboteq_ros2_control"]
+	path = third_party/roboteq_ros2_control
+	url = https://github.com/oaklandrobotics/roboteq_ros2_control

@@ -47,7 +47,7 @@ private:
   // Constants
   static constexpr uint8_t k_reset_nav_button_ = 0;
   static constexpr uint8_t k_set_estop_button_ = 1;
-  static constexpr uint8_t k_set_course_button_ = 2;
+  static constexpr uint8_t k_set_course_button_ = 4;
   static constexpr uint8_t k_set_auton_button_ = 3;
 };
 

@@ -50,14 +50,14 @@ def generate_launch_description():
 
   declare_joy_config = DeclareLaunchArgument(
     'joy_config',
-    default_value='wired_xbox.yaml',
+    default_value='bt_xbox.yaml',
     description='Joystick config file'
   )
 
   declare_fusioncore_config = DeclareLaunchArgument(
-    'joy_config',
-    default_value='wired_xbox.yaml',
-    description='Joystick config file'
+    'fusioncore_config',
+    default_value='fusioncore_config.yaml',
+    description='FusionCore config file'
   )
 
   ####################

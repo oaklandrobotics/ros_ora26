@@ -6,7 +6,7 @@ launch:
     default: "True"
 - arg:
     name: "joy_config"
-    default: "wired_xbox.yaml"
+    default: "bt_xbox.yaml"
 
 # Launch Nodes
 - node:
@@ -37,3 +37,7 @@ launch:
     remap:
     - from: "/cmd_vel_out"
       to: "/diff_cont/cmd_vel"
+
+- node:
+    pkg: "ora_teleop"
+    exec: "controller_node"

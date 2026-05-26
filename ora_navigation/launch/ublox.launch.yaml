@@ -13,8 +13,8 @@ launch:
       value: "10001"
     - name: "mountpoint"
       value: "METR_RTCM3-GG"
-    - name: "username" #TODO get ORA creds instead of my own
-      value: "dmocnik"
+    - name: "username"
+      value: "ourobotics"
     - name: "password"
       value: "$(env MDOT_PW)" # make sure to run `export MDOT_PW=<the_password>` before launching
     - name: "use_https"

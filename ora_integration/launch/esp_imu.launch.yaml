@@ -6,7 +6,7 @@ launch:
     default: "/dev/ttyUSB0"
 - arg:
     name: "baud_rate"
-    default: "912600"
+    default: "115200"
 
 - node:
     pkg: "micro_ros_agent"

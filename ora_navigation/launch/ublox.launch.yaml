@@ -1,21 +1,26 @@
 launch:
-# u-blox driver
-- include:
-    file: "$(find-pkg-share ublox_dgnss)/launch/ublox_rover_hpposllh_navsatfix.launch.py"
 
-# NTRIP Client
-- include:
-    file: "$(find-pkg-share ublox_dgnss)/launch/ntrip_client.launch.py"
-    arg:
-    - name: "host"
-      value: "148.149.0.87"
-    - name: "port"
-      value: "10001"
-    - name: "mountpoint"
-      value: "METR_RTCM3-GG"
-    - name: "username"
-      value: "ourobotics"
-    - name: "password"
-      value: "$(env MDOT_PW)" # make sure to run `export MDOT_PW=<the_password>` before launching
-    - name: "use_https"
-      value: "False"
+- group:
+  - push_ros_namespace:
+      namespace: "gnss"
+
+  # u-blox driver
+  - include:
+      file: "$(find-pkg-share ublox_dgnss)/launch/ublox_rover_hpposllh_navsatfix.launch.py"
+
+  # NTRIP Client
+  - include:
+      file: "$(find-pkg-share ublox_dgnss)/launch/ntrip_client.launch.py"
+      arg:
+      - name: "host"
+        value: "148.149.0.87"
+      - name: "port"
+        value: "10001"
+      - name: "mountpoint"
+        value: "METR_RTCM3-GG"
+      - name: "username"
+        value: "ourobotics"
+      - name: "password"
+        value: "$(env MDOT_PW)" # make sure to run `export MDOT_PW=<the_password>` before launching
+      - name: "use_https"
+        value: "False"

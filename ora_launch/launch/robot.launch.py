@@ -117,6 +117,20 @@ def generate_launch_description():
     }.items()
   )
 
+  # GNSS
+  gnss_launch = IncludeLaunchDescription(
+    AnyLaunchDescriptionSource(
+      PathJoinSubstitution([
+        FindPackageShare('ora_navigation'), 'launch', 'ublox.launch.yaml'
+      ])
+    ),
+    launch_arguments={
+      'use_sim_time': use_sim_time
+    }.items(),
+
+    condition=UnlessCondition(use_sim_time)
+  )
+
   # fusioncore
   fusioncore_launch = IncludeLaunchDescription(
     AnyLaunchDescriptionSource(
@@ -287,6 +301,9 @@ def generate_launch_description():
     # Ros2 Control
     diff_drive_node,
     joint_broad_node,
+
+    # GNSS
+    gnss_launch,
 
     # Edge/line detection
     edge_detection_node,

@@ -11,3 +11,6 @@
 [submodule "roboteq_ros2_control"]
 	path = third_party/roboteq_ros2_control
 	url = https://github.com/oaklandrobotics/roboteq_ros2_control
+[submodule "ublox_dgnss"]
+	path = third_party/ublox_dgnss
+	url = https://github.com/aussierobots/ublox_dgnss

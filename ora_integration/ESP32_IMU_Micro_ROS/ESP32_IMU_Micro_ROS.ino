@@ -36,7 +36,8 @@
 
 // Timer Interrupt timeout
 const unsigned int IMU_PUBLISH_TASK_TIME_MS = 100;
-const unsigned int LED_TASK_TIME_MS = 500;
+const unsigned int HEARTBEAT_LED_TASK_TIME_MS = 500;
+const unsigned int AUTONOMOUS_LED_TASK_TIME_MS = 500;
 
 // IMU measurement covariance (accuracy)
 static const Vector_t ACCEL_COV_DIAG = {0.02f, 0.02f, 0.02f};
@@ -63,7 +64,8 @@ rcl_publisher_t imuPublisher;
 rcl_allocator_t allocator;
 rcl_node_t node;
 rcl_timer_t imuPublishTimer;
-rcl_timer_t ledTimer;
+rcl_timer_t heartbeatLedTimer;
+rcl_timer_t autonomousLedTimer;
 rcl_service_t autonomousLedStateService;
 std_srvs__srv__SetBool_Request autonomousLedStateRequest;
 std_srvs__srv__SetBool_Response autonomousLedStateResponse;
@@ -118,7 +120,7 @@ void setup()
     pinMode(AUTONOMOUS_LED_PIN, OUTPUT);
 
     digitalWrite(HEARTBEAT_LED_PIN, HIGH);
-    digitalWrite(AUTONOMOUS_LED_PIN, HIGH);
+    digitalWrite(AUTONOMOUS_LED_PIN, LOW);
 
     // Setting up IMU
     bool imuConfigSuccessful = configureIMU();
@@ -248,7 +250,7 @@ void initMicroRos()
         &imuPublisher,
         &node,
         ROSIDL_GET_MSG_TYPE_SUPPORT(sensor_msgs, msg, Imu),
-        "imu")
+        "/esp/imu")
     );
 
     // Create timers
@@ -260,12 +262,20 @@ void initMicroRos()
         imuTimerCallback)
     );
 
-    // Blinking LED timer
+    // Heartbeat LED timer
     RCCHECK(rclc_timer_init_default(
-        &ledTimer,
+        &heartbeatLedTimer,
         &support,
-        RCL_MS_TO_NS(LED_TASK_TIME_MS),
-        ledTimerCallback)
+        RCL_MS_TO_NS(HEARTBEAT_LED_TASK_TIME_MS),
+        heartbeatLedTimerCallback)
+    );
+
+    // Autonomous LED timer
+    RCCHECK(rclc_timer_init_default(
+        &autonomousLedTimer,
+        &support,
+        RCL_MS_TO_NS(AUTONOMOUS_LED_TASK_TIME_MS),
+        autonomousLedTimerCallback)
     );
 
     // Creating Services
@@ -274,13 +284,14 @@ void initMicroRos()
         &autonomousLedStateService,
         &node,
         ROSIDL_GET_SRV_TYPE_SUPPORT(std_srvs, srv, SetBool),
-        "/set_autonomous_led_state")
+        "/navigation/set_auton")
     );
 
     // Create executor
-    RCCHECK(rclc_executor_init(&executor, &support.context, 3, &allocator));
+    RCCHECK(rclc_executor_init(&executor, &support.context, 4, &allocator));
     RCCHECK(rclc_executor_add_timer(&executor, &imuPublishTimer));
-    RCCHECK(rclc_executor_add_timer(&executor, &ledTimer));
+    RCCHECK(rclc_executor_add_timer(&executor, &heartbeatLedTimer));
+    RCCHECK(rclc_executor_add_timer(&executor, &autonomousLedTimer));
 
     // Adding Services with callback and request / response variables
     RCCHECK(rclc_executor_add_service(
@@ -344,11 +355,11 @@ void imuTimerCallback(rcl_timer_t * timer, int64_t last_call_time)
 
 
 /**************************************************
- * Function Name: ledTimerCallback
+ * Function Name: heartbeatLedTimerCallback
  * Description: 
 **************************************************/
 
-void ledTimerCallback(rcl_timer_t * timer, int64_t last_call_time)
+void heartbeatLedTimerCallback(rcl_timer_t * timer, int64_t last_call_time)
 {  
   RCLC_UNUSED(last_call_time);
 
@@ -357,6 +368,30 @@ void ledTimerCallback(rcl_timer_t * timer, int64_t last_call_time)
     digitalWrite(HEARTBEAT_LED_PIN, !digitalRead(HEARTBEAT_LED_PIN));
   }
 }
+
+
+/**************************************************
+ * Function Name: autonomousLedTimerCallback
+ * Description: 
+**************************************************/
+
+void autonomousLedTimerCallback(rcl_timer_t * timer, int64_t last_call_time)
+{
+    RCLC_UNUSED(last_call_time);
+
+    if (timer != NULL) 
+    {
+        if(autonomousLedState)
+        {
+            digitalWrite(AUTONOMOUS_LED_PIN, !digitalRead(AUTONOMOUS_LED_PIN));
+        }
+        else
+        {
+            digitalWrite(AUTONOMOUS_LED_PIN, LOW);
+        }
+    }
+}
+
 
 
 /*************************************************************************

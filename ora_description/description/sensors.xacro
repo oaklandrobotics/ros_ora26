@@ -174,7 +174,7 @@
   <joint name="gps_joint" type="fixed">
     <parent link="tower_link"/>
     <child link="gnss_link"/>
-    <origin xyz="0 0 ${gps_z_offset}" rpy="0 0 0"/>
+    <origin xyz="${gps_x_offset} ${gps_y_offset} ${gps_z_offset}" rpy="0 0 0"/>
   </joint>
 
   <!-- <gazebo reference="gnss_link">

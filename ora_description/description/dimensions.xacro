@@ -71,7 +71,8 @@
   <xacro:property name="tower_z_offset" value="${base_height + base_z_offset}"/>
   <xacro:property name="lidar_x_offset" value="${28.49 * in_to_m}"/>
   <xacro:property name="lidar_z_offset" value="${4.62 * in_to_m}"/>
-  <xacro:property name="gps_x_offset" value="${tower_x_offset}"/>
+  <xacro:property name="gps_x_offset" value="${0}"/>
+  <xacro:property name="gps_y_offset" value="${(tower_width / 2) - gps_radius}"/>
   <xacro:property name="gps_z_offset" value="${(tower_height / 2) + (gps_height / 2)}"/>
   <xacro:property name="camera_x_offset" value="${(tower_length / 2) + (2 * in_to_m)}"/>
   <xacro:property name="camera_z_offset" value="${(tower_height / 2)}"/>

@@ -76,5 +76,5 @@
   <xacro:property name="gps_z_offset" value="${(tower_height / 2) + (gps_height / 2)}"/>
   <xacro:property name="camera_x_offset" value="${(tower_length / 2) + (2 * in_to_m)}"/>
   <xacro:property name="camera_z_offset" value="${(tower_height / 2)}"/>
-  <xacro:property name="imu_z_offset" value="${base_z_offset + (base_height / 2) - (0.25 * in_to_m)}"/>
+  <xacro:property name="imu_z_offset" value="${base_z_offset - (base_height / 2) + (9 * in_to_m)}"/>
 </robot>

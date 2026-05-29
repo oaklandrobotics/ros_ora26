@@ -204,24 +204,22 @@
 
   <!-- IMU -->
   <link name="imu_link">
-    <inertial>
+    <xacro:inertial_box mass="0.01" x="${imu_length}" y="${imu_width}" z="${imu_height}">
       <origin xyz="0 0 0" rpy="0 0 0"/>
-      <mass value="0.1"/>
-      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
-    </inertial>
+    </xacro:inertial_box>
 
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <box size="0.1 0.1 0.1"/>
+        <box size="${imu_length} ${imu_width} ${imu_height}"/>
       </geometry>
-      <material name="dark_gray"/>
+      <material name="purple"/>
     </visual>
 
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <box size="0.1 0.1 0.1"/>
+        <box size="${imu_length} ${imu_width} ${imu_height}"/>
       </geometry>
     </collision>
   </link>
@@ -229,7 +227,7 @@
   <joint name="imu_joint" type="fixed">
     <parent link="base_link"/>
     <child link="imu_link"/>
-    <origin xyz="0 0 0.01" rpy="0 0 0"/>
+    <origin xyz="0 0 ${imu_z_offset}" rpy="0 0 0"/>
   </joint>
 
   <!-- IMU Plugin -->

@@ -59,7 +59,10 @@
   <xacro:property name="camera_width" value="0.130"/>
   <xacro:property name="camera_height" value="0.022"/>
 
-  <!-- TODO add IMU dimensions and offsets -->
+  <!-- IMU Dimensions -->
+  <xacro:property name="imu_length" value="${25 * mm_to_m}"/>
+  <xacro:property name="imu_width" value="${15 * mm_to_m}"/>
+  <xacro:property name="imu_height" value="${10 * mm_to_m}"/>
 
   <!-- Assorted Offset Values -->
   <xacro:property name="base_x_offset" value="${(back_caster_x_offset / 4)}"/>
@@ -72,4 +75,5 @@
   <xacro:property name="gps_z_offset" value="${(tower_height / 2) + (gps_height / 2)}"/>
   <xacro:property name="camera_x_offset" value="${(tower_length / 2) + (2 * in_to_m)}"/>
   <xacro:property name="camera_z_offset" value="${(tower_height / 2)}"/>
+  <xacro:property name="imu_z_offset" value="${base_z_offset + (base_height / 2) - (0.25 * in_to_m)}"/>
 </robot>

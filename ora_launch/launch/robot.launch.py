@@ -7,7 +7,7 @@ RegisterEventHandler,
 LogInfo,
 )
 from launch.launch_description_sources import AnyLaunchDescriptionSource, PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, PythonExpression
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, PythonExpression, Command
 from launch.conditions import IfCondition, UnlessCondition
 from launch.event_handlers import OnProcessExit
 
@@ -15,6 +15,7 @@ from launch_ros.actions import LifecycleNode, Node
 from launch_ros.event_handlers import OnStateTransition
 from launch_ros.events.lifecycle import ChangeState
 from launch_ros.substitutions import FindPackageShare
+from launch_ros.parameter_descriptions import ParameterValue
 
 def generate_launch_description():
   use_sim_time = LaunchConfiguration('use_sim_time')
@@ -58,6 +59,19 @@ def generate_launch_description():
     'fusioncore_config',
     default_value='fusioncore_config.yaml',
     description='FusionCore config file'
+  )
+
+  robot_description = ParameterValue(
+    Command([
+      'xacro',
+      PathJoinSubstitution([
+        FindPackageShare('ora_description'),
+        'description',
+        model_name
+      ]),
+      'use_sim_time:=false'
+    ]),
+    value_type=str
   )
 
   ####################
@@ -163,13 +177,10 @@ def generate_launch_description():
     name='diff_drive_spawner',
     output='screen',
     arguments=[
-      'diff_cont'
+      'diff_cont',
+      '--controller-manager',
+      '/controller_manager'
     ],
-    parameters=[
-      {
-        'use_sim_time': use_sim_time
-      }
-    ]
   )
 
   joint_broad_node = Node(
@@ -178,13 +189,27 @@ def generate_launch_description():
     name='joint_broad_spawner',
     output='screen',
     arguments=[
-      'joint_broad'
+      'joint_broad',
+      '--controller-manager',
+      '/controller_manager'
     ],
+  )
+
+  controller_manager = Node(
+    package='controller_manager',
+    executable='ros2_control_node',
     parameters=[
       {
-        'use_sim_time': use_sim_time
-      }
-    ]
+        'robot_description': robot_description
+      },
+      PathJoinSubstitution([
+        FindPackageShare('ora_launch'),
+        'config',
+        'real_controller.yaml'
+      ])
+    ],
+    output='screen',
+    condition=UnlessCondition(use_sim_time)
   )
 
   edge_detection_node = Node(

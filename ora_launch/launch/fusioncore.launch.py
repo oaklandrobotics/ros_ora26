@@ -42,7 +42,8 @@ def generate_launch_description():
       ('/imu/data', '/imu'),
       ('/odom/wheels', '/diff_cont/odom'),
       ('/gnss/fix', '/gnss/fix'),
-    ]
+    ],
+     arguments=['--enclave', '/robot/fusioncore_node']
   )
 
   configure_fusioncore = TimerAction(

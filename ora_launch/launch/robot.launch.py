@@ -163,7 +163,9 @@ def generate_launch_description():
     name='diff_drive_spawner',
     output='screen',
     arguments=[
-      'diff_cont'
+      'diff_cont',
+      '--enclave',
+      '/robot/spawner'
     ],
     parameters=[
       {
@@ -178,7 +180,9 @@ def generate_launch_description():
     name='joint_broad_spawner',
     output='screen',
     arguments=[
-      'joint_broad'
+      'joint_broad',
+      '--enclave',
+      '/robot/spawner'
     ],
     parameters=[
       {
@@ -195,7 +199,8 @@ def generate_launch_description():
       {
         'use_sim_time': use_sim_time
       }
-    ]
+    ],
+    arguments=['--enclave','/robot/edge_detection']
   )
 
   ####################

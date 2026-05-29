@@ -1,3 +1,9 @@
 .vscode
 __pycache__/
 .DS_Store
+# SROS2 Keystore exclusions
+**/keystore/
+**/*_key.pem
+**/*_cert.pem
+**/*_permissions.*
+**/governance.p7s

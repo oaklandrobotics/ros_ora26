@@ -133,7 +133,7 @@ def generate_launch_description():
                 respawn=use_respawn,
                 respawn_delay=2.0,
                 parameters=[configured_params],
-                arguments=['--ros-args', '--log-level', log_level],
+                arguments=['--ros-args', '--log-level', log_level, '--enclave', '/robot/nav2'],
                 remappings=remappings + [('cmd_vel', 'cmd_vel_nav')],
             ),
             Node(
@@ -144,7 +144,7 @@ def generate_launch_description():
                 respawn=use_respawn,
                 respawn_delay=2.0,
                 parameters=[configured_params],
-                arguments=['--ros-args', '--log-level', log_level],
+                arguments=['--ros-args', '--log-level', log_level, '--enclave', '/robot/nav2'],
                 remappings=remappings,
             ),
             Node(
@@ -155,7 +155,7 @@ def generate_launch_description():
                 respawn=use_respawn,
                 respawn_delay=2.0,
                 parameters=[configured_params],
-                arguments=['--ros-args', '--log-level', log_level],
+                arguments=['--ros-args', '--log-level', log_level, '--enclave', '/robot/nav2'],
                 remappings=remappings,
             ),
             Node(
@@ -166,7 +166,7 @@ def generate_launch_description():
                 respawn=use_respawn,
                 respawn_delay=2.0,
                 parameters=[configured_params],
-                arguments=['--ros-args', '--log-level', log_level],
+                arguments=['--ros-args', '--log-level', log_level, '--enclave', '/robot/nav2'],
                 remappings=remappings,
             ),
             Node(
@@ -177,7 +177,7 @@ def generate_launch_description():
                 respawn=use_respawn,
                 respawn_delay=2.0,
                 parameters=[configured_params],
-                arguments=['--ros-args', '--log-level', log_level],
+                arguments=['--ros-args', '--log-level', log_level, '--enclave', '/robot/nav2'],
                 remappings=remappings + [('cmd_vel', 'cmd_vel_nav')],
             ),
             Node(
@@ -188,7 +188,7 @@ def generate_launch_description():
                 respawn=use_respawn,
                 respawn_delay=2.0,
                 parameters=[configured_params],
-                arguments=['--ros-args', '--log-level', log_level],
+                arguments=['--ros-args', '--log-level', log_level, '--enclave', '/robot/nav2'],
                 remappings=remappings,
             ),
             Node(
@@ -199,7 +199,7 @@ def generate_launch_description():
                 respawn=use_respawn,
                 respawn_delay=2.0,
                 parameters=[configured_params],
-                arguments=['--ros-args', '--log-level', log_level],
+                arguments=['--ros-args', '--log-level', log_level, '--enclave', '/robot/nav2'],
                 remappings=remappings,
             ),
             Node(
@@ -210,7 +210,7 @@ def generate_launch_description():
                 respawn=use_respawn,
                 respawn_delay=2.0,
                 parameters=[configured_params],
-                arguments=['--ros-args', '--log-level', log_level],
+                arguments=['--ros-args', '--log-level', log_level, '--enclave', '/robot/nav2'],
                 remappings=remappings
                 + [('cmd_vel', 'cmd_vel_nav')],
             ),
@@ -222,7 +222,7 @@ def generate_launch_description():
                 respawn=use_respawn,
                 respawn_delay=2.0,
                 parameters=[configured_params],
-                arguments=['--ros-args', '--log-level', log_level],
+                arguments=['--ros-args', '--log-level', log_level, '--enclave', '/robot/nav2'],
                 remappings=remappings,
             ),
             Node(
@@ -233,7 +233,7 @@ def generate_launch_description():
                 respawn=use_respawn,
                 respawn_delay=2.0,
                 parameters=[configured_params],
-                arguments=['--ros-args', '--log-level', log_level],
+                arguments=['--ros-args', '--log-level', log_level, '--enclave', '/robot/nav2'],
                 remappings=remappings,
             ),
             Node(
@@ -241,7 +241,7 @@ def generate_launch_description():
                 executable='lifecycle_manager',
                 name='lifecycle_manager_navigation',
                 output='screen',
-                arguments=['--ros-args', '--log-level', log_level],
+                arguments=['--ros-args', '--log-level', log_level, '--enclave', '/robot/nav2'],
                 parameters=[{'autostart': autostart}, {'node_names': lifecycle_nodes}],
             ),
         ],

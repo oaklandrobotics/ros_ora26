@@ -51,8 +51,13 @@
   <xacro:property name="lidar_radius" value="${103.3 * mm_to_m / 2}"/>
 
   <!-- GPS Dimensions -->
-  <xacro:property name="gps_height" value="${20 * mm_to_m}"/>
-  <xacro:property name="gps_radius" value="${50 * mm_to_m / 2}"/>
+  <xacro:property name="gps_height" value="${0.875 * in_to_m}"/>
+  <xacro:property name="gps_radius" value="${2.5 * in_to_m / 2}"/>
+
+  <!-- Camera Dimensions -->
+  <xacro:property name="camera_length" value="0.015"/>
+  <xacro:property name="camera_width" value="0.130"/>
+  <xacro:property name="camera_height" value="0.022"/>
 
   <!-- TODO add IMU dimensions and offsets -->
 
@@ -61,8 +66,10 @@
   <xacro:property name="base_z_offset" value="${7.375 * in_to_m}"/>
   <xacro:property name="tower_x_offset" value="${(-base_length / 2) + base_x_offset + (tower_length / 2) + (12.75 * in_to_m)}"/>
   <xacro:property name="tower_z_offset" value="${base_height + base_z_offset}"/>
-  <xacro:property name="lidar_x_offset" value="${(base_length / 2) - (lidar_radius / 2) + (base_x_offset / 2)}"/>
-  <xacro:property name="lidar_z_offset" value="${(base_height / 2) + (lidar_height / 2) + base_z_offset}"/>
-  <xacro:property name="gps_x_offset" value="${0}"/>
-  <xacro:property name="gps_z_offset" value="${(base_height / 2) + (gps_height / 2) + base_z_offset}"/>
+  <xacro:property name="lidar_x_offset" value="${28.49 * in_to_m}"/>
+  <xacro:property name="lidar_z_offset" value="${4.62 * in_to_m}"/>
+  <xacro:property name="gps_x_offset" value="${tower_x_offset}"/>
+  <xacro:property name="gps_z_offset" value="${(tower_height / 2) + (gps_height / 2)}"/>
+  <xacro:property name="camera_x_offset" value="${(tower_length / 2) + (2 * in_to_m)}"/>
+  <xacro:property name="camera_z_offset" value="${(tower_height / 2)}"/>
 </robot>

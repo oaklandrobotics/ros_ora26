@@ -58,6 +58,7 @@
   <xacro:property name="camera_length" value="0.015"/>
   <xacro:property name="camera_width" value="0.130"/>
   <xacro:property name="camera_height" value="0.022"/>
+  <xacro:property name="zed2i_height" value="${30.25 * mm_to_m}"/>
 
   <!-- IMU Dimensions -->
   <xacro:property name="imu_length" value="${25 * mm_to_m}"/>

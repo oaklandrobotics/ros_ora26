@@ -14,3 +14,6 @@
 [submodule "ublox_dgnss"]
 	path = third_party/ublox_dgnss
 	url = https://github.com/aussierobots/ublox_dgnss
+[submodule "third_party/zed-ros2-description"]
+	path = third_party/zed-ros2-description
+	url = https://github.com/stereolabs/zed-ros2-description

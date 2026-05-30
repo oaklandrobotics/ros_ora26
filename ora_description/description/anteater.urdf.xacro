@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="https://www.ros.org/wiki/xacro" name="robot_name">
+<robot xmlns:xacro="https://www.ros.org/wiki/xacro" name="erdferkel">
   <xacro:arg name="sim_mode" default="false"/>
 
   <!-- Include all of the pieces of the robot -->
@@ -8,4 +8,5 @@
   <xacro:include filename="wheel.xacro"/>
   <xacro:include filename="sensors.xacro"/>
   <xacro:include filename="ros2_control.xacro"/>
+  <xacro:include filename="camera.xacro"/>
 </robot>

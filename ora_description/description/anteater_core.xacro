@@ -41,18 +41,52 @@
     </visual>
 
     <collision>
-      <origin xyz="${0 + (back_caster_x_offset / 4)} 0 ${back_caster_radius / 4}" rpy="0 0 0"/>
+      <origin xyz="${base_x_offset} 0 ${base_z_offset}" rpy="0 0 0"/>
       <geometry>
         <box size="${base_length} ${base_width} ${base_height}"/>
       </geometry>
     </collision>
 
     <xacro:inertial_box mass="50.0" x="${base_length}" y="${base_width}" z="${base_height}">
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="${base_x_offset} 0 ${base_z_offset}" rpy="0 0 0"/>
     </xacro:inertial_box>
   </link>
 
   <gazebo reference="chassis_link">
+    <material name="white"/>
+  </gazebo>
+
+  <!-- TOWER LINK -->
+
+  <joint name="tower_joint" type="fixed">
+    <parent link="chassis_link"/>
+    <child link="tower_link"/>
+    <origin xyz="${tower_x_offset} 0 ${(base_z_offset / 2) + tower_z_offset}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="tower_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="${tower_length} ${tower_width} ${tower_height}"/>
+      </geometry>
+
+      <material name="white"/>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="${tower_length} ${tower_width} ${tower_height}"/>
+      </geometry>
+    </collision>
+
+    <xacro:inertial_box mass="5.0" x="${tower_length}" y="${tower_width}" z="${tower_height}">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:inertial_box>
+  </link>
+
+  <gazebo reference="tower_link">
     <material name="white"/>
   </gazebo>
 </robot>

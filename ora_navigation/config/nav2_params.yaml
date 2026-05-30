@@ -112,8 +112,7 @@ local_costmap:
       width:  8
       height: 8
       resolution: 0.05
-      # TODO: Update footprint to match robot
-      footprint: "[[0.54, 0.34], [0.54, -0.34], [-0.331, -0.34], [-0.331, 0.34]]"
+      footprint: "[[0.78, 0.39], [0.78, -0.39], [-0.495, -0.39], [-0.495, 0.39]]"
       plugins: ["obstacle_layer", "line_layer", "inflation_layer"]
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
@@ -180,8 +179,7 @@ global_costmap:
       width: 80
       height: 80
       resolution: 0.1
-      # TODO: Update footprint to match robot
-      footprint: "[[0.54, 0.34], [0.54, -0.34], [-0.331, -0.34], [-0.331, 0.34]]"
+      footprint: "[[0.78, 0.39], [0.78, -0.39], [-0.495, -0.39], [-0.495, 0.39]]"
       track_unknown_space: false     # true = plan through unknown (GPS-nav mode)
       plugins: ["obstacle_layer", "line_layer", "inflation_layer"]
       obstacle_layer:

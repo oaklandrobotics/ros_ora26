@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="https://www.ros.org/wiki/xacro">
+  <xacro:include filename="dimensions.xacro" />
+  <xacro:include filename="inertia_macros.xacro" />
+  <xacro:include filename="$(find zed_description)/urdf/zed_macro.urdf.xacro" />
+  <xacro:property name="camera_pitch" value="0.610865" /> <!-- 35 degrees =  0.610865 rad -->
+
+  <link name="camera_link" />
+
+  <joint name="camera_joint" type="fixed">
+    <parent link="tower_link" />
+    <child link="camera_link" />
+    <origin xyz="${camera_x_offset} 0 ${camera_z_offset}" rpy="0 0 0" />
+  </joint>
+
+  <!-- Simulated RGBD Camera -->
+  <xacro:if value="$(arg sim_mode)">
+    <link name="sim_camera_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="${camera_length} ${camera_width} ${camera_height}" />
+        </geometry>
+        <material name="yellow" />
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="${camera_length} ${camera_width} ${camera_height}" />
+        </geometry>
+      </collision>
+
+      <xacro:inertial_box mass="0.035" x="${camera_length}" y="${camera_width}" z="${camera_height}">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+      </xacro:inertial_box>
+    </link>
+
+    <joint name="sim_camera_joint" type="fixed">
+      <parent link="camera_link" />
+      <child link="sim_camera_link" />
+      <origin xyz="0 0 ${-(camera_height / 2)}" rpy="0 ${camera_pitch} 0" />
+    </joint>
+
+    <!-- Virtual link for use with the line detection -->
+    <link name='camera_link_optical' />
+
+    <joint name="camera_optical_joint" type="fixed">
+      <parent link="camera_link" />
+      <child link="camera_link_optical" />
+      <origin xyz="0 0 0" rpy="-1.57079632679 0 -1.57079632679" />
+    </joint>
+  </xacro:if>
+
+  <!-- Real ZED 2i Camera -->
+  <xacro:unless value="$(arg sim_mode)">
+    <xacro:arg name="camera_name" default="zed" />
+    <xacro:arg name="camera_model" default="zed2i" />
+    <xacro:include filename="$(find zed_description)/urdf/zed_macro.urdf.xacro" />
+    
+    <xacro:zed_camera name="$(arg camera_name)" model="$(arg camera_model)" enable_gnss="false">
+      <gnss_origin xyz="0 0 0" rpy="0 0 0" />
+    </xacro:zed_camera>
+
+    <joint name="$(arg camera_name)_joint" type="fixed">
+      <parent link="camera_link" />
+      <child link="$(arg camera_name)_camera_link" />
+      <origin xyz="0 0 ${-zed2i_height}" rpy="0 ${camera_pitch} 0" />
+    </joint>
+  </xacro:unless>
+</robot>

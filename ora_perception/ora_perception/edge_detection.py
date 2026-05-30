@@ -9,8 +9,9 @@ import cv2
 import numpy as np
 from sensor_msgs_py import point_cloud2 as pc2
 
-# Topic name
+# Topic names
 EDGE_POINTS_TOPIC = "/depth_camera/filtered/points"
+MASKED_IMG_TOPIC = "/masked_image"
 
 # Parameters
 BLUR_KERNEL_SIZE = 5
@@ -44,8 +45,9 @@ class EdgeDetectionNode(Node):
         self.depth_sub = message_filters.Subscriber(self, Image, depth_image_topic)
         self.info_sub = self.create_subscription(CameraInfo, camera_into_topic, self.info_callback, 10)
 
-        # Topic publisher
+        # Topic publishers
         self.edge_publisher = self.create_publisher(PointCloud2, EDGE_POINTS_TOPIC, 10)
+        self.masked_img_pub = self.create_publisher(Image, MASKED_IMG_TOPIC, 10)
 
         # Messages from image_sub and depth_sub must be synced for accuracy.
         #   ts stands for time synchronization
@@ -66,7 +68,7 @@ class EdgeDetectionNode(Node):
             'cy': msg.k[5]
         }
 
-    def detect_edges(self, image_raw, image_depth):
+    def detect_edges(self, image_raw: Image, image_depth: Image):
         if self.camera_model is None:
             self.get_logger().warn("Waiting for CameraInfo...")
             return
@@ -92,6 +94,13 @@ class EdgeDetectionNode(Node):
             robot_mask_points = np.array([[295, 720], [412, 551], [957, 551], [1110, 720]])
         robot_mask_points = robot_mask_points.reshape((4, 1, 2))
         cv2.fillPoly(mask, [robot_mask_points], 0)
+
+        # Pubished the masked *color* image
+        color_mask_cv = cv2.bitwise_and(cv_raw, cv_raw, mask=mask)
+        color_mask_ros = Image()
+        color_mask_ros = self.bridge.cv2_to_imgmsg(color_mask_cv, 'bgr8')
+        color_mask_ros.header = image_raw.header
+        self.masked_img_pub.publish(color_mask_ros)
 
         # Thresholding to find "White" edges
         _, threshold = cv2.threshold(blur, LINE_LOWER_BOUND, LINE_UPPER_BOUND, cv2.THRESH_BINARY)

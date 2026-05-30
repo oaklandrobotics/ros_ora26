@@ -82,11 +82,16 @@ class EdgeDetectionNode(Node):
         grey_scale = cv2.cvtColor(cv_raw, cv2.COLOR_BGR2GRAY)
         blur = cv2.GaussianBlur(grey_scale, (BLUR_KERNEL_SIZE, BLUR_KERNEL_SIZE), 0)
 
-        # Masking (Bottom half)
+        # Masking (Top of frame to near horizon line)
         mask = np.zeros(cv_raw.shape[:2], dtype=np.uint8)
         h, w = cv_raw.shape[:2]
-        cv2.rectangle(mask, (0, int(h/2)), (w, h), 255, -1)
-        
+        cv2.rectangle(mask, (0, 200), (w, h), 255, -1)
+
+        # Masking visible part of robot in frame
+        robot_mask_points = np.array([[328, 720], [470, 400], [812, 400], [955, 720]])
+        robot_mask_points = robot_mask_points.reshape((4, 1, 2))
+        cv2.fillPoly(mask, [robot_mask_points], 0)
+
         # Thresholding to find "White" edges
         _, threshold = cv2.threshold(blur, LINE_LOWER_BOUND, LINE_UPPER_BOUND, cv2.THRESH_BINARY)
         final_mask = cv2.bitwise_and(threshold, mask)

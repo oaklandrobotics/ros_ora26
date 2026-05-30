@@ -1,12 +1,16 @@
 launch:
-
 - group:
-  - push_ros_namespace:
-      namespace: "gnss"
+  - set_parameter:
+      name: "qos_overrides./gnss/fix.publisher.reliability"
+      value: "reliable"
 
-  # u-blox driver
   - include:
       file: "$(find-pkg-share ublox_dgnss)/launch/ublox_rover_hpposllh_navsatfix.launch.py"
+      arg:
+        - name: "namespace"
+          value: "gnss"
+        - name: "frame_id"
+          value: "gnss_link"
 
   # NTRIP Client
   - include:

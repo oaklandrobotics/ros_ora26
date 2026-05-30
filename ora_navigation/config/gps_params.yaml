@@ -1,0 +1,8 @@
+/gnss/ublox_nav_sat_fix_hp:
+  ros__parameters:
+    qos_overrides:
+      /gnss/fix:
+        publisher:
+          reliability: reliable
+          history: keep_last
+          depth: 100

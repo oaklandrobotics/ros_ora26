@@ -9,10 +9,7 @@ import cv2
 import numpy as np
 from sensor_msgs_py import point_cloud2 as pc2
 
-# Topic names
-RAW_IMAGE_TOPIC = "/depth_camera/image_raw"
-DEPTH_IMAGE_TOPIC = "/depth_camera/depth_image_raw"
-CAMERA_INFO_TOPIC = "/depth_camera/camera_info"
+# Topic name
 EDGE_POINTS_TOPIC = "/depth_camera/filtered/points"
 
 # Parameters
@@ -27,35 +24,35 @@ MAX_DEPTH = 8
 class EdgeDetectionNode(Node):
     def __init__(self):
         super().__init__("edge_detection_node")
+
         self.bridge = CvBridge()
         self.camera_model = None
 
+        # Set the topic name based on use_sim_time
+        self.use_sim_time = self.get_parameter('use_sim_time').value
+        if self.use_sim_time == True: #Simulated camera
+            raw_image_topic = "/depth_camera/image_raw"
+            depth_image_topic = "/depth_camera/depth_image_raw"
+            camera_into_topic = "/depth_camera/camera_info"
+        else: # Real Camera - ZED2i (left channel)
+            raw_image_topic = "/zed/zed_node/rgb/color/raw/image"
+            depth_image_topic = "/zed/zed_node/depth/depth_registered"
+            camera_into_topic = "/zed/zed_node/depth/camera_info"
+
         # Topic subscriptions
-        self.image_sub = message_filters.Subscriber(
-            self, 
-            Image, 
-            RAW_IMAGE_TOPIC
-        )
-        self.depth_sub = message_filters.Subscriber(
-            self, 
-            Image, 
-            DEPTH_IMAGE_TOPIC
-        )
-        self.info_sub = self.create_subscription(
-            CameraInfo, 
-            CAMERA_INFO_TOPIC, 
-            self.info_callback, 
-            10
-        )
+        self.image_sub = message_filters.Subscriber(self, Image, raw_image_topic)
+        self.depth_sub = message_filters.Subscriber(self, Image, depth_image_topic)
+        self.info_sub = self.create_subscription(CameraInfo, camera_into_topic, self.info_callback, 10)
 
         # Topic publisher
         self.edge_publisher = self.create_publisher(PointCloud2, EDGE_POINTS_TOPIC, 10)
 
         # Messages from image_sub and depth_sub must be synced for accuracy.
         #   ts stands for time synchronization
-        self.ts = message_filters.ApproximateTimeSynchronizer(
-            (self.image_sub, self.depth_sub), 10, slop=0.1)
+        self.ts = message_filters.ApproximateTimeSynchronizer((self.image_sub, self.depth_sub), 10, slop=0.1)
         self.ts.registerCallback(self.detect_edges)
+
+        self.get_logger().info('Hello from edge detection')
 
     def info_callback(self, msg):
         # Extract camera information from the CameraInfo message
@@ -88,7 +85,11 @@ class EdgeDetectionNode(Node):
         cv2.rectangle(mask, (0, 200), (w, h), 255, -1)
 
         # Masking visible part of robot in frame
-        robot_mask_points = np.array([[328, 720], [470, 400], [812, 400], [955, 720]])
+        # [Bottom left, Top left, Top right, Bottom right]
+        if self.use_sim_time == True: #Simulated camera
+            robot_mask_points = np.array([[328, 720], [470, 400], [812, 400], [955, 720]])
+        else: # Real camera
+            robot_mask_points = np.array([[295, 720], [412, 551], [957, 551], [1110, 720]])
         robot_mask_points = robot_mask_points.reshape((4, 1, 2))
         cv2.fillPoly(mask, [robot_mask_points], 0)
 
@@ -124,7 +125,10 @@ class EdgeDetectionNode(Node):
 
         # Create and Publish PointCloud2
         pc_msg = pc2.create_cloud_xyz32(image_depth.header, points)
-        pc_msg.header.frame_id = "camera_link_optical"
+        if self.use_sim_time == True:
+            pc_msg.header.frame_id = "camera_link_optical"
+        else:
+            pc_msg.header.frame_id = "zed_left_camera_link"
         self.edge_publisher.publish(pc_msg)
 
 def main(args=None):

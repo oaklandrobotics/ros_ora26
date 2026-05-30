@@ -32,6 +32,8 @@
   </joint>
 
   <xacro:unless value="$(arg sim_mode)">
+    <link name="velodyne" />
+
     <joint name="velodyne_joint" type="fixed">
       <parent link="lidar_link"/>
       <child link="velodyne"/>

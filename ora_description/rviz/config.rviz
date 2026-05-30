@@ -5,7 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded: ~
       Splitter Ratio: 0.5029411911964417
-    Tree Height: 685
+    Tree Height: 502
   - Class: rviz_common/Views
     Expanded:
       - /Current View1
@@ -67,11 +67,6 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        camera_link_optical:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
         chassis_link:
           Alpha: 1
           Show Axes: false
@@ -122,6 +117,40 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        tower_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        velodyne:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        zed_camera_center:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        zed_camera_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        zed_left_camera_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        zed_left_camera_frame_optical:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        zed_right_camera_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        zed_right_camera_frame_optical:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
       Mass Properties:
         Inertia: false
         Mass: false
@@ -143,8 +172,6 @@ Visualization Manager:
           Value: true
         camera_link:
           Value: true
-        camera_link_optical:
-          Value: true
         chassis_link:
           Value: true
         gnss_link:
@@ -159,6 +186,8 @@ Visualization Manager:
           Value: true
         lidar_link:
           Value: true
+        map:
+          Value: true
         odom:
           Value: true
         right_back_caster_link:
@@ -167,39 +196,64 @@ Visualization Manager:
           Value: true
         right_wheel_link:
           Value: true
+        tower_link:
+          Value: true
+        velodyne:
+          Value: true
+        zed_camera_center:
+          Value: true
+        zed_camera_link:
+          Value: true
+        zed_left_camera_frame:
+          Value: true
+        zed_left_camera_frame_optical:
+          Value: true
+        zed_right_camera_frame:
+          Value: true
+        zed_right_camera_frame_optical:
+          Value: true
       Marker Scale: 0.30000001192092896
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        odom:
-          base_link:
-            base_footprint:
-              {}
-            camera_link:
-              camera_link_optical:
+        map:
+          odom:
+            base_link:
+              base_footprint:
                 {}
-            chassis_link:
-              {}
-            gnss_link:
-              {}
-            imu_link:
-              {}
-            left_back_caster_link:
-              {}
-            left_front_caster_link:
-              {}
-            left_wheel_link:
-              {}
-            lidar_link:
-              {}
-            right_back_caster_link:
-              {}
-            right_front_caster_link:
-              {}
-            right_wheel_link:
-              {}
+              chassis_link:
+                tower_link:
+                  camera_link:
+                    {}
+                  gnss_link:
+                    {}
+              imu_link:
+                {}
+              left_back_caster_link:
+                {}
+              left_front_caster_link:
+                {}
+              left_wheel_link:
+                {}
+              lidar_link:
+                velodyne:
+                  {}
+              right_back_caster_link:
+                {}
+              right_front_caster_link:
+                {}
+              right_wheel_link:
+                {}
+            zed_camera_link:
+              zed_camera_center:
+                zed_left_camera_frame:
+                  zed_left_camera_frame_optical:
+                    {}
+                zed_right_camera_frame:
+                  zed_right_camera_frame_optical:
+                    {}
       Update Interval: 0
       Value: true
     - Alpha: 0.6000000238418579
@@ -217,7 +271,7 @@ Visualization Manager:
       Enabled: false
       Invert Rainbow: true
       Max Color: 255; 255; 255
-      Max Intensity: 0
+      Max Intensity: 100
       Min Color: 0; 0; 0
       Min Intensity: 0
       Name: PointCloud2
@@ -231,7 +285,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /scan/points
+        Value: /velodyne_points
       Use Fixed Frame: true
       Use rainbow: true
       Value: false
@@ -250,7 +304,7 @@ Visualization Manager:
       Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 0
+      Max Intensity: 100
       Min Color: 0; 0; 0
       Min Intensity: 0
       Name: Base Scan
@@ -284,7 +338,7 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 0
+      Max Intensity: 83
       Min Color: 255; 0; 127
       Min Intensity: 0
       Name: Filtered Scan
@@ -419,7 +473,7 @@ Visualization Manager:
         Value: /lookahead_collision_arc
       Value: true
     - Class: rviz_default_plugins/Image
-      Enabled: false
+      Enabled: true
       Max Value: 1
       Median window: 5
       Min Value: 0
@@ -430,8 +484,8 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /depth_camera/image_raw
-      Value: false
+        Value: /zed/zed_node/rgb/color/rect/image
+      Value: true
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -444,7 +498,7 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: Intensity
       Decay Time: 0
-      Enabled: false
+      Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Max Intensity: 4096
@@ -464,7 +518,7 @@ Visualization Manager:
         Value: /depth_camera/filtered/points
       Use Fixed Frame: true
       Use rainbow: true
-      Value: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -502,7 +556,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: 4.710000038146973
+      Angle: 4.5049943923950195
       Class: rviz_default_plugins/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -512,11 +566,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 90.03439331054688
+      Scale: 130.00103759765625
       Target Frame: base_link
       Value: TopDownOrtho (rviz_default_plugins)
-      X: -1.392691731452942
-      Y: -0.646464467048645
+      X: 0.647064208984375
+      Y: -0.36223170161247253
     Saved:
       - Angle: 4.710000038146973
         Class: rviz_default_plugins/TopDownOrtho
@@ -541,9 +595,9 @@ Window Geometry:
   Hide Right Dock: false
   Image:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000001e600000415fc0200000005fb000000100044006900730070006c006100790073010000003b00000336000000c700fffffffb0000000a0049006d006100670065000000029f0000010b0000001600fffffffb0000000c00430061006d00650072006101000004320000018a0000000000000000fb0000000a005600690065007700730000000373000000dd000000a000fffffffb0000000a005600690065007700730100000377000000d9000000a000ffffff000005520000041500000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd00000001000000000000021b0000040dfc0200000005fb000000100044006900730070006c006100790073010000003f00000284000000cc00fffffffb0000000a0049006d00610067006501000002c9000000d30000001700fffffffb0000000c00430061006d00650072006101000004320000018a0000000000000000fb0000000a005600690065007700730000000373000000dd000000a900fffffffb0000000a0056006900650077007301000003a2000000aa000000a900ffffff0000051d0000040d00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
   Width: 1854
-  X: 2054
-  Y: 163
+  X: 66
+  Y: 32

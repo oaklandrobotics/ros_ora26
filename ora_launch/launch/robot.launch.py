@@ -121,6 +121,16 @@ def generate_launch_description():
     condition=IfCondition(use_sim_time)
   )
 
+  #LiDAR
+  lidar_launch = IncludeLaunchDescription(
+    AnyLaunchDescriptionSource(
+      PathJoinSubstitution([
+        FindPackageShare('ora_perception'), 'launch', 'VLP16.launch.py'
+      ])
+    ),
+    condition=UnlessCondition(use_sim_time)
+  )
+
   # LiDAR Filter
   filter_launch = IncludeLaunchDescription(
     AnyLaunchDescriptionSource(
@@ -329,6 +339,9 @@ def generate_launch_description():
     controller_manager,
     diff_drive_node,
     joint_broad_node,
+
+    # LiDAR
+    lidar_launch,
 
     # GNSS
     gnss_launch,

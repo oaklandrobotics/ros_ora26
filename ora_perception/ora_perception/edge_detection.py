@@ -36,7 +36,7 @@ class EdgeDetectionNode(Node):
             depth_image_topic = "/depth_camera/depth_image_raw"
             camera_into_topic = "/depth_camera/camera_info"
         else: # Real Camera - ZED2i (left channel)
-            raw_image_topic = "/zed/zed_node/rgb/color/raw/image"
+            raw_image_topic = "/zed/zed_node/rgb/color/rect/image"
             depth_image_topic = "/zed/zed_node/depth/depth_registered"
             camera_into_topic = "/zed/zed_node/depth/camera_info"
 

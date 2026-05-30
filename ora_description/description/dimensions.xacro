@@ -24,7 +24,7 @@
   <xacro:property name="tower_height" value="${26.25 * in_to_m}"/>
 
   <!-- Wheel Dimensions / Location -->
-  <xacro:property name="main_wheel_diameter" value="${11.97 * in_to_m}"/>
+  <xacro:property name="main_wheel_diameter" value="${13 * in_to_m}"/>
   <xacro:property name="main_wheel_radius" value="${main_wheel_diameter / 2}"/>
   <xacro:property name="main_wheel_width" value="${48 * mm_to_m}"/>
   <xacro:property name="main_wheel_z_offset" value="${0.0}"/>

@@ -61,7 +61,7 @@ controller_server:
       min_lookahead_dist: 0.6
       max_lookahead_dist: 1.5
       lookahead_time: 1.0
-      rotate_to_heading_angular_vel: 10.0
+      rotate_to_heading_angular_vel: 7.5
       transform_tolerance: 0.1
       use_velocity_scaled_lookahead_dist: true
       min_approach_linear_velocity: 0.05
@@ -76,7 +76,7 @@ controller_server:
       regulated_linear_scaling_min_speed: 0.25
       use_rotate_to_heading: true     # rotate in place before starting: safe for GPS nav
       allow_reversing: false
-      rotate_to_heading_min_angle: 0.785  # ~45 deg: only rotate if heading error > this
+      rotate_to_heading_min_angle: 1.57  # ~45 deg: only rotate if heading error > this
       max_angular_accel: 10.0
       max_robot_pose_search_dist: 10.0
 
@@ -95,8 +95,8 @@ velocity_smoother:
     velocity_timeout: 1.0
     max_velocity: [1.0, 0.0, 1.75]
     min_velocity: [-1.0, 0.0, -1.75]
-    max_accel: [0.5, 0.0, 10.0]
-    max_decel: [-0.5, 0.0, -10.0]
+    max_accel: [0.5, 0.0, 7.5]
+    max_decel: [-0.5, 0.0, -7.5]
 
 # ── Local Costmap ────────────────────────────────────────────────────────────
 # Used for local plan

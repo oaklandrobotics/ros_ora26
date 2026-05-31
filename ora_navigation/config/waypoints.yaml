@@ -12,14 +12,17 @@ practice_course:
 
 main_course:
   - name: north
-    lat: 42.66827
-    lon: -83.21934
-  - name: north_ramp
-    lat: 42.668121
-    lon: -83.219361
-  - name: south_ramp
-    lat: 42.668077
-    lon: -83.219359
-  - name: south
-    lat: 42.667928
-    lon: -83.219328
+    lat: 42.667917
+    lon: -83.218664
+  # - name: north
+  #   lat: 42.66827
+  #   lon: -83.21934
+  # - name: north_ramp
+  #   lat: 42.668121
+  #   lon: -83.219361
+  # - name: south_ramp
+  #   lat: 42.668077
+  #   lon: -83.219359
+  # - name: south
+  #   lat: 42.667928
+  #   lon: -83.219328

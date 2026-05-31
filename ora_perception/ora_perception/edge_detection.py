@@ -34,16 +34,16 @@ class EdgeDetectionNode(Node):
         if self.use_sim_time == True: #Simulated camera
             raw_image_topic = "/depth_camera/image_raw"
             depth_image_topic = "/depth_camera/depth_image_raw"
-            camera_into_topic = "/depth_camera/camera_info"
+            camera_info_topic = "/depth_camera/camera_info"
         else: # Real Camera - ZED2i (left channel)
             raw_image_topic = "/zed/zed_node/rgb/color/rect/image"
             depth_image_topic = "/zed/zed_node/depth/depth_registered"
-            camera_into_topic = "/zed/zed_node/depth/camera_info"
+            camera_info_topic = "/zed/zed_node/depth/camera_info"
 
         # Topic subscriptions
         self.image_sub = message_filters.Subscriber(self, Image, raw_image_topic)
         self.depth_sub = message_filters.Subscriber(self, Image, depth_image_topic)
-        self.info_sub = self.create_subscription(CameraInfo, camera_into_topic, self.info_callback, 10)
+        self.info_sub = self.create_subscription(CameraInfo, camera_info_topic, self.info_callback, 10)
 
         # Topic publishers
         self.edge_publisher = self.create_publisher(PointCloud2, EDGE_POINTS_TOPIC, 10)
@@ -137,7 +137,8 @@ class EdgeDetectionNode(Node):
         if self.use_sim_time == True:
             pc_msg.header.frame_id = "camera_link_optical"
         else:
-            pc_msg.header.frame_id = "zed_left_camera_link"
+            pc_msg.header.stamp = self.get_clock().now().to_msg()
+            pc_msg.header.frame_id = "zed_left_camera_frame_optical"
         self.edge_publisher.publish(pc_msg)
 
 def main(args=None):

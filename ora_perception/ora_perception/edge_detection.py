@@ -18,6 +18,7 @@ BLUR_KERNEL_SIZE = 5
 # Values closer to 255 are colors closer to white (white is 255)
 LINE_LOWER_BOUND = 200
 LINE_UPPER_BOUND = 255
+HORIZON_LINE = 0.278
 
 MIN_DEPTH = 1
 MAX_DEPTH = 8
@@ -84,16 +85,21 @@ class EdgeDetectionNode(Node):
         # Masking (Top of frame to near horizon line)
         mask = np.zeros(cv_raw.shape[:2], dtype=np.uint8)
         h, w = cv_raw.shape[:2]
-        cv2.rectangle(mask, (0, 200), (w, h), 255, -1)
+        cv2.rectangle(mask, (0, int(HORIZON_LINE * h)), (w, h), 255, -1)
 
         # Masking visible part of robot in frame
         # [Bottom left, Top left, Top right, Bottom right]
         if self.use_sim_time == True: #Simulated camera
-            robot_mask_points = np.array([[328, 720], [470, 400], [812, 400], [955, 720]])
+            robot_mask_points = np.array([[0.256, 1], [0.367, 0.556], [0.634, 0.556], [0.746, 1]])
         else: # Real camera
-            robot_mask_points = np.array([[295, 720], [412, 551], [957, 551], [1110, 720]])
-        robot_mask_points = robot_mask_points.reshape((4, 1, 2))
-        cv2.fillPoly(mask, [robot_mask_points], 0)
+            robot_mask_points = np.array([[0.230, 1], [0.322, 0.765], [0.748, 0.765], [0.867, 1]])
+        pixel_points = robot_mask_points.copy()
+        pixel_points[:, 0] *= (w - 1)
+        pixel_points[:, 1] *= (h - 1)
+        pixel_points = pixel_points.astype(np.int32)
+
+        pixel_points = pixel_points.reshape((4, 1, 2))
+        cv2.fillPoly(mask, [pixel_points], 0)
 
         # Pubished the masked *color* image
         color_mask_cv = cv2.bitwise_and(cv_raw, cv_raw, mask=mask)

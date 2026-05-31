@@ -32,19 +32,19 @@ fusioncore:
     # ── Wheel encoders: TODO ────────────────────────────────────────────
     # 500 CPR optical encoders through a 24:1 gearbox, 0.1651m wheel radius.
     # Tighter than the default: Husky's encoders are high quality.
-    encoder.vel_noise: 0.02         # m/s
-    encoder.yaw_noise: 0.005         # rad/s
+    encoder.vel_noise: 0.1         # m/s
+    encoder.yaw_noise: 0.1         # rad/s
 
     # ── GPS: u-blox F9P (standard autonomous GPS defaults) ───────────────────
     # F9P autonomous CEP: 2.0m (1σ ≈ 2.4m). Conservative 2.5m set here.
     # For RTK float  (CEP 0.4m):  set base_noise_xy: 0.5,  min_fix_type: 3
     # For RTK fixed  (CEP 0.01m): set base_noise_xy: 0.015, min_fix_type: 4
-    gnss.base_noise_xy: 0.5         # m
+    gnss.base_noise_xy: 0.015         # m
     gnss.base_noise_z: 1.0          # m
     gnss.heading_noise: 0.02
     gnss.max_hdop: 3.5              # F9P tracks many constellations: HDOP is usually good
     gnss.min_satellites: 4
-    gnss.min_fix_type: 1            # 1=GPS, 2=DGPS, 3=RTK_FLOAT, 4=RTK_FIXED
+    gnss.min_fix_type: 4            # 1=GPS, 2=DGPS, 3=RTK_FLOAT, 4=RTK_FIXED
 
     # F9P antenna lever arm: measure from base_link to antenna center
     # x=forward, y=left, z=up (meters). Set to your actual mounting position.

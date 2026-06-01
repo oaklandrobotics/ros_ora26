@@ -10,6 +10,7 @@ services:
     environment:
       DISPLAY: ${DISPLAY}
       NVIDIA_DRIVER_CAPABILITIES: all
+      RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
       
     labels:
       - autoheal=true

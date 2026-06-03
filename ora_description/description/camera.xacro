@@ -46,7 +46,7 @@
     <link name='camera_link_optical' />
 
     <joint name="camera_optical_joint" type="fixed">
-      <parent link="camera_link" />
+      <parent link="sim_camera_link" />
       <child link="camera_link_optical" />
       <origin xyz="0 0 0" rpy="-1.57079632679 0 -1.57079632679" />
     </joint>

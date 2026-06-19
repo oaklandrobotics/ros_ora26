@@ -16,3 +16,12 @@ twist_mux:
         topic: cmd_vel_joy
         timeout: 0.5
         priority: 100
+
+    locks:
+      # Block all output on estop
+      # This is a SOFTWARE LEVEL estop. The motors will still have power and are still capable of driving.
+      estop:
+        topic: estop
+        timeout: 0.0
+        priority: 255
+

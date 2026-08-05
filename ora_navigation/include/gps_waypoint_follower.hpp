@@ -95,6 +95,11 @@ private:
     geographic_msgs::msg::GeoPoint waypoint,
     rclcpp::Client<fusioncore_ros::srv::FromLL>::SharedFuture future_response
   );
+  
+  void getNavInfoCallback(
+    const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
+    std::shared_ptr<std_srvs::srv::Trigger::Response> response
+  );
 
   // Action Callbacks
   void navGoalResponseCallback(
@@ -124,6 +129,8 @@ private:
   rclcpp::Service<std_srvs::srv::SetBool>::SharedPtr set_auton_srv_;
   rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr reset_auton_srv_;
   rclcpp::Service<std_srvs::srv::SetBool>::SharedPtr set_course_srv_;
+
+  rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr get_navigation_info_srv_;
 
   // Action Client
   rclcpp_action::Client<NavigateToPose>::SharedPtr nav_to_pose_client_;

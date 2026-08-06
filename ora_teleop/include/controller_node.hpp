@@ -1,10 +1,17 @@
 #ifndef CONTROLLER_NODE_HPP
 #define CONTROLLER_NODE_HPP
 
+#include <deque>
+#include <chrono>
+#include <cstdint>
+
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/joy.hpp"
+#include "sensor_msgs/msg/joy_feedback.hpp"
 #include "std_srvs/srv/set_bool.hpp"
 #include "std_srvs/srv/trigger.hpp"
+
+using namespace std::chrono_literals;
 
 class ControllerNode : public rclcpp::Node
 {
@@ -12,7 +19,16 @@ public:
   ControllerNode();
 
 private:
-  // Topic Callbacks
+  struct TimedJoyFeedback
+  {
+    float intensity;
+    std::chrono::milliseconds duration;
+  };
+
+  // Publisher Callbacks
+  void setJoyFeedbackCallback();
+
+  // Subscriber Callbacks
   void joyCallback(
     const sensor_msgs::msg::Joy::SharedPtr msg
   );
@@ -24,6 +40,9 @@ private:
   void setCourse();
   void reloadWaypoint();
 
+  // Publisher
+  rclcpp::Publisher<sensor_msgs::msg::JoyFeedback>::SharedPtr joy_feedback_publisher_;
+
   // Subscriber
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joy_subscriber_;
 
@@ -33,6 +52,28 @@ private:
   rclcpp::Client<std_srvs::srv::SetBool>::SharedPtr set_estop_client_;
   rclcpp::Client<std_srvs::srv::SetBool>::SharedPtr set_course_client_;
   rclcpp::Client<std_srvs::srv::Trigger>::SharedPtr reload_waypoint_client_;
+
+  // Service Client Callbacks
+  void setCourseClientCallback(rclcpp::Client<std_srvs::srv::SetBool>::SharedFuture future);
+
+  // Vector to store feedback queue
+  std::deque<TimedJoyFeedback> pending_feedback_queue;
+
+  // Vector for each feedback type
+  inline static const std::deque<TimedJoyFeedback> north_course_feedback_ = 
+  {
+    {1.0F, 500ms}
+  };
+  
+  inline static const std::deque<TimedJoyFeedback> south_course_feedback_ = 
+  {
+    {1.0F, 500ms},
+    {0.0F, 250ms},
+    {1.0F, 500ms}
+  };
+
+  // Timer for feedback callbacks
+  rclcpp::TimerBase::SharedPtr timer_;
 
   // Track auton/estop state
   bool auton_enabled_ = false;
@@ -52,6 +93,7 @@ private:
   static constexpr uint8_t k_set_course_button_ = 4;
   static constexpr uint8_t k_set_auton_button_ = 3;
   static constexpr uint8_t k_reload_waypoint_button_ = 15;
+  static constexpr uint8_t k_drive_forward_button_ = 11;
 };
 
 #endif

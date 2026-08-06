@@ -5,5 +5,5 @@ uint8 active_index
 
 string starting_direction
 
-bool successs
+bool success
 string message

@@ -2,6 +2,13 @@
 
 ControllerNode::ControllerNode() : Node("controller_node")
 {
+  // Initialize Publisher
+  joy_feedback_publisher_ = this->create_publisher<sensor_msgs::msg::JoyFeedback>
+  (
+    "/joy/set_feedback",
+    10
+  );
+
   // Initialize Subscriber and assign Callback
   joy_subscriber_ = this->create_subscription<sensor_msgs::msg::Joy>(
     "/joy",
@@ -21,6 +28,53 @@ ControllerNode::ControllerNode() : Node("controller_node")
   RCLCPP_INFO(
     this->get_logger(),
     "ControllerNode initialized"
+  );
+}
+
+/**
+ * 
+ */
+void ControllerNode::setJoyFeedbackCallback()
+{
+  // Cancel the timer if it already exists to make a new timer with the correct period
+  if (timer_ != nullptr)
+  {
+    timer_->cancel();
+    timer_.reset();
+  }
+
+  // Create and fill feedback message
+  sensor_msgs::msg::JoyFeedback feedback_message = sensor_msgs::msg::JoyFeedback();
+
+  feedback_message.type = sensor_msgs::msg::JoyFeedback::TYPE_RUMBLE;
+  feedback_message.id = 0;
+
+  // Send a 0 command and return if no more feedback values in the queue
+  if (pending_feedback_queue.empty())
+  {
+    // Set feedback intensity to 0.0
+    feedback_message.intensity = 0.0;
+
+    // Publish feedback message
+    joy_feedback_publisher_->publish(feedback_message);
+
+    return;
+  }
+
+  // Copy the next item in the queue and then pop the element
+  TimedJoyFeedback current_timed_feedback = pending_feedback_queue.front();
+  pending_feedback_queue.pop_front();
+
+  // Set feedback intensity to current feedback to intensity
+  feedback_message.intensity = current_timed_feedback.intensity;
+
+  // Publish feedback message
+  joy_feedback_publisher_->publish(feedback_message);
+
+  // Create new timer using the current feedback items duration to call callback again
+  timer_ = this->create_wall_timer(
+    current_timed_feedback.duration,
+    std::bind(&ControllerNode::setJoyFeedbackCallback, this)
   );
 }
 
@@ -55,6 +109,7 @@ void ControllerNode::joyCallback(sensor_msgs::msg::Joy::SharedPtr msg)
     // Set active course
     if (set_course_now && !set_course_pressed_)
     {
+      pending_feedback_queue.clear();
       setCourse();
     }
 
@@ -160,14 +215,46 @@ void ControllerNode::setCourse()
     return;
   }
 
-  // practice_course_enabled_ is flipped
-  practice_course_enabled_ = !practice_course_enabled_;
-
   // Send a message to the set_auton_client
   auto request = std::make_shared<std_srvs::srv::SetBool::Request>();
-  request->data = practice_course_enabled_;
+  request->data = !practice_course_enabled_;
 
-  set_course_client_->async_send_request(request);
+  set_course_client_->async_send_request(
+    request,
+    [this](
+      rclcpp::Client<std_srvs::srv::SetBool>::SharedFuture future
+    )
+    {
+      setCourseClientCallback(future);
+    }
+  );
+}
+
+/**
+ * 
+ */
+void ControllerNode::setCourseClientCallback(
+  rclcpp::Client<std_srvs::srv::SetBool>::SharedFuture future
+)
+{
+  const auto response = future.get();
+
+  if (response->success)
+  {
+    // practice_course_enabled_ is flipped
+    practice_course_enabled_ = !practice_course_enabled_;
+
+    if (practice_course_enabled_)
+    {
+      pending_feedback_queue = north_course_feedback_;
+    }
+    else
+    {
+      pending_feedback_queue = south_course_feedback_;
+    }
+
+    setJoyFeedbackCallback();
+  }
 }
 
 /**

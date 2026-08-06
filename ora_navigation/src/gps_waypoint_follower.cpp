@@ -1,6 +1,7 @@
 #include "../include/gps_waypoint_follower.hpp"
 
 using NavigateToPose = nav2_msgs::action::NavigateToPose;
+using namespace std::chrono_literals;
 
 GpsWaypointFollower::GpsWaypointFollower() : Node("gps_waypoint_follower")
 {
@@ -50,6 +51,12 @@ GpsWaypointFollower::GpsWaypointFollower() : Node("gps_waypoint_follower")
 
   // Action Client
   nav_to_pose_client_ = rclcpp_action::create_client<NavigateToPose>(this, "/navigate_to_pose");
+
+
+  publisher_ = this->create_publisher<geometry_msgs::msg::TwistStamped>("/cmd_vel_nav_out", 10);
+  // Create a timer to call the callback function at 10 Hz (every 100ms)
+  timer_ = this->create_wall_timer(
+    100ms, std::bind(&GpsWaypointFollower::timer_callback, this));
 
   const YAML::Node config_file = YAML::LoadFile(waypoints_file);
   initialize(config_file);
@@ -261,6 +268,33 @@ NavigateToPose::Goal GpsWaypointFollower::buildNavigateToPoseGoal(
   return goal_msg;
 }
 
+void GpsWaypointFollower::timer_callback()
+{
+  // This callback is called at a fixed rate (10 Hz) by the timer
+  // You can use this to perform periodic checks or updates if needed
+  // For example, you could check the status of the current goal or update internal state
+  geometry_msgs::msg::TwistStamped cmd_vel;
+  cmd_vel.header.stamp = this->get_clock()->now();
+
+  if (enable_follower_)
+  {
+    // Publish 1m/s forward velocity command
+    cmd_vel.twist.linear.x = 1.0; // Move forward at 1 m/s
+    cmd_vel.twist.angular.z = 0.0; // No rotation
+    publisher_->publish(cmd_vel);
+  }
+  else
+  {
+    // Publish 1m/s forward velocity command
+    cmd_vel.twist.linear.x = 0.0; // Move forward at 1 m/s
+    cmd_vel.twist.angular.z = 0.0; // No rotation
+    publisher_->publish(cmd_vel);
+  }
+
+    RCLCPP_INFO(this->get_logger(), "Publishing: Linear x: '%f', Angular z: '%f'", 
+            cmd_vel.twist.linear.x, cmd_vel.twist.angular.z);
+}
+
 void GpsWaypointFollower::navigateToWaypoint(const geometry_msgs::msg::Point& localized_waypoint)
 {
   if (!this->nav_to_pose_client_->wait_for_action_server())
@@ -335,25 +369,26 @@ void GpsWaypointFollower::setAutonCallback(
 
   if (!waypoints_configured_)
   {
-    // Get vector of waypoints
-    selected_waypoints_ = practice_course_ ? practice_course_waypoints_ : main_course_waypoints_;
+    
+    // // Get vector of waypoints
+    // selected_waypoints_ = practice_course_ ? practice_course_waypoints_ : main_course_waypoints_;
 
-    // Reset waypoint index and vector
-    waypoint_transform_index_ = 0;
-    localized_waypoints_.clear();
-    waypoints_configured_ = true;
+    // // Reset waypoint index and vector
+    // waypoint_transform_index_ = 0;
+    // localized_waypoints_.clear();
+    // waypoints_configured_ = true;
 
-    response->success = true;
-    response->message = "Waypoint follower enabled, transforming waypoints";
+    // response->success = true;
+    // response->message = "Waypoint follower enabled, transforming waypoints";
 
-    transformNextWaypoint();
+    // transformNextWaypoint();
     return;
   }
 
   response->success = true;
   response->message = "Waypoint follower enabled, resuming navigation";
 
-  startNavigation();
+  // startNavigation();
 }
 
 /**
@@ -566,6 +601,8 @@ void GpsWaypointFollower::navGoalResultCallback(
           this->get_logger(),
           "Follower not enabled, ending navigation"
         );
+
+        this->stopNavigation();
 
         return;
       }

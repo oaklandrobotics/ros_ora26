@@ -16,6 +16,7 @@
 #include "fusioncore_ros/srv/from_ll.hpp"
 #include "geographic_msgs/msg/geo_point.hpp"
 #include "geometry_msgs/msg/point.hpp"
+#include "geometry_msgs/msg/twist_stamped.hpp"
 
 #include "std_srvs/srv/set_bool.hpp"
 #include "std_srvs/srv/trigger.hpp"
@@ -102,6 +103,11 @@ private:
   void navCancelGoalCallback(
     const std::shared_ptr<action_msgs::srv::CancelGoal_Response>& cancel_response
   );
+
+  // I suppose I can give up my morals and just drive straight sigh
+  rclcpp::TimerBase::SharedPtr timer_;
+  rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr publisher_;
+  void timer_callback();
 
   // Service Client
   rclcpp::Client<fusioncore_ros::srv::FromLL>::SharedPtr from_ll_client_;

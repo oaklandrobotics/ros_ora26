@@ -20,13 +20,3 @@ launch:
       value: "$(command 'xacro $(find-pkg-share ora_description)/description/$(var model_name) sim_mode:=$(var use_sim_time)')"
     - name: "use_sim_time"
       value: "$(var use_sim_time)"
-
-- node:
-    pkg: "rviz2"
-    exec: "rviz2"
-    name: "rviz2_robot"
-    output: "screen"
-    args: "-d $(find-pkg-share ora_description)/rviz/$(var rviz_config)"
-    param:
-    - name: "use_sim_time"
-      value: "$(var use_sim_time)"

@@ -1,28 +1,28 @@
 ---
 practice_course:
-  - name: north
-    lat: 42.668212
-    lon: -83.218459
-  - name: mid
-    lat: 42.668086
-    lon: -83.218446
   - name: south
-    lat: 42.66796
-    lon: -83.218433
+    lat: 42.667928
+    lon: -83.219328
+  - name: south_ramp
+    lat: 42.668077
+    lon: -83.219359
+  - name: north_ramp
+    lat: 42.668121
+    lon: -83.219361
+  - name: north
+    lat: 42.66827
+    lon: -83.21934
 
 main_course:
   - name: north
-    lat: 42.667917
-    lon: -83.218664
-  # - name: north
-  #   lat: 42.66827
-  #   lon: -83.21934
-  # - name: north_ramp
-  #   lat: 42.668121
-  #   lon: -83.219361
-  # - name: south_ramp
-  #   lat: 42.668077
-  #   lon: -83.219359
-  # - name: south
-  #   lat: 42.667928
-  #   lon: -83.219328
+    lat: 42.66827
+    lon: -83.21934
+  - name: north_ramp
+    lat: 42.668121
+    lon: -83.219361
+  - name: south_ramp
+    lat: 42.668077
+    lon: -83.219359
+  - name: south
+    lat: 42.667928
+    lon: -83.219328

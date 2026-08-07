@@ -156,6 +156,9 @@ void GpsWaypointFollower::transformNextWaypoint()
       localized_waypoints_.size()
     );
 
+    // Add current location at the end of the localized_waypoints_ for navigation back to start
+    addStartingWaypoint();
+
     startNavigation();
 
     return;
@@ -395,9 +398,6 @@ void GpsWaypointFollower::setAutonCallback(
     response->message = "Waypoint follower enabled, transforming waypoints";
 
     transformNextWaypoint();
-
-    // Add current location at the end of the localized_waypoints_ for navigation back to start
-    addStartingWaypoint();
 
     return;
   }

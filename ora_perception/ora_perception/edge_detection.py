@@ -130,7 +130,7 @@ class EdgeDetectionNode(Node):
     # Masking visible part of robot in frame
     # [Bottom left, Top left, Top right, Bottom right]
     if self.use_sim_time == True: #Simulated camera
-      robot_mask_points = np.array([[0.256, 1], [0.367, 0.556], [0.634, 0.556], [0.746, 1]])
+      robot_mask_points = np.array([[0.2, 1], [0.3, 0.556], [0.7, 0.556], [0.8, 1]])
     else: # Real camera
       robot_mask_points = np.array([[0.230, 1], [0.322, 0.675], [0.748, 0.675], [0.867, 1]])
 

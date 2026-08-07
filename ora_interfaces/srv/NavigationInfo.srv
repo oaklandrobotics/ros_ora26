@@ -1,6 +1,6 @@
 # Empty Request
 ---
-geometry_msgs/point[] localized_waypoints
+geometry_msgs/Point[] localized_waypoints
 uint8 active_index
 
 string starting_direction

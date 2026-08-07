@@ -57,6 +57,17 @@ GpsWaypointFollower::GpsWaypointFollower() : Node("gps_waypoint_follower")
     }
   );
 
+  get_navigation_info_srv_ = this->create_service<ora_interfaces::srv::NavigationInfo>(
+    "navigation/get_info",
+    [this](
+      const std::shared_ptr<ora_interfaces::srv::NavigationInfo::Request> request,
+      std::shared_ptr<ora_interfaces::srv::NavigationInfo::Response> response
+    )
+    {
+      getNavInfoCallback(request, response);
+    }
+  );
+
   // Service Client
   from_ll_client_ = this->create_client<fusioncore_ros::srv::FromLL>("/fromLL");
 
@@ -673,6 +684,23 @@ void GpsWaypointFollower::navCancelGoalCallback(
   }
 
   current_goal_handle_.reset();
+}
+
+/**
+ * 
+ */
+void GpsWaypointFollower::getNavInfoCallback(
+  const std::shared_ptr<ora_interfaces::srv::NavigationInfo::Request> request,
+  std::shared_ptr<ora_interfaces::srv::NavigationInfo::Response> response
+)
+{
+  if (request){};
+
+  response->localized_waypoints = localized_waypoints_;
+  response->active_index = current_waypoint_index_;
+  response->starting_direction = practice_course_ ? "Practice Course" : "North Course";
+  response->success = true;
+  response->message = "Navigation goals returned";
 }
 
 int main(int argc, char** argv)

@@ -17,11 +17,12 @@ find_package(geographic_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav2_msgs REQUIRED)
 find_package(yaml-cpp REQUIRED)
+find_package(ora_interfaces REQUIRED)
 
 add_executable(gps_waypoint_follower src/gps_waypoint_follower.cpp)
 ament_target_dependencies(gps_waypoint_follower
   rclcpp rclcpp_action ament_index_cpp std_msgs std_srvs  geographic_msgs geometry_msgs
-  nav2_msgs
+  nav2_msgs ora_interfaces
   fusioncore_ros
 )
 

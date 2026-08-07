@@ -22,6 +22,7 @@
 #include "std_srvs/srv/set_bool.hpp"
 #include "std_srvs/srv/trigger.hpp"
 #include "action_msgs/srv/cancel_goal.hpp"
+#include "ora_interfaces/srv/navigation_info.hpp"
 
 class GpsWaypointFollower : public rclcpp::Node
 {
@@ -97,8 +98,8 @@ private:
   );
   
   void getNavInfoCallback(
-    const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
-    std::shared_ptr<std_srvs::srv::Trigger::Response> response
+    const std::shared_ptr<ora_interfaces::srv::NavigationInfo::Request> request,
+    std::shared_ptr<ora_interfaces::srv::NavigationInfo::Response> response
   );
 
   // Action Callbacks
@@ -130,7 +131,7 @@ private:
   rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr reset_auton_srv_;
   rclcpp::Service<std_srvs::srv::SetBool>::SharedPtr set_course_srv_;
 
-  rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr get_navigation_info_srv_;
+  rclcpp::Service<ora_interfaces::srv::NavigationInfo>::SharedPtr get_navigation_info_srv_;
 
   // Action Client
   rclcpp_action::Client<NavigateToPose>::SharedPtr nav_to_pose_client_;

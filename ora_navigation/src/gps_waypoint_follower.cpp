@@ -1,6 +1,7 @@
 #include "../include/gps_waypoint_follower.hpp"
 
 using NavigateToPose = nav2_msgs::action::NavigateToPose;
+using namespace std::chrono_literals;
 
 GpsWaypointFollower::GpsWaypointFollower() : Node("gps_waypoint_follower")
 {
@@ -10,6 +11,17 @@ GpsWaypointFollower::GpsWaypointFollower() : Node("gps_waypoint_follower")
   this->declare_parameter("waypoints_file", default_waypoint_file);
 
   const auto waypoints_file = this->get_parameter("waypoints_file").as_string();
+
+  // Subscriber and callback
+  pose_sub_ = this->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
+    "/fusion/pose", 20,
+    [this](
+      const geometry_msgs::msg::PoseWithCovarianceStamped msg
+    )
+    {
+      poseCallback(msg);
+    }
+  );
 
   // Create services and assign callbacks
   set_auton_srv_ = this->create_service<std_srvs::srv::SetBool>(
@@ -42,6 +54,17 @@ GpsWaypointFollower::GpsWaypointFollower() : Node("gps_waypoint_follower")
     )
     {
       setCourseCallback(request, response);
+    }
+  );
+
+  get_navigation_info_srv_ = this->create_service<ora_interfaces::srv::NavigationInfo>(
+    "navigation/get_info",
+    [this](
+      const std::shared_ptr<ora_interfaces::srv::NavigationInfo::Request> request,
+      std::shared_ptr<ora_interfaces::srv::NavigationInfo::Response> response
+    )
+    {
+      getNavInfoCallback(request, response);
     }
   );
 
@@ -133,6 +156,9 @@ void GpsWaypointFollower::transformNextWaypoint()
       localized_waypoints_.size()
     );
 
+    // Add current location at the end of the localized_waypoints_ for navigation back to start
+    addStartingWaypoint();
+
     startNavigation();
 
     return;
@@ -152,6 +178,26 @@ void GpsWaypointFollower::transformNextWaypoint()
       fromLLCallback(waypoint, future_response);
     }
   );
+}
+
+void GpsWaypointFollower::addStartingWaypoint()
+{
+  // Check if the pose is too old
+  // if (this->last_known_pose_.header.stamp.sec <= this->get_clock()->now() - std::chrono::seconds(1))
+  // {
+  //   return;
+  // }
+
+  // Last known pose is good for starting pose
+  auto starting_pose = this->last_known_pose_.pose.pose;
+
+  RCLCPP_INFO(
+    this->get_logger(),
+    "Adding the point x=%.3f, y=%.3f as the starting waypoint",
+    starting_pose.position.x, starting_pose.position.y
+  );
+
+  localized_waypoints_.push_back(starting_pose.position);
 }
 
 void GpsWaypointFollower::startNavigation()
@@ -313,6 +359,11 @@ void GpsWaypointFollower::navigateToWaypoint(const geometry_msgs::msg::Point& lo
   return;
 }
 
+void GpsWaypointFollower::poseCallback(const geometry_msgs::msg::PoseWithCovarianceStamped msg)
+{
+  last_known_pose_ = msg;
+}
+
 /**
  * `request->data: false` - Autonomous control disabled
  * `request->data: true` - Autonomous control enabled
@@ -347,6 +398,7 @@ void GpsWaypointFollower::setAutonCallback(
     response->message = "Waypoint follower enabled, transforming waypoints";
 
     transformNextWaypoint();
+
     return;
   }
 
@@ -632,6 +684,23 @@ void GpsWaypointFollower::navCancelGoalCallback(
   }
 
   current_goal_handle_.reset();
+}
+
+/**
+ * 
+ */
+void GpsWaypointFollower::getNavInfoCallback(
+  const std::shared_ptr<ora_interfaces::srv::NavigationInfo::Request> request,
+  std::shared_ptr<ora_interfaces::srv::NavigationInfo::Response> response
+)
+{
+  if (request){};
+
+  response->localized_waypoints = localized_waypoints_;
+  response->active_index = current_waypoint_index_;
+  response->starting_direction = practice_course_ ? "Practice Course" : "North Course";
+  response->success = true;
+  response->message = "Navigation goals returned";
 }
 
 int main(int argc, char** argv)

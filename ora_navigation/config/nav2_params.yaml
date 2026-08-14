@@ -146,7 +146,7 @@ local_costmap:
         combination_method: 1
 
         pointcloud:
-          topic: /depth_camera/filtered/points
+          topic: /filtered/lines
           data_type: "PointCloud2"
           min_obstacle_height: -0.5
           max_obstacle_height: 0.5
@@ -218,7 +218,7 @@ global_costmap:
         combination_method: 1
 
         pointcloud:
-          topic: /depth_camera/filtered/points
+          topic: /filtered/lines
           data_type: "PointCloud2"
           min_obstacle_height: -2.0
           max_obstacle_height: 2.0

@@ -44,7 +44,7 @@ fusioncore:
     gnss.heading_noise: 0.02
     gnss.max_hdop: 3.5              # F9P tracks many constellations: HDOP is usually good
     gnss.min_satellites: 4
-    gnss.min_fix_type: 4            # 1=GPS, 2=DGPS, 3=RTK_FLOAT, 4=RTK_FIXED
+    gnss.min_fix_type: 1            # 1=GPS, 2=DGPS, 3=RTK_FLOAT, 4=RTK_FIXED
 
     # F9P antenna lever arm: measure from base_link to antenna center
     # x=forward, y=left, z=up (meters). Set to your actual mounting position.

@@ -3,9 +3,11 @@ Panels:
     Help Height: 78
     Name: Displays
     Property Tree Widget:
-      Expanded: ~
-      Splitter Ratio: 0.5029411911964417
-    Tree Height: 449
+      Expanded:
+        - /TF1/Frames1
+        - /TF1/Tree1
+      Splitter Ratio: 0.43383583426475525
+    Tree Height: 524
   - Class: rviz_common/Views
     Expanded:
       - /Current View1
@@ -67,6 +69,10 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        camera_link_optical:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         chassis_link:
           Alpha: 1
           Show Axes: false
@@ -117,40 +123,16 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        sim_camera_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         tower_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        velodyne:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        zed_camera_center:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        zed_camera_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        zed_left_camera_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        zed_left_camera_frame_optical:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        zed_right_camera_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        zed_right_camera_frame_optical:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
       Mass Properties:
         Inertia: false
         Mass: false
@@ -165,12 +147,14 @@ Visualization Manager:
       Filter (whitelist): ""
       Frame Timeout: 15
       Frames:
-        All Enabled: true
+        All Enabled: false
         base_footprint:
           Value: true
         base_link:
           Value: true
         camera_link:
+          Value: false
+        camera_link_optical:
           Value: true
         chassis_link:
           Value: true
@@ -194,21 +178,9 @@ Visualization Manager:
           Value: true
         right_wheel_link:
           Value: true
+        sim_camera_link:
+          Value: true
         tower_link:
-          Value: true
-        velodyne:
-          Value: true
-        zed_camera_center:
-          Value: true
-        zed_camera_link:
-          Value: true
-        zed_left_camera_frame:
-          Value: true
-        zed_left_camera_frame_optical:
-          Value: true
-        zed_right_camera_frame:
-          Value: true
-        zed_right_camera_frame_optical:
           Value: true
       Marker Scale: 0.30000001192092896
       Name: TF
@@ -216,40 +188,35 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        odom:
-          base_link:
-            base_footprint:
-              {}
-            chassis_link:
-              tower_link:
-                camera_link:
-                  zed_camera_link:
-                    zed_camera_center:
-                      zed_left_camera_frame:
-                        zed_left_camera_frame_optical:
-                          {}
-                      zed_right_camera_frame:
-                        zed_right_camera_frame_optical:
-                          {}
-                gnss_link:
-                  {}
-            imu_link:
-              {}
-            left_back_caster_link:
-              {}
-            left_front_caster_link:
-              {}
-            left_wheel_link:
-              {}
-            lidar_link:
-              velodyne:
+        base_link:
+          base_footprint:
+            {}
+          chassis_link:
+            tower_link:
+              camera_link:
+                sim_camera_link:
+                  camera_link_optical:
+                    {}
+              gnss_link:
                 {}
-            right_back_caster_link:
-              {}
-            right_front_caster_link:
-              {}
-            right_wheel_link:
-              {}
+          imu_link:
+            {}
+          left_back_caster_link:
+            {}
+          left_front_caster_link:
+            {}
+          left_wheel_link:
+            {}
+          lidar_link:
+            {}
+          right_back_caster_link:
+            {}
+          right_front_caster_link:
+            {}
+          right_wheel_link:
+            {}
+        odom:
+          {}
       Update Interval: 0
       Value: true
     - Alpha: 0.6000000238418579
@@ -264,13 +231,13 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: Intensity
       Decay Time: 0
-      Enabled: false
+      Enabled: true
       Invert Rainbow: true
       Max Color: 255; 255; 255
       Max Intensity: 100
       Min Color: 0; 0; 0
       Min Intensity: 0
-      Name: PointCloud2
+      Name: Lidar PointCloud
       Position Transformer: XYZ
       Selectable: true
       Size (Pixels): 3
@@ -284,7 +251,7 @@ Visualization Manager:
         Value: /velodyne_points
       Use Fixed Frame: true
       Use rainbow: true
-      Value: false
+      Value: true
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -300,7 +267,7 @@ Visualization Manager:
       Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 100
+      Max Intensity: 0
       Min Color: 0; 0; 0
       Min Intensity: 0
       Name: Base Scan
@@ -334,9 +301,9 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 255
+      Max Intensity: 0
       Min Color: 255; 0; 127
-      Min Intensity: 3
+      Min Intensity: 0
       Name: Filtered Scan
       Position Transformer: XYZ
       Selectable: true
@@ -511,7 +478,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /depth_camera/filtered/points
+        Value: /filtered/lines
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
@@ -566,7 +533,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: 4.5049943923950195
+      Angle: 4.710000514984131
       Class: rviz_default_plugins/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -576,11 +543,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 130.00103759765625
+      Scale: 70
       Target Frame: base_link
       Value: TopDownOrtho (rviz_default_plugins)
-      X: 0.647064208984375
-      Y: -0.36223170161247253
+      X: 0
+      Y: 0
     Saved:
       - Angle: 4.710000038146973
         Class: rviz_default_plugins/TopDownOrtho
@@ -600,14 +567,14 @@ Visualization Manager:
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 1131
+  Height: 1495
   Hide Left Dock: false
   Hide Right Dock: false
   Image:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd00000001000000000000021b0000040dfc0200000006fb000000100044006900730070006c006100790073010000003f0000024f000000cc00fffffffb0000000a0049006d0061006700650100000294000000c20000001700fffffffb0000000c00430061006d00650072006101000004320000018a0000000000000000fb0000000a005600690065007700730000000373000000dd000000a900fffffffb0000000a0056006900650077007300000002d6000000a9000000a900fffffffb0000000a0049006d006100670065010000035c000000f00000001700ffffff0000051d0000040d00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd00000001000000000000025700000581fc0200000006fb000000100044006900730070006c006100790073010000003b00000295000000c700fffffffb0000000a0049006d00610067006501000002d6000000d90000001600fffffffb0000000c00430061006d00650072006101000004320000018a0000000000000000fb0000000a0056006900650077007301000003b5000000f5000000a000fffffffb0000000a0056006900650077007300000002d6000000a9000000a000fffffffb0000000a0049006d00610067006501000004b00000010c0000001600ffffff000007970000058100000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
-  Width: 1854
-  X: 66
-  Y: 32
+  Width: 2548
+  X: 1888
+  Y: -32

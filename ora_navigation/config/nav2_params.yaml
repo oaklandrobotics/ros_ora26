@@ -169,6 +169,48 @@ local_costmap:
         cost_scaling_factor: 1.0
         inflation_radius: 1.0
       always_send_full_costmap: true
+      # Semantic segmentation plugin implementation
+      semantic_segmentation_layer:
+        plugin: "semantic_segmentation_layer::SemanticSegmentationLayer"
+        enabled: True
+        observation_sources: camera
+        camera:
+          segmentation_topic: "/segmentation/mask"
+          confidence_topic: "/segmentation/confidence"
+          labels_topic: "/segmentation/label_info"
+          pointcloud_topic: "/rgbd_camera/depth/points"
+          observation_persistence: 0.0
+          expected_update_rate: 0.0
+          visualize_tile_map: True
+          use_cost_selection: False
+          max_obstacle_distance: 5.0
+          min_obstacle_distance: 0.3
+          tile_map_decay_time: 2.0
+          class_types: ["traversable", "intermediate", "danger"]
+          traversable:
+            classes: ["sidewalk"]
+            base_cost: 0
+            max_cost: 0
+            mark_confidence: 0
+            samples_to_max_cost: 0
+          intermediate:
+            classes: ["background"]
+            base_cost: 127
+            max_cost: 127
+            mark_confidence: 0
+            samples_to_max_cost: 0
+          danger:
+            classes: ["grass"]
+            base_cost: 254
+            max_cost: 254
+            mark_confidence: 0
+            samples_to_max_cost: 0
+            dominant_priority: False
+      inflation_layer:
+        plugin: "nav2_costmap_2d::InflationLayer"
+        cost_scaling_factor: 3.0
+        inflation_radius: 0.70
+      introspection_mode: "disabled"
 
 # ── Global Costmap ────────────────────────────────────────────────────────────
 # Used to create global plan
@@ -241,6 +283,48 @@ global_costmap:
         cost_scaling_factor: 1.0
         inflation_radius: 1.0
       always_send_full_costmap: false
+      # Semantic segmentation plugin integration
+      semantic_segmentation_layer:
+        plugin: "semantic_segmentation_layer::SemanticSegmentationLayer"
+        enabled: True
+        observation_sources: camera
+        camera:
+          segmentation_topic: "/segmentation/mask"
+          confidence_topic: "/segmentation/confidence"
+          labels_topic: "/segmentation/label_info"
+          pointcloud_topic: "/rgbd_camera/depth/points"
+          observation_persistence: 0.0
+          expected_update_rate: 0.0
+          visualize_tile_map: False
+          use_cost_selection: True
+          max_obstacle_distance: 5.0
+          min_obstacle_distance: 0.3
+          tile_map_decay_time: 2.0
+          class_types: ["traversable", "intermediate", "danger"]
+          traversable:
+            classes: ["sidewalk"]
+            base_cost: 0
+            max_cost: 0
+            mark_confidence: 0
+            samples_to_max_cost: 0
+          intermediate:
+            classes: ["background"]
+            base_cost: 127
+            max_cost: 127
+            mark_confidence: 0
+            samples_to_max_cost: 0
+          danger:
+            classes: ["grass"]
+            base_cost: 254
+            max_cost: 254
+            mark_confidence: 0
+            samples_to_max_cost: 0
+            dominant_priority: False
+      inflation_layer:
+        plugin: "nav2_costmap_2d::InflationLayer"
+        cost_scaling_factor: 3.0
+        inflation_radius: 0.7
+      introspection_mode: "disabled"
 
 # ── Map Server ────────────────────────────────────────────────────────────────
 # No map available 

@@ -17,7 +17,49 @@ find_package(geographic_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav2_msgs REQUIRED)
 find_package(yaml-cpp REQUIRED)
+find_package(message_filters REQUIRED)
+find_package(nav2_costmap_2d REQUIRED)
+find_package(nav2_util REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(pluginlib REQUIRED)
+find_package(rclcpp_lifecycle REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
+find_package(tf2_sensor_msgs REQUIRED)
+find_package(vision_msgs REQUIRED)
 find_package(ora_interfaces REQUIRED)
+
+# Include directories
+include_directories(include)
+
+# Create the semantic segmentation layer library
+add_library(semantic_segmentation_layer SHARED
+  src/semantic_segmentation_layer.cpp
+  src/segmentation_buffer.cpp
+)
+
+target_include_directories(semantic_segmentation_layer
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+
+target_link_libraries(semantic_segmentation_layer
+  PUBLIC
+    message_filters::message_filters
+    nav2_costmap_2d::nav2_costmap_2d_core
+    nav2_util::nav2_util_core
+    nav2_util::nav2_util_core
+    pluginlib::pluginlib
+    rclcpp::rclcpp
+    rclcpp_lifecycle::rclcpp_lifecycle
+    tf2::tf2
+    tf2_ros::tf2_ros
+    tf2_sensor_msgs::tf2_sensor_msgs
+    ${vision_msgs_TARGETS}
+)
 
 add_executable(gps_waypoint_follower src/gps_waypoint_follower.cpp)
 ament_target_dependencies(gps_waypoint_follower
@@ -41,6 +83,26 @@ if(BUILD_TESTING)
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+# Install semantic segmentation layer library
+install(TARGETS semantic_segmentation_layer
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
+
+# Install semantic segmentation header files
+install(DIRECTORY include/
+  DESTINATION include
+)
+
+# Install semantic segmentation layer plugin description file
+install(FILES costmap_plugins.xml
+  DESTINATION share/${PROJECT_NAME}
+)
+
+# Export semantic segmentation layer plugin description file for pluginlib
+pluginlib_export_plugin_description_file(nav2_costmap_2d costmap_plugins.xml)
 
 install(DIRECTORY
   config

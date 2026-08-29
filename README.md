@@ -57,8 +57,9 @@ You should now be able to run nodes with `ros2 run` or start launch files with `
 For example, you can bring up the robot with the main launch file:
 
 ```bash
-ros2 launch ora_launch robot.launch.py
+ros2 launch ora_launch robot.launch.py use_sim_time:=true use_semantic_segmentation:=false
 ```
+*For more information on 'use_sim_time' and 'use_semantic_segmentation' launch arguments, see [Configuration Notes](#configuration-notes)*
 
 ## How to contribute
 
@@ -74,3 +75,38 @@ This can be done in your IDE of choice, such as VS Code.
 ### Open a pull request and have it reviewed
 
 ### Merge it
+
+## Configuration Notes
+
+### Overview
+This system has a defualt configuration to favor the real robot over the simulation. This means that features like semantic segmentation is enabled by defualt while simulation time is disabled by default.
+
+To enable simulation time (Required to run the simulation on your PC), use:
+```bash
+ros2 launch ora_launch robot.launch.py use_sim_time:=true
+```
+
+*Semantic segmentation requires Nvidia CUDA, If you PC does not support this, disable semantic segmentation. For more information on using the semantic segmentation feature, see the [this quide.](ora_perception/semantic_segmentation/README.md)*
+
+To disable semantic segmentation, use:
+```bash
+ros2 launch ora_launch robot.launch.py use_semantic_segmentation:=false
+```
+
+### Make Configuration Persistant
+Rather than typing these parameters to every launch command, you can add them to your environment instead.
+
+To disable semantic segmentation:
+```bash
+echo "export USE_SEMANTIC_SEGMENTATION=false" >> ~/.bashrc
+```
+
+To enable simulation time:
+```bash
+echo "export USE_SIM_TIME=true" >> ~/.bashrc
+```
+
+Any time an environment file is modified you must source it again or restart your shell:
+```bash
+source ~/.bashrc
+```

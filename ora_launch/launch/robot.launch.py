@@ -1,3 +1,4 @@
+import os
 from launch import LaunchDescription
 from launch.actions import (
 DeclareLaunchArgument,
@@ -17,6 +18,20 @@ from launch_ros.events.lifecycle import ChangeState
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.parameter_descriptions import ParameterValue
 
+# Environment variables for parameters
+# This allows you to add env variables to your ~/.bashrc file rather 
+#   than specifying them every launch
+#  For example, to set use_sim_time to true on your system, 
+#    append 'export USE_SIM_TIME=true' to the end of your ~/.bashrc file.
+#    After changing an environment file, you must source it with 'source ~/.bashrc'
+USE_SIM_TIME = os.getenv('USE_SIM_TIME', 'false')
+MODEL_NAME = os.getenv('MODEL_NAME', 'anteater.urdf.xacro')
+RVIZ_CONFIG = os.getenv('RVIZ_CONFIG', 'config.rviz')
+WORLD_NAME = os.getenv('WORLD_NAME', 'igvc_world.sdf')
+JOY_CONFIG = os.getenv('JOY_CONFIG', 'bt_xbox.yaml')
+FUSIONCORE_CONFIG = os.getenv('FUSIONCORE_CONFIG', 'fusioncore_config.yaml')
+USE_SEMANTIC_SEGMENTATION = os.getenv('USE_SEMANTIC_SEGMENTATION', 'true')
+
 def generate_launch_description():
   use_sim_time = LaunchConfiguration('use_sim_time')
   model_name = LaunchConfiguration('model_name')
@@ -24,41 +39,48 @@ def generate_launch_description():
   world_name = LaunchConfiguration('world_name')
   joy_config = LaunchConfiguration('joy_config')
   fusioncore_config = LaunchConfiguration('fusioncore_config')
+  use_semantic_segmentation = LaunchConfiguration('use_semantic_segmentation')
 
   declare_use_sim_time = DeclareLaunchArgument(
     'use_sim_time',
-    default_value='false',
+    default_value=USE_SIM_TIME,
     description='Use simulation time'
   )
 
   declare_model_name = DeclareLaunchArgument(
     'model_name',
-    default_value='anteater.urdf.xacro',
+    default_value=MODEL_NAME,
     description='Robot model xacro file'
   )
 
   declare_rviz_config = DeclareLaunchArgument(
     'rviz_config',
-    default_value='config.rviz',
+    default_value=RVIZ_CONFIG,
     description='RViz config file'
   )
 
   declare_world_name = DeclareLaunchArgument(
     'world_name',
-    default_value='igvc_world.sdf',
+    default_value=WORLD_NAME,
     description='Gazebo world file'
   )
 
   declare_joy_config = DeclareLaunchArgument(
     'joy_config',
-    default_value='bt_xbox.yaml',
+    default_value=JOY_CONFIG,
     description='Joystick config file'
   )
 
   declare_fusioncore_config = DeclareLaunchArgument(
     'fusioncore_config',
-    default_value='fusioncore_config.yaml',
+    default_value=FUSIONCORE_CONFIG,
     description='FusionCore config file'
+  )
+
+  declare_use_semantic_segmentation = DeclareLaunchArgument(
+    'use_semantic_segmentation',
+    default_value=USE_SEMANTIC_SEGMENTATION,
+    description='Launch with/without semantic segmentation node'
   )
 
   robot_description = ParameterValue(
@@ -125,7 +147,7 @@ def generate_launch_description():
   lidar_launch = IncludeLaunchDescription(
     AnyLaunchDescriptionSource(
       PathJoinSubstitution([
-        FindPackageShare('ora_perception'), 'launch', 'VLP16.launch.py'
+        FindPackageShare('lidar'), 'launch', 'VLP16.launch.py'
       ])
     ),
     condition=UnlessCondition(use_sim_time)
@@ -135,7 +157,7 @@ def generate_launch_description():
   filter_launch = IncludeLaunchDescription(
     AnyLaunchDescriptionSource(
       PathJoinSubstitution([
-        FindPackageShare('ora_perception'), 'launch', 'filter.launch.yaml',
+        FindPackageShare('lidar'), 'launch', 'filter.launch.yaml',
       ])
     ),
     launch_arguments={
@@ -225,7 +247,7 @@ def generate_launch_description():
   )
 
   edge_detection_node = Node(
-    package='ora_perception',
+    package='edge_detection',
     executable='edge_detection',
     name='edge_detection',
     parameters=[
@@ -234,6 +256,19 @@ def generate_launch_description():
       }
     ]
   )
+
+  semantic_segmentation_node = Node(
+    package='semantic_segmentation',
+    executable='segmentation_node',
+    name='semantic_segmentation',
+    parameters=[
+      {
+        'use_sim_time': use_sim_time
+      }
+    ],
+    condition=IfCondition(use_semantic_segmentation)
+  )
+  
 
   ####################
   #   PreReq Nodes   #
@@ -327,6 +362,7 @@ def generate_launch_description():
     declare_world_name,
     declare_joy_config,
     declare_fusioncore_config,
+    declare_use_semantic_segmentation,
 
     # Generic
     rsp_launch,
@@ -348,6 +384,9 @@ def generate_launch_description():
 
     # Edge/line detection
     edge_detection_node,
+
+    # Semantic segmentation
+    semantic_segmentation_node,
 
     # Prerequisite Nodes
     filter_prereq_node,

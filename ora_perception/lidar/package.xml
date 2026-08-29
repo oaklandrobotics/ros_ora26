@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>ora_perception</name>
+  <name>lidar</name>
   <version>0.0.0</version>
   <description>Custom params for VLP-16</description>
   <maintainer email="dan@todo.todo">dan</maintainer>
@@ -15,13 +15,6 @@
   <!-- Lidar -->
   <exec_depend>velodyne</exec_depend>
   <exec_depend>laser_filters</exec_depend>
-
-  <!-- Vision Pipeline -->
-  <exec_depend>rclpy</exec_depend>
-  <exec_depend>sensor_msgs</exec_depend>
-  <exec_depend>cv_bridge</exec_depend>
-  <exec_depend>python3-opencv</exec_depend>
-  <exec_depend>python3-numpy</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

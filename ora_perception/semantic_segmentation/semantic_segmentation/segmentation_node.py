@@ -76,7 +76,7 @@ class SegmentationNode(Node):
         self.bridge = CvBridge()
         
         # Declare parameters
-        self.declare_parameter('input_topic', '/masked_image')
+        self.declare_parameter('input_image_topic', '/depth_camera/image_raw')
         self.declare_parameter('mask_topic', '/segmentation/mask')
         self.declare_parameter('confidence_topic', '/segmentation/confidence')
         self.declare_parameter('label_info_topic', '/segmentation/label_info')
@@ -84,17 +84,16 @@ class SegmentationNode(Node):
         self.declare_parameter('publish_overlay', True)
         
         # Get parameters
-        input_topic = self.get_parameter('input_topic').get_parameter_value().string_value
+        input_image_topic = self.get_parameter('input_image_topic').get_parameter_value().string_value
         mask_topic = self.get_parameter('mask_topic').get_parameter_value().string_value
         confidence_topic = self.get_parameter('confidence_topic').get_parameter_value().string_value
         label_info_topic = self.get_parameter('label_info_topic').get_parameter_value().string_value
         overlay_topic = self.get_parameter('overlay_topic').get_parameter_value().string_value
         publish_overlay = self.get_parameter('publish_overlay').get_parameter_value().bool_value
-        
-        # Create subscribers and publishers
+
         self.subscription = self.create_subscription(
             Image,
-            input_topic,
+            input_image_topic,
             self.image_callback,
             10
         )
@@ -134,7 +133,7 @@ class SegmentationNode(Node):
         # Create and publish LabelInfo message
         self.publish_label_info()
         
-        self.get_logger().info(f'Subscribing to: {input_topic}')
+        self.get_logger().info(f'Subscribing to: {input_image_topic}')
         self.get_logger().info(f'Publishing mask to: {mask_topic}')
         self.get_logger().info(f'Publishing confidence to: {confidence_topic}')
         self.get_logger().info(f'Publishing label info to: {label_info_topic}')
@@ -189,11 +188,10 @@ class SegmentationNode(Node):
                 colored[mask == class_id] = color
         
         return colored
-    
-    def image_callback(self, msg):
+    def image_callback(self, image_raw: Image):
         """Process incoming image and publish segmentation results."""
         # Convert ROS image to OpenCV format (BGR)
-        cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
+        cv_image = self.bridge.imgmsg_to_cv2(image_raw, desired_encoding='bgr8')
         
         # Convert BGR to RGB
         rgb_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
@@ -223,11 +221,11 @@ class SegmentationNode(Node):
         
         # Create mask image message
         mask_msg = self.bridge.cv2_to_imgmsg(prediction, encoding='mono8')
-        mask_msg.header = msg.header
+        mask_msg.header = image_raw.header
         
         # Create confidence image message
         confidence_msg = self.bridge.cv2_to_imgmsg(confidence_uint8, encoding='mono8')
-        confidence_msg.header = msg.header
+        confidence_msg.header = image_raw.header
         
         # Publish mask and confidence
         self.mask_publisher.publish(mask_msg)
@@ -238,7 +236,7 @@ class SegmentationNode(Node):
             pred_colored = self.create_colored_mask(prediction)
             overlay = cv2.addWeighted(cv_image, 0.7, pred_colored, 0.3, 0)
             overlay_msg = self.bridge.cv2_to_imgmsg(overlay, encoding='bgr8')
-            overlay_msg.header = msg.header
+            overlay_msg.header = image_raw.header
             self.overlay_publisher.publish(overlay_msg)
 
 

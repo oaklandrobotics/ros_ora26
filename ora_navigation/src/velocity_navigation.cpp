@@ -16,12 +16,12 @@ void VelocityNavigation::startNavigation()
 void VelocityNavigation::stopNavigation()
 {
   geometry_msgs::msg::TwistStamped cmd_vel;
-  cmd_vel.header.stamp = clock_->get_clock()->now();
+  cmd_vel.header.stamp = clock_->now();
 
   // Publish 0 velocity and rotation
   cmd_vel.twist.linear.x = 0.0;
   cmd_vel.twist.angular.z = 0.0;
-  publisher_->publish(cmd_vel);
+  twist_publisher_->publish(cmd_vel);
 
   // Disable velocity control and set velocity to 0
   enable_velocity_ = false;
@@ -38,7 +38,7 @@ void VelocityNavigation::resetNavigation()
 void VelocityNavigation::setVelocity(double velocity)
 {
   velocity_setpoint_ = velocity;
-  active_velocity_ = (enable_velocity ? velocity_setpoint_ : 0.0);
+  active_velocity_ = (enable_velocity_ ? velocity_setpoint_ : 0.0);
 }
 
 void VelocityNavigation::update()
@@ -46,11 +46,11 @@ void VelocityNavigation::update()
   if (enable_velocity_)
   {
     geometry_msgs::msg::TwistStamped cmd_vel;
-    cmd_vel.header.stamp = clock_->get_clock()->now();
+    cmd_vel.header.stamp = clock_->now();
 
     // Publish velocity command with no rotation
     cmd_vel.twist.linear.x = active_velocity_;
     cmd_vel.twist.angular.z = 0.0;
-    publisher_->publish(cmd_vel);
+    twist_publisher_->publish(cmd_vel);
   }
 }

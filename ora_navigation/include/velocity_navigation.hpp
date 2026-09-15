@@ -31,7 +31,7 @@ public:
 private:
   bool enable_velocity_ = false;
   double active_velocity_ = 0.0;
-  double user_velocity_ = 1.0;
+  double velocity_setpoint_ = 1.0;
 
   rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr twist_publisher_;
 };

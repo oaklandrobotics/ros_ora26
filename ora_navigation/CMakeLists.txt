@@ -63,12 +63,17 @@ target_link_libraries(semantic_segmentation_layer
 
 add_executable(gps_waypoint_follower src/gps_waypoint_follower.cpp)
 ament_target_dependencies(gps_waypoint_follower
+add_executable(navigation_manager
+  src/navigation_manager.cpp
+  src/gps_waypoint_follower.cpp
+)
+ament_target_dependencies(navigation_manager
   rclcpp rclcpp_action ament_index_cpp std_msgs std_srvs  geographic_msgs geometry_msgs
   nav2_msgs ora_interfaces
   fusioncore_ros
 )
 
-target_link_libraries(gps_waypoint_follower
+target_link_libraries(navigation_manager
   yaml-cpp
 )
 
@@ -111,7 +116,7 @@ install(DIRECTORY
 )
 
 install(TARGETS
-  gps_waypoint_follower
+navigation_manager
   DESTINATION lib/${PROJECT_NAME}
 )
 

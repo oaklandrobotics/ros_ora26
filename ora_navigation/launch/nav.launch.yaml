@@ -15,7 +15,7 @@ launch:
 
 - node:
     pkg: "ora_navigation"
-    exec: "gps_waypoint_follower"
+    exec: "navigation_manager"
     output: "screen"
     param:
       - name: "use_sim_time"

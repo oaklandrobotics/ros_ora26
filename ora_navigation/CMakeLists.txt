@@ -61,8 +61,6 @@ target_link_libraries(semantic_segmentation_layer
     ${vision_msgs_TARGETS}
 )
 
-add_executable(gps_waypoint_follower src/gps_waypoint_follower.cpp)
-ament_target_dependencies(gps_waypoint_follower
 add_executable(navigation_manager
   src/navigation_manager.cpp
   src/gps_waypoint_follower.cpp

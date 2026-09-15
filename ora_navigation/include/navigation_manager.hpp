@@ -18,12 +18,16 @@
 #include "geometry_msgs/msg/point.hpp"
 #include "geometry_msgs/msg/pose_with_covariance_stamped.hpp"
 
+#include "geometry_msgs/msg/twist_stamped.hpp"
+
 #include "std_srvs/srv/set_bool.hpp"
 #include "std_srvs/srv/trigger.hpp"
 #include "action_msgs/srv/cancel_goal.hpp"
 #include "ora_interfaces/srv/navigation_info.hpp"
 
+#include "../include/navigation.hpp"
 #include "../include/gps_waypoint_follower.hpp"
+#include "../include/velocity_navigation.hpp"
 
 enum NavigationMode
 {
@@ -44,7 +48,9 @@ private:
   NavigationMode navigation_mode_ = NavigationMode::GpsNavigation;
 
   // Navigation Classes
+  Navigation* active_navigation_ = nullptr;
   std::unique_ptr<GpsWaypointFollower> waypoint_follower_;
+  std::unique_ptr<VelocityNavigation> velocity_navigation_;
 
   // Track auton state
   bool enable_navigation_ = false;
@@ -53,6 +59,9 @@ private:
   void startNavigation();
   void stopNavigation();
   void resetNavigation();
+
+  // Update Callback
+  void updateTimerCallback();
 
   // Subscriber Callbacks
   void poseCallback(
@@ -79,6 +88,12 @@ private:
     const std::shared_ptr<ora_interfaces::srv::NavigationInfo::Request> request,
     std::shared_ptr<ora_interfaces::srv::NavigationInfo::Response> response
   );
+
+  // Publisher
+  rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr twist_publisher_;
+
+  // Timer
+  rclcpp::TimerBase::SharedPtr update_timer_;
 
   // Subscriber
   rclcpp::Subscription<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr pose_sub_;

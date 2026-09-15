@@ -1,4 +1,4 @@
-#include "velocity_navigation.hpp"
+#include "../include/velocity_navigation.hpp"
 
 VelocityNavigation::VelocityNavigation(
   rclcpp::Logger logger,

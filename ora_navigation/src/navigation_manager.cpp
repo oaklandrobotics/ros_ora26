@@ -141,6 +141,8 @@ void NavigationManager::resetNavigation()
 
 void NavigationManager::setNavigation(NavigationMode navigation_mode)
 {
+  stopNavigation();
+
   switch (navigation_mode)
   {
     case NavigationMode::GPS:

@@ -139,6 +139,25 @@ void NavigationManager::resetNavigation()
   active_navigation_->resetNavigation();
 }
 
+void NavigationManager::setNavigation(NavigationMode navigation_mode)
+{
+  switch (navigation_mode)
+  {
+    case NavigationMode::GPS:
+      active_navigation_ = gps_navigation_.get();
+      navigation_mode_ = NavigationMode::GPS;
+      break;
+
+    case NavigationMode::Velocity:
+      active_navigation_ = velocity_navigation_.get();
+      navigation_mode_ = NavigationMode::Velocity;
+      break;
+
+    default:
+      break;
+  }
+}
+
 void NavigationManager::updateTimerCallback()
 {
   switch (navigation_mode_)

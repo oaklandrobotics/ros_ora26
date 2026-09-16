@@ -60,6 +60,8 @@ private:
   void stopNavigation();
   void resetNavigation();
 
+  void setNavigation(NavigationMode navigation_mode);
+
   // Update Callback
   void updateTimerCallback();
 

@@ -92,7 +92,7 @@ NavigationManager::NavigationManager() : Node("navigation_manager")
   nav_to_pose_client_ = rclcpp_action::create_client<NavigateToPose>(this, "/navigate_to_pose");
 
   // Create Navigation classes
-  waypoint_follower_ = std::make_unique<GpsWaypointFollower>(
+  gps_navigation_ = std::make_unique<GpsNavigation>(
     this->get_logger(),
     this->get_clock(),
     from_ll_client_,
@@ -106,7 +106,7 @@ NavigationManager::NavigationManager() : Node("navigation_manager")
     twist_publisher_
   );
 
-  active_navigation_ = velocity_navigation_.get();
+  setNavigation(NavigationMode::GPS);
 }
 
 /**
@@ -143,7 +143,7 @@ void NavigationManager::updateTimerCallback()
 {
   switch (navigation_mode_)
   {
-    case NavigationMode::VelocityForward:
+    case NavigationMode::Velocity:
       velocity_navigation_->update();
       break;
     default:
@@ -153,7 +153,7 @@ void NavigationManager::updateTimerCallback()
 
 void NavigationManager::poseCallback(const geometry_msgs::msg::PoseWithCovarianceStamped msg)
 {
-  waypoint_follower_->updatePose(msg);
+  gps_navigation_->updatePose(msg);
 }
 
 /**
@@ -172,12 +172,12 @@ void NavigationManager::setAutonCallback(
     stopNavigation();
 
     response->success = true;
-    response->message = "Navigation disabled";
+    response->message = "Navigation Disabled.";
     return;
   }
 
   response->success = true;
-  response->message = "Waypoint follower enabled, resuming navigation";
+  response->message = "Navigation Enabled.";
 
   startNavigation();
 }
@@ -196,7 +196,7 @@ void NavigationManager::resetAutonCallback(
   resetNavigation();
 
   response->success = true;
-  response->message = "Reset navigation values.";
+  response->message = "Navigation Reset.";
 }
 
 /**
@@ -210,7 +210,7 @@ void NavigationManager::setCourseCallback(
 {
   auto practice_course = request->data;
 
-  waypoint_follower_->setCourse(practice_course);
+  gps_navigation_->setCourse(practice_course);
 
   response->success = true;
   
@@ -246,7 +246,7 @@ void NavigationManager::getNavInfoCallback(
   (void) request;
 
   // Retrieve the current navigation state from the waypoint follower
-  auto navigation_state = waypoint_follower_->getNavigationState();
+  auto navigation_state = gps_navigation_->getNavigationState();
 
   // Populate response with navigation state information
   response->localized_waypoints = navigation_state.localized_waypoints;

@@ -26,14 +26,14 @@
 #include "ora_interfaces/srv/navigation_info.hpp"
 
 #include "../include/navigation.hpp"
-#include "../include/gps_waypoint_follower.hpp"
+#include "../include/gps_navigation.hpp"
 #include "../include/velocity_navigation.hpp"
 
 enum NavigationMode
 {
-  GpsNavigation,
-  VelocityForward,
-  PositionForward
+  GPS,
+  Velocity,
+  Position
 };
 
 class NavigationManager : public rclcpp::Node
@@ -45,11 +45,11 @@ private:
   using NavigateToPose = nav2_msgs::action::NavigateToPose;
 
   // Track navigation mode
-  NavigationMode navigation_mode_ = NavigationMode::GpsNavigation;
+  NavigationMode navigation_mode_ = NavigationMode::GPS;
 
   // Navigation Classes
   Navigation* active_navigation_ = nullptr;
-  std::unique_ptr<GpsWaypointFollower> waypoint_follower_;
+  std::unique_ptr<GpsNavigation> gps_navigation_;
   std::unique_ptr<VelocityNavigation> velocity_navigation_;
 
   // Track auton state

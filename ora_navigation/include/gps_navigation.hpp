@@ -25,12 +25,13 @@
 using NavigateToPose = nav2_msgs::action::NavigateToPose;
 
 /**
- * 
+ * GpsNavigation derived from the Navigation base class.
+ * Used for GPS navigation between defined lat/lon waypoints.
  */
-class GpsWaypointFollower : public Navigation
+class GpsNavigation : public Navigation
 {
 public:
-  GpsWaypointFollower(
+  GpsNavigation(
     rclcpp::Logger logger,
     rclcpp::Clock::SharedPtr clock,
     rclcpp::Client<fusioncore_ros::srv::FromLL>::SharedPtr from_ll_client,

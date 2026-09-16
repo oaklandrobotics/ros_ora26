@@ -21,7 +21,7 @@ find_package(ora_interfaces REQUIRED)
 
 add_executable(navigation_manager
   src/navigation_manager.cpp
-  src/gps_waypoint_follower.cpp
+  src/gps_navigation.cpp
   src/velocity_navigation.cpp
 )
 ament_target_dependencies(navigation_manager

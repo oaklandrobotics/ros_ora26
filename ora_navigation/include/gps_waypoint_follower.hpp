@@ -20,12 +20,14 @@
 
 #include "action_msgs/srv/cancel_goal.hpp"
 
+#include "../include/navigation.hpp"
+
 using NavigateToPose = nav2_msgs::action::NavigateToPose;
 
 /**
  * 
  */
-class GpsWaypointFollower
+class GpsWaypointFollower : public Navigation
 {
 public:
   GpsWaypointFollower(
@@ -43,20 +45,18 @@ public:
     std::string starting_direction;
   };
 
+  // Navigation Control Interfaces
+  void startNavigation() override;
+  void stopNavigation() override;
+  void resetNavigation() override;
+
+  // Navigation Information Interfaces
   void updatePose(const geometry_msgs::msg::PoseWithCovarianceStamped pose);
   void setCourse(const bool is_practice_course);
   const NavigationState getNavigationState();
 
-  // Navigation Control Interfaces
-  void startNavigation();
-  void stopNavigation();
-  void resetNavigation();
-
 private:
   using NavigateToPose = nav2_msgs::action::NavigateToPose;
-
-  rclcpp::Logger logger_;
-  rclcpp::Clock::SharedPtr clock_;
 
   // Setup / Loading
   void initialize(const YAML::Node& config);

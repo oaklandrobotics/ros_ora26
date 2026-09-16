@@ -9,7 +9,7 @@ GpsWaypointFollower::GpsWaypointFollower(
   rclcpp::Client<fusioncore_ros::srv::FromLL>::SharedPtr from_ll_client,
   rclcpp_action::Client<NavigateToPose>::SharedPtr nav_to_pose_client,
   std::string waypoint_file_path
-) : logger_(logger), clock_(clock), 
+) : Navigation(logger, clock), 
     from_ll_client_(from_ll_client), nav_to_pose_client_(nav_to_pose_client)
 {
   const YAML::Node config_file = YAML::LoadFile(waypoint_file_path);
@@ -177,6 +177,11 @@ void GpsWaypointFollower::addStartingWaypoint()
  */
 void GpsWaypointFollower::startNavigation()
 {
+  RCLCPP_INFO(
+    logger_,
+    "Starting GPS based navigation."
+  );
+
   enable_follower_ = true;
 
   // Configure waypoints if there is no configuration
@@ -233,6 +238,11 @@ void GpsWaypointFollower::startNavigation()
  */
 void GpsWaypointFollower::stopNavigation()
 {
+  RCLCPP_INFO(
+    logger_,
+    "Stopping GPS based navigation."
+  );
+
   enable_follower_ = false;
 
   if (!current_goal_handle_)
@@ -266,12 +276,12 @@ void GpsWaypointFollower::stopNavigation()
  */
 void GpsWaypointFollower::resetNavigation()
 {
-  enable_follower_ = false;
-
   RCLCPP_INFO(
     logger_,
-    "Waypoint navigation reset"
+    "Resetting GPS based navigation."
   );
+
+  enable_follower_ = false;
 
   waypoints_configured_ = false;
   waypoint_transform_index_ = 0;

@@ -85,7 +85,7 @@ class WaitForPrereqs(Node):
         return 0
 
       if missing_topics:
-        self.get_logger().info(f'Missing topics: {missing_topics}')
+        self.get_logger().info(f'Missing topics: {missing_topics}', skip_first=True, throttle_duration_sec=1.0)
 
       if missing_transforms:
         self.get_logger().info(

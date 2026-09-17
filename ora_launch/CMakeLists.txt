@@ -30,6 +30,7 @@ install(
 # Set up the scripts folder
 install(PROGRAMS
   scripts/wait_for_prereqs.py
+  scripts/ros2_control_recovery.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

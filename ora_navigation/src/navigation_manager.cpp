@@ -14,6 +14,21 @@ NavigationManager::NavigationManager() : Node("navigation_manager")
 
   const auto waypoints_file = this->get_parameter("waypoints_file").as_string();
 
+  // Create publisher
+  twist_publisher_ = this->create_publisher<geometry_msgs::msg::TwistStamped>(
+    "/cmd_vel_nav_out",
+    10
+  );
+
+  // Create publisher timer for callback function
+  update_timer_ = this->create_wall_timer(
+    100ms,
+    [this]()
+    {
+      updateTimerCallback();
+    }
+  );
+
   // Subscriber and callback
   pose_sub_ = this->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
     "/fusion/pose", 20,
@@ -77,13 +92,21 @@ NavigationManager::NavigationManager() : Node("navigation_manager")
   nav_to_pose_client_ = rclcpp_action::create_client<NavigateToPose>(this, "/navigate_to_pose");
 
   // Create Navigation classes
-  waypoint_follower_ = std::make_unique<GpsWaypointFollower>(
+  gps_navigation_ = std::make_unique<GpsNavigation>(
     this->get_logger(),
     this->get_clock(),
     from_ll_client_,
     nav_to_pose_client_,
     waypoints_file
   );
+
+  velocity_navigation_ = std::make_unique<VelocityNavigation>(
+    this->get_logger(),
+    this->get_clock(),
+    twist_publisher_
+  );
+
+  setNavigation(NavigationMode::GPS);
 }
 
 /**
@@ -91,50 +114,9 @@ NavigationManager::NavigationManager() : Node("navigation_manager")
  */
 void NavigationManager::startNavigation()
 {
-  switch(navigation_mode_)
-  {
-    case NavigationMode::GpsNavigation:
-      RCLCPP_INFO(
-        this->get_logger(),
-        "Starting GPS navigation."
-      );
+  enable_navigation_ = true;
 
-      waypoint_follower_->startNavigation();
-      break;
-
-    case NavigationMode::VelocityForward:
-      RCLCPP_INFO(
-        this->get_logger(),
-        "Starting velocity navigation."
-      );
-      RCLCPP_WARN(
-        this->get_logger(),
-        "Velocity Navigation not implemented!"
-      );
-
-      // TODO: Add velocity navigation start
-      break;
-
-      case NavigationMode::PositionForward:
-        RCLCPP_INFO(
-          this->get_logger(),
-          "Starting position navigation."
-        );
-        RCLCPP_WARN(
-          this->get_logger(),
-          "Position Navigation not implemented!"
-        );
-
-        // TODO: Add position navigation start
-        break;
-
-      default:
-        RCLCPP_ERROR(
-          this->get_logger(),
-          "Navigation Mode not set correctly!!"
-        );
-        return;
-  }
+  active_navigation_->startNavigation();
 }
 
 /**
@@ -144,50 +126,7 @@ void NavigationManager::stopNavigation()
 {
   enable_navigation_ = false;
 
-  switch(navigation_mode_)
-  {
-    case NavigationMode::GpsNavigation:
-      RCLCPP_INFO(
-        this->get_logger(),
-        "Stopping GPS navigation."
-      );
-
-      waypoint_follower_->stopNavigation();
-      break;
-
-    case NavigationMode::VelocityForward:
-      RCLCPP_INFO(
-        this->get_logger(),
-        "Stopping velocity navigation."
-      );
-      RCLCPP_WARN(
-        this->get_logger(),
-        "Velocity Navigation not implemented!"
-      );
-
-      // TODO: Add velocity navigation stop
-      break;
-
-      case NavigationMode::PositionForward:
-        RCLCPP_INFO(
-          this->get_logger(),
-          "Stopping position navigation."
-        );
-        RCLCPP_WARN(
-          this->get_logger(),
-          "Position Navigation not implemented!"
-        );
-
-        // TODO: Add position navigation stop
-        break;
-
-      default:
-        RCLCPP_ERROR(
-          this->get_logger(),
-          "Navigation Mode not set correctly!!"
-        );
-        return;
-  }
+  active_navigation_->stopNavigation();
 }
 
 /**
@@ -197,55 +136,45 @@ void NavigationManager::resetNavigation()
 {
   enable_navigation_ = false;
 
-  switch(navigation_mode_)
+  active_navigation_->resetNavigation();
+}
+
+void NavigationManager::setNavigation(NavigationMode navigation_mode)
+{
+  stopNavigation();
+
+  switch (navigation_mode)
   {
-    case NavigationMode::GpsNavigation:
-      RCLCPP_INFO(
-        this->get_logger(),
-        "Resetting GPS navigation."
-      );
-
-      waypoint_follower_->resetNavigation();
+    case NavigationMode::GPS:
+      active_navigation_ = gps_navigation_.get();
+      navigation_mode_ = NavigationMode::GPS;
       break;
 
-    case NavigationMode::VelocityForward:
-      RCLCPP_INFO(
-        this->get_logger(),
-        "Resetting velocity navigation."
-      );
-      RCLCPP_WARN(
-        this->get_logger(),
-        "Velocity Navigation not implemented!"
-      );
-
-      // TODO: Add velocity navigation reset
+    case NavigationMode::Velocity:
+      active_navigation_ = velocity_navigation_.get();
+      navigation_mode_ = NavigationMode::Velocity;
       break;
 
-      case NavigationMode::PositionForward:
-        RCLCPP_INFO(
-          this->get_logger(),
-          "Resetting position navigation."
-        );
-        RCLCPP_WARN(
-          this->get_logger(),
-          "Position Navigation not implemented!"
-        );
+    default:
+      break;
+  }
+}
 
-        // TODO: Add position navigation reset
-        break;
-
-      default:
-        RCLCPP_ERROR(
-          this->get_logger(),
-          "Navigation Mode not set correctly!!"
-        );
-        return;
+void NavigationManager::updateTimerCallback()
+{
+  switch (navigation_mode_)
+  {
+    case NavigationMode::Velocity:
+      velocity_navigation_->update();
+      break;
+    default:
+      break;
   }
 }
 
 void NavigationManager::poseCallback(const geometry_msgs::msg::PoseWithCovarianceStamped msg)
 {
-  waypoint_follower_->updatePose(msg);
+  gps_navigation_->updatePose(msg);
 }
 
 /**
@@ -264,12 +193,12 @@ void NavigationManager::setAutonCallback(
     stopNavigation();
 
     response->success = true;
-    response->message = "Navigation disabled";
+    response->message = "Navigation Disabled.";
     return;
   }
 
   response->success = true;
-  response->message = "Waypoint follower enabled, resuming navigation";
+  response->message = "Navigation Enabled.";
 
   startNavigation();
 }
@@ -288,7 +217,7 @@ void NavigationManager::resetAutonCallback(
   resetNavigation();
 
   response->success = true;
-  response->message = "Reset navigation values.";
+  response->message = "Navigation Reset.";
 }
 
 /**
@@ -302,7 +231,7 @@ void NavigationManager::setCourseCallback(
 {
   auto practice_course = request->data;
 
-  waypoint_follower_->setCourse(practice_course);
+  gps_navigation_->setCourse(practice_course);
 
   response->success = true;
   
@@ -338,7 +267,7 @@ void NavigationManager::getNavInfoCallback(
   (void) request;
 
   // Retrieve the current navigation state from the waypoint follower
-  auto navigation_state = waypoint_follower_->getNavigationState();
+  auto navigation_state = gps_navigation_->getNavigationState();
 
   // Populate response with navigation state information
   response->localized_waypoints = navigation_state.localized_waypoints;

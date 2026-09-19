@@ -12,22 +12,23 @@ GpsNavigation::GpsNavigation(
 ) : Navigation(logger, clock), 
     from_ll_client_(from_ll_client), nav_to_pose_client_(nav_to_pose_client)
 {
-  const YAML::Node config_file = YAML::LoadFile(waypoint_file_path);
-  initialize(config_file);
+  waypoint_file_path_ = waypoint_file_path;
+  initialize();
 }
 
 /**
  * Reset waypoints and navigation index and load waypoints from configuration file
  */
-void GpsNavigation::initialize(const YAML::Node& config)
+void GpsNavigation::initialize()
 {
+  const YAML::Node config_file = YAML::LoadFile(waypoint_file_path_);
   practice_course_waypoints_.clear();
   main_course_waypoints_.clear();
 
   current_waypoint_index_ = 0;
 
-  loadWaypoints(config["practice_course"], practice_course_waypoints_);
-  loadWaypoints(config["main_course"], main_course_waypoints_);
+  loadWaypoints(config_file["practice_course"], practice_course_waypoints_);
+  loadWaypoints(config_file["main_course"], main_course_waypoints_);
 }
 
 /**

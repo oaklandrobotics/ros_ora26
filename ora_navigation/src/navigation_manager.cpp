@@ -85,6 +85,17 @@ NavigationManager::NavigationManager() : Node("navigation_manager")
     }
   );
 
+  reload_waypoint_srv_ = this->create_service<std_srvs::srv::Trigger>(
+    "navigation/reload_waypoint",
+    [this](
+      const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
+      std::shared_ptr<std_srvs::srv::Trigger::Response> response
+    )
+    {
+      reloadWaypointCallback(request, response);
+    }
+  );
+
   // Service Client
   from_ll_client_ = this->create_client<fusioncore_ros::srv::FromLL>("/fromLL");
 
@@ -277,6 +288,18 @@ void NavigationManager::getNavInfoCallback(
   response->message = "Navigation goals returned";
 }
 
+void NavigationManager::reloadWaypointCallback(
+  const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
+  std::shared_ptr<std_srvs::srv::Trigger::Response> response
+)
+{
+  (void) request;
+  gps_navigation_->initialize();
+
+  response->success = true;
+  response->message = "Navigation Reload Waypoints.";
+}
+
 int main(int argc, char** argv)
 {
   rclcpp::init(argc, argv);
@@ -287,3 +310,4 @@ int main(int argc, char** argv)
   rclcpp::shutdown();
   return 0;
 }
+

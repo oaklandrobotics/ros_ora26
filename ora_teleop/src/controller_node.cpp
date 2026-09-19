@@ -17,6 +17,8 @@ ControllerNode::ControllerNode() : Node("controller_node")
   reset_nav_client_ = this->create_client<std_srvs::srv::Trigger>("navigation/reset_auton");
   set_estop_client_ = this->create_client<std_srvs::srv::SetBool>("estop");
   set_course_client_ = this->create_client<std_srvs::srv::SetBool>("navigation/set_course");
+  reload_waypoint_client_ = this->create_client<std_srvs::srv::Trigger>("navigation/reload_waypoint");
+
 
   RCLCPP_INFO(
     this->get_logger(),
@@ -33,7 +35,7 @@ void ControllerNode::joyCallback(sensor_msgs::msg::Joy::SharedPtr msg)
     const bool reset_nav_now = msg->buttons[k_reset_nav_button_];
     const bool set_estop_now = msg->buttons[k_set_estop_button_];
     const bool set_course_now = msg->buttons[k_set_course_button_];
-
+    const bool reload_waypoint_now = msg->buttons[k_reload_waypoint_button_];
     // Set autonomous state
     if (set_auton_now && !set_auton_pressed_)
     {
@@ -57,12 +59,18 @@ void ControllerNode::joyCallback(sensor_msgs::msg::Joy::SharedPtr msg)
     {
       setCourse();
     }
+    // Set active course
+    if (reload_waypoint_now && !reload_waypoint_pressed_)
+      {
+        reloadWaypoint();
+      }
 
     // Store the state of the button for rising edge logic
     set_auton_pressed_ = set_auton_now;
     reset_nav_pressed_ = reset_nav_now;
     set_estop_pressed_ = set_estop_now;
     set_course_pressed_ = set_course_now;
+    reload_waypoint_pressed_ = reload_waypoint_now;
   }
 }
 
@@ -114,6 +122,29 @@ void ControllerNode::resetNav()
   auto request = std::make_shared<std_srvs::srv::Trigger::Request>();
 
   reset_nav_client_->async_send_request(request);
+}
+
+void ControllerNode::reloadWaypoint()
+{
+  RCLCPP_INFO(
+    this->get_logger(),
+    "Reload waypoint button pressed"
+  );
+
+  if (!reload_waypoint_client_->service_is_ready())
+  {
+    RCLCPP_WARN(
+      this->get_logger(),
+      "reload_waypoint service is not ready yet"
+    );
+
+    return;
+  }
+
+  // Send a Trigger request to the reload_waypoint_client_
+  auto request = std::make_shared<std_srvs::srv::Trigger::Request>();
+
+  reload_waypoint_client_->async_send_request(request);
 }
 
 void ControllerNode::setEstop()

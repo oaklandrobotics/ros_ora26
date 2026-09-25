@@ -137,7 +137,10 @@ void NavigationManager::stopNavigation()
 {
   enable_navigation_ = false;
 
-  active_navigation_->stopNavigation();
+  if (active_navigation_ != nullptr)
+  {
+    active_navigation_->stopNavigation();
+  }
 }
 
 /**
@@ -147,7 +150,10 @@ void NavigationManager::resetNavigation()
 {
   enable_navigation_ = false;
 
-  active_navigation_->resetNavigation();
+  if (active_navigation_ != nullptr)
+  {
+    active_navigation_->resetNavigation();
+  }
 }
 
 void NavigationManager::setNavigation(NavigationMode navigation_mode)

@@ -51,7 +51,7 @@ private:
   static constexpr uint8_t k_set_estop_button_ = 1;
   static constexpr uint8_t k_set_course_button_ = 4;
   static constexpr uint8_t k_set_auton_button_ = 3;
-  static constexpr uint8_t k_reload_waypoint_button_ = 7;
+  static constexpr uint8_t k_reload_waypoint_button_ = 15;
 
 };
 

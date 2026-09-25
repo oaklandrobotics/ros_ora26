@@ -29,6 +29,11 @@ void GpsNavigation::initialize()
 
   loadWaypoints(config_file["practice_course"], practice_course_waypoints_);
   loadWaypoints(config_file["main_course"], main_course_waypoints_);
+
+  RCLCPP_INFO(
+    logger_,
+    "Waypoint groups loaded."
+  );
 }
 
 /**
@@ -69,10 +74,6 @@ void GpsNavigation::loadWaypoints(
     destination_vector.push_back(nav_waypoint);
   }
 
-  RCLCPP_INFO(
-    logger_,
-    "Waypoint group loaded."
-  );
 }
 
 /**

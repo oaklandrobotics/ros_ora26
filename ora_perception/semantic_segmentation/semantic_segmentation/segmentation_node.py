@@ -188,6 +188,30 @@ class SegmentationNode(Node):
                 colored[mask == class_id] = color
         
         return colored
+
+    def mask_robot(self, cv_image):
+        # Masking (Top of frame to near horizon line)
+        mask = np.zeros(cv_image.shape[:2], dtype=np.uint8)
+        h, w = cv_image.shape[:2]
+        cv2.rectangle(mask, (0, int(HORIZON_LINE * h)), (w, h), 255, -1)
+
+        # Masking visible part of robot in frame
+        # [Bottom left, Top left, Top right, Bottom right]
+        if self.use_sim_time == True: #Simulated camera
+        robot_mask_points = np.array([[0.2, 1], [0.3, 0.556], [0.7, 0.556], [0.8, 1]])
+        else: # Real camera
+        robot_mask_points = np.array([[0.230, 1], [0.322, 0.675], [0.748, 0.675], [0.867, 1]])
+
+        pixel_points = robot_mask_points.copy()
+        pixel_points[:, 0] *= (w - 1)
+        pixel_points[:, 1] *= (h - 1)
+        pixel_points = pixel_points.astype(np.int32)
+
+        pixel_points = pixel_points.reshape((4, 1, 2))
+        cv2.fillPoly(mask, [pixel_points], 0)
+
+        return mask
+
     def image_callback(self, image_raw: Image):
         """Process incoming image and publish segmentation results."""
         # Convert ROS image to OpenCV format (BGR)
@@ -199,11 +223,14 @@ class SegmentationNode(Node):
         # Preprocess image
         # Convert to the model's expected dtype (FP16 or FP32)
         dtype = np.float16 if self.use_fp16 else np.float32
+        # Convert image from HWC (Height Width Channels) to CHW which is required for deep learning.
         input_tensor = rgb_image.transpose(2, 0, 1).astype(dtype) / 255.0
-        # Apply ImageNet normalization
+        # Channel wise Z-score standardization (Z-score: # of std deviations above/below the mean of dataset)
+        # Normalize data such that the median is centered around 0 and reduce contrast
         input_tensor = (input_tensor - self.mean.squeeze(0)) / self.std.squeeze(0)
-        # Add batch dimension
-        input_tensor = np.expand_dims(input_tensor, axis=0)
+        # Model is designed to process multiple images simultaneously, so it expects a 4D image. 
+        # Convert (Channels, Height, Width) -> (Batch, Channels, Height, Width)
+        input_tensor = np.expand_dims(input_tensor, axis=0) # Insert new empty container at beginning
         
         # Run ONNX inference
         outputs = self.session.run(None, {'input': input_tensor})
@@ -219,6 +246,9 @@ class SegmentationNode(Node):
         confidence = np.max(probabilities, axis=1).squeeze(0)
         confidence_uint8 = (confidence * 255.0).astype(np.uint8)
         
+        robot_mask = self.mask_robot(cv_image)
+        cv2.bitwise_and(cv_image, cv_image, mask=robot_mask)
+
         # Create mask image message
         mask_msg = self.bridge.cv2_to_imgmsg(prediction, encoding='mono8')
         mask_msg.header = image_raw.header

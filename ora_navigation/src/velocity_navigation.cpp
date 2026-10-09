@@ -11,9 +11,10 @@ void VelocityNavigation::startNavigation()
 {
   RCLCPP_INFO(
     logger_,
-    "Starting velocity based navigation."
+    "Starting velocity time based navigation."
   );
 
+  velocity_time_ = clock_->now();
   enable_velocity_ = true;
   active_velocity_ = velocity_setpoint_;
 }
@@ -22,7 +23,7 @@ void VelocityNavigation::stopNavigation()
 {
   RCLCPP_INFO(
     logger_,
-    "Stopping velocity based navigation."
+    "Stopping velocity time based navigation."
   );
 
   geometry_msgs::msg::TwistStamped cmd_vel;
@@ -60,6 +61,11 @@ void VelocityNavigation::update()
 {
   if (enable_velocity_)
   {
+    if ((clock_->now() - velocity_time_).seconds() > velocity_duration_)
+    {
+      stopNavigation();
+      return;
+    }
     geometry_msgs::msg::TwistStamped cmd_vel;
     cmd_vel.header.stamp = clock_->now();
 

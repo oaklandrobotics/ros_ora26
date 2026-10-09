@@ -23,6 +23,7 @@ private:
   void setEstop();
   void reloadWaypoint();
   void setCourse();
+  void toggleNavigation();
 
   // Subscriber
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joy_subscriber_;
@@ -33,6 +34,7 @@ private:
   rclcpp::Client<std_srvs::srv::SetBool>::SharedPtr set_estop_client_;
   rclcpp::Client<std_srvs::srv::SetBool>::SharedPtr set_course_client_;
   rclcpp::Client<std_srvs::srv::Trigger>::SharedPtr reload_waypoint_client_;
+  rclcpp::Client<std_srvs::srv::Trigger>::SharedPtr toggle_navigation_client_;
 
   // Track auton/estop state
   bool auton_enabled_ = false;
@@ -45,6 +47,7 @@ private:
   bool set_estop_pressed_ = false;
   bool set_course_pressed_ = false;
   bool reload_waypoint_pressed_ = false;
+  bool toggle_navigation_pressed_ = false;
 
   // Constants
   static constexpr uint8_t k_reset_nav_button_ = 0;
@@ -52,6 +55,7 @@ private:
   static constexpr uint8_t k_set_course_button_ = 4;
   static constexpr uint8_t k_set_auton_button_ = 3;
   static constexpr uint8_t k_reload_waypoint_button_ = 15;
+  static constexpr uint8_t k_toggle_navigation_button_ = 10;
 
 };
 

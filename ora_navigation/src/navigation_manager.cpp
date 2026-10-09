@@ -96,6 +96,17 @@ NavigationManager::NavigationManager() : Node("navigation_manager")
     }
   );
 
+  toggle_navigation_srv_ = this->create_service<std_srvs::srv::Trigger>(
+    "navigation/toggle_navigation",
+    [this](
+      const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
+      std::shared_ptr<std_srvs::srv::Trigger::Response> response
+    )
+    {
+      toggleNavigationCallback(request, response);
+    }
+  );
+
   // Service Client
   from_ll_client_ = this->create_client<fusioncore_ros::srv::FromLL>("/fromLL");
 
@@ -204,6 +215,7 @@ void NavigationManager::setAutonCallback(
 )
 {
   enable_navigation_ = request->data;
+  startNavigation();
 
   if (!enable_navigation_)
   {
@@ -304,6 +316,27 @@ void NavigationManager::reloadWaypointCallback(
 
   response->success = true;
   response->message = "Navigation Reload Waypoints.";
+}
+
+void NavigationManager::toggleNavigationCallback(
+  const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
+  std::shared_ptr<std_srvs::srv::Trigger::Response> response
+)
+{
+  (void) request;
+
+  if (navigation_mode_ == NavigationMode::GPS)
+  {
+    setNavigation(NavigationMode::Velocity);
+    response->message = "Switched to Velocity Navigation";
+  }
+  else if (navigation_mode_ == NavigationMode::Velocity)
+  {
+    setNavigation(NavigationMode::GPS);
+    response->message = "Switched to GPS Navigation";
+  }
+
+  response->success = true;
 }
 
 int main(int argc, char** argv)

@@ -18,7 +18,7 @@ ControllerNode::ControllerNode() : Node("controller_node")
   set_estop_client_ = this->create_client<std_srvs::srv::SetBool>("estop");
   set_course_client_ = this->create_client<std_srvs::srv::SetBool>("navigation/set_course");
   reload_waypoint_client_ = this->create_client<std_srvs::srv::Trigger>("navigation/reload_waypoint");
-
+  toggle_navigation_client_ = this->create_client<std_srvs::srv::Trigger>("navigation/toggle_navigation");
 
   RCLCPP_INFO(
     this->get_logger(),
@@ -36,6 +36,7 @@ void ControllerNode::joyCallback(sensor_msgs::msg::Joy::SharedPtr msg)
     const bool set_estop_now = msg->buttons[k_set_estop_button_];
     const bool set_course_now = msg->buttons[k_set_course_button_];
     const bool reload_waypoint_now = msg->buttons[k_reload_waypoint_button_];
+    const bool toggle_navigation_now = msg->buttons[k_toggle_navigation_button_];
     // Set autonomous state
     if (set_auton_now && !set_auton_pressed_)
     {
@@ -64,6 +65,11 @@ void ControllerNode::joyCallback(sensor_msgs::msg::Joy::SharedPtr msg)
       {
         reloadWaypoint();
       }
+    // Set velocity to GPS navigation
+    if (toggle_navigation_now && !toggle_navigation_pressed_)
+      {
+        toggleNavigation();
+      }
 
     // Store the state of the button for rising edge logic
     set_auton_pressed_ = set_auton_now;
@@ -71,6 +77,7 @@ void ControllerNode::joyCallback(sensor_msgs::msg::Joy::SharedPtr msg)
     set_estop_pressed_ = set_estop_now;
     set_course_pressed_ = set_course_now;
     reload_waypoint_pressed_ = reload_waypoint_now;
+    toggle_navigation_pressed_ = toggle_navigation_now;
   }
 }
 
@@ -146,6 +153,29 @@ void ControllerNode::reloadWaypoint()
 
   reload_waypoint_client_->async_send_request(request);
 }
+
+void ControllerNode::toggleNavigation()
+{
+  RCLCPP_INFO(
+    this->get_logger(),
+    "Navigation mode button pressed"
+  );
+
+  if (!toggle_navigation_client_->service_is_ready())
+  {
+    RCLCPP_WARN(
+      this->get_logger(),
+      "toggle_navigation service is not ready yet"
+    );
+
+    return;
+  }
+
+  auto request = std::make_shared<std_srvs::srv::Trigger::Request>();
+
+  toggle_navigation_client_->async_send_request(request);
+}
+
 
 void ControllerNode::setEstop()
 {

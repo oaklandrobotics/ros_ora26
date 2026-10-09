@@ -96,6 +96,11 @@ private:
     std::shared_ptr<std_srvs::srv::Trigger::Response> response
   );
 
+  void toggleNavigationCallback(
+    const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
+    std::shared_ptr<std_srvs::srv::Trigger::Response> response
+  );
+
   // Publisher
   rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr twist_publisher_;
 
@@ -113,6 +118,7 @@ private:
   rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr reset_auton_srv_;
   rclcpp::Service<std_srvs::srv::SetBool>::SharedPtr set_course_srv_;
   rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr reload_waypoint_srv_;
+  rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr toggle_navigation_srv_;
 
   rclcpp::Service<ora_interfaces::srv::NavigationInfo>::SharedPtr get_navigation_info_srv_;
 

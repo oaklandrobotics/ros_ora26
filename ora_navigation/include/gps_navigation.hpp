@@ -55,12 +55,12 @@ public:
   void updatePose(const geometry_msgs::msg::PoseWithCovarianceStamped pose);
   void setCourse(const bool is_practice_course);
   const NavigationState getNavigationState();
+  void initialize();
 
 private:
   using NavigateToPose = nav2_msgs::action::NavigateToPose;
 
   // Setup / Loading
-  void initialize(const YAML::Node& config);
   void loadWaypoints(
     const YAML::Node& waypoint_group,
     std::vector<geographic_msgs::msg::GeoPoint>& destination_vector
@@ -92,6 +92,8 @@ private:
   bool waypoints_configured_ = false;
   size_t current_waypoint_index_ = 0;
   size_t retry_events_ = 0;
+
+  std::string waypoint_file_path_;
 
   void fromLLCallback(
     geographic_msgs::msg::GeoPoint waypoint,

@@ -21,8 +21,8 @@ private:
   void setAuton();
   void resetNav();
   void setEstop();
-  void reloadWaypoint();
   void setCourse();
+  void reloadWaypoint();
 
   // Subscriber
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joy_subscriber_;
@@ -52,7 +52,6 @@ private:
   static constexpr uint8_t k_set_course_button_ = 4;
   static constexpr uint8_t k_set_auton_button_ = 3;
   static constexpr uint8_t k_reload_waypoint_button_ = 15;
-
 };
 
 #endif

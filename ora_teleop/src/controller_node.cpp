@@ -36,6 +36,7 @@ void ControllerNode::joyCallback(sensor_msgs::msg::Joy::SharedPtr msg)
     const bool set_estop_now = msg->buttons[k_set_estop_button_];
     const bool set_course_now = msg->buttons[k_set_course_button_];
     const bool reload_waypoint_now = msg->buttons[k_reload_waypoint_button_];
+
     // Set autonomous state
     if (set_auton_now && !set_auton_pressed_)
     {
@@ -59,6 +60,7 @@ void ControllerNode::joyCallback(sensor_msgs::msg::Joy::SharedPtr msg)
     {
       setCourse();
     }
+    
     // Set active course
     if (reload_waypoint_now && !reload_waypoint_pressed_)
       {
@@ -124,29 +126,6 @@ void ControllerNode::resetNav()
   reset_nav_client_->async_send_request(request);
 }
 
-void ControllerNode::reloadWaypoint()
-{
-  RCLCPP_INFO(
-    this->get_logger(),
-    "Reload waypoint button pressed"
-  );
-
-  if (!reload_waypoint_client_->service_is_ready())
-  {
-    RCLCPP_WARN(
-      this->get_logger(),
-      "reload_waypoint service is not ready yet"
-    );
-
-    return;
-  }
-
-  // Send a Trigger request to the reload_waypoint_client_
-  auto request = std::make_shared<std_srvs::srv::Trigger::Request>();
-
-  reload_waypoint_client_->async_send_request(request);
-}
-
 void ControllerNode::setEstop()
 {
   RCLCPP_INFO(
@@ -199,6 +178,29 @@ void ControllerNode::setCourse()
   request->data = practice_course_enabled_;
 
   set_course_client_->async_send_request(request);
+}
+
+void ControllerNode::reloadWaypoint()
+{
+  RCLCPP_INFO(
+    this->get_logger(),
+    "Reload waypoint button pressed"
+  );
+
+  if (!reload_waypoint_client_->service_is_ready())
+  {
+    RCLCPP_WARN(
+      this->get_logger(),
+      "reload_waypoint service is not ready yet"
+    );
+
+    return;
+  }
+
+  // Send a Trigger request to the reload_waypoint_client_
+  auto request = std::make_shared<std_srvs::srv::Trigger::Request>();
+
+  reload_waypoint_client_->async_send_request(request);
 }
 
 /**

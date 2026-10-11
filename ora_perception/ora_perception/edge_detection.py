@@ -8,6 +8,7 @@ from cv_bridge import CvBridge
 import cv2
 import numpy as np
 from sensor_msgs_py import point_cloud2 as pc2
+from rcl_interfaces.msg import ParameterDescriptor, IntegerRange
 
 # Topic names
 EDGE_POINTS_TOPIC = '/filtered/lines'
@@ -23,12 +24,30 @@ HORIZON_LINE = 0.278
 MIN_DEPTH = 0
 MAX_DEPTH = 10
 
+def make_free_space_mask(lines_mask, valid_mask, dilation_radius):
+  """Exclude detected lines and a pixel margin from the clearing region."""
+  kernel_size = 2 * dilation_radius + 1
+  protected_lines = cv2.dilate(
+    lines_mask, np.ones((kernel_size, kernel_size), np.uint8), iterations=1
+  )
+  return cv2.bitwise_and(cv2.bitwise_not(protected_lines), valid_mask)
+
 class EdgeDetectionNode(Node):
   def __init__(self):
     super().__init__('edge_detection_node')
 
     self.bridge = CvBridge()
     self.camera_model = None
+    # Radius 2 preserves the existing 5x5 protection kernel. Read-only because
+    # the kernel is configured at startup; restart the node to change it.
+    self.free_space_dilation_radius = self.declare_parameter(
+      'free_space_dilation_radius', 2,
+      ParameterDescriptor(
+        description='Pixel margin around detected lines excluded from clearing.',
+        read_only=True,
+        integer_range=[IntegerRange(from_value=0, to_value=100, step=1)]
+      )
+    ).value
 
     # Set the topic name based on use_sim_time
     self.use_sim_time = self.get_parameter('use_sim_time').value
@@ -171,10 +190,9 @@ class EdgeDetectionNode(Node):
     )
 
     # Dilate the clean lines to create a layer between the lines and free space
-    protected_lines = cv2.dilate(clean_lines, np.ones((5, 5), np.uint8), iterations=1)
-    protected_lines = cv2.bitwise_and(protected_lines, mask)
-
-    free_mask = cv2.bitwise_and(cv2.bitwise_not(protected_lines), mask)
+    free_mask = make_free_space_mask(
+      clean_lines, mask, self.free_space_dilation_radius
+    )
 
     lines_points = self.image_to_depth(clean_lines, cv_depth, stride=2)
     free_points = self.image_to_depth(free_mask, cv_depth, stride=10)

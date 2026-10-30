@@ -20,15 +20,18 @@
 
 #include "action_msgs/srv/cancel_goal.hpp"
 
+#include "../include/navigation.hpp"
+
 using NavigateToPose = nav2_msgs::action::NavigateToPose;
 
 /**
- * 
+ * GpsNavigation derived from the Navigation base class.
+ * Used for GPS navigation between defined lat/lon waypoints.
  */
-class GpsWaypointFollower
+class GpsNavigation : public Navigation
 {
 public:
-  GpsWaypointFollower(
+  GpsNavigation(
     rclcpp::Logger logger,
     rclcpp::Clock::SharedPtr clock,
     rclcpp::Client<fusioncore_ros::srv::FromLL>::SharedPtr from_ll_client,
@@ -43,20 +46,18 @@ public:
     std::string starting_direction;
   };
 
+  // Navigation Control Interfaces
+  void startNavigation() override;
+  void stopNavigation() override;
+  void resetNavigation() override;
+
+  // Navigation Information Interfaces
   void updatePose(const geometry_msgs::msg::PoseWithCovarianceStamped pose);
   void setCourse(const bool is_practice_course);
   const NavigationState getNavigationState();
 
-  // Navigation Control Interfaces
-  void startNavigation();
-  void stopNavigation();
-  void resetNavigation();
-
 private:
   using NavigateToPose = nav2_msgs::action::NavigateToPose;
-
-  rclcpp::Logger logger_;
-  rclcpp::Clock::SharedPtr clock_;
 
   // Setup / Loading
   void initialize(const YAML::Node& config);

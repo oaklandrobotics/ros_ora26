@@ -63,7 +63,8 @@ target_link_libraries(semantic_segmentation_layer
 
 add_executable(navigation_manager
   src/navigation_manager.cpp
-  src/gps_waypoint_follower.cpp
+  src/gps_navigation.cpp
+  src/velocity_navigation.cpp
 )
 ament_target_dependencies(navigation_manager
   rclcpp rclcpp_action ament_index_cpp std_msgs std_srvs  geographic_msgs geometry_msgs

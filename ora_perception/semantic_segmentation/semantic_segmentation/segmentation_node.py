@@ -193,14 +193,14 @@ class SegmentationNode(Node):
         # Masking (Top of frame to near horizon line)
         mask = np.zeros(cv_image.shape[:2], dtype=np.uint8)
         h, w = cv_image.shape[:2]
-        cv2.rectangle(mask, (0, int(HORIZON_LINE * h)), (w, h), 255, -1)
+        cv2.rectangle(mask, (0, int(HORIZON_LINE * h)), (w - 1, h - 1), 255, -1)
 
         # Masking visible part of robot in frame
         # [Bottom left, Top left, Top right, Bottom right]
         if self.use_sim_time == True: #Simulated camera
-        robot_mask_points = np.array([[0.2, 1], [0.3, 0.556], [0.7, 0.556], [0.8, 1]])
+            robot_mask_points = np.array([[0.2, 1], [0.3, 0.556], [0.7, 0.556], [0.8, 1]])
         else: # Real camera
-        robot_mask_points = np.array([[0.230, 1], [0.322, 0.675], [0.748, 0.675], [0.867, 1]])
+            robot_mask_points = np.array([[0.230, 1], [0.322, 0.675], [0.748, 0.675], [0.867, 1]])
 
         pixel_points = robot_mask_points.copy()
         pixel_points[:, 0] *= (w - 1)
@@ -247,7 +247,7 @@ class SegmentationNode(Node):
         confidence_uint8 = (confidence * 255.0).astype(np.uint8)
         
         robot_mask = self.mask_robot(cv_image)
-        cv2.bitwise_and(cv_image, cv_image, mask=robot_mask)
+        prediction = cv2.bitwise_and(prediction, prediction, mask=robot_mask)
 
         # Create mask image message
         mask_msg = self.bridge.cv2_to_imgmsg(prediction, encoding='mono8')

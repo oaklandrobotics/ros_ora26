@@ -20,15 +20,3 @@ ros2 run ora_perception edge_detection --ros-args \
 
 Run only one edge-detection node at a time. In the full robot launch, set the
 parameter in the `edge_detection_node` parameters in `ora_launch/launch/robot.launch.py`.
-
-Regression checks exercise margins, frame boundaries, robot/horizon exclusions,
-and the actual image-to-point-cloud callback in both simulated and real modes:
-
-```bash
-colcon test --packages-select ora_perception --ctest-args -R free_space_mask
-colcon test-result --verbose
-```
-
-These checks validate the image-mask and point-cloud behavior. They do not
-establish that downstream costmap raytracing cannot cross a line or replace
-field validation on the robot. Camera alignment is tracked separately from #68.

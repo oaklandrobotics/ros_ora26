@@ -3,11 +3,18 @@
 <package format="3">
   <name>ora_integration</name>
   <version>0.0.0</version>
-  <description>For communication and integration with ESP32 hardware running microROS</description>
+  <description>For communication and integration with microcontroller based sensors</description>
   <maintainer email="dmocnik@oakland.edu">dan</maintainer>
-  <license>TODO: License declaration</license>
+  <maintainer email="ztlain@oakland.edu">zack</maintainer>
+  <maintainer email="gtrupiano@oakland.edu">george</maintainer>
+  <license>Apache 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>rclcpp</depend>
+  <depend>rclcpp_lifecycle</depend>
+  <depend>lifecycle_msgs</depend>
+  <depend>sensor_msgs</depend>
 
   <exec_depend>tf2_ros</exec_depend>
 

@@ -7,9 +7,23 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(ament_index_cpp REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(rclcpp_lifecycle REQUIRED)
+find_package(lifecycle_msgs REQUIRED)
+find_package(std_srvs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+
+add_executable(imu_interface
+  src/imu_interface.cpp
+  src/can/socket_can.cpp
+  src/can/epoll_event_loop.cpp
+)
+
+ament_target_dependencies(imu_interface
+  rclcpp ament_index_cpp rclcpp_lifecycle lifecycle_msgs
+  std_srvs sensor_msgs
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -26,6 +40,11 @@ endif()
 install(DIRECTORY
   launch
   DESTINATION share/${PROJECT_NAME}/
+)
+
+install(TARGETS
+  imu_interface
+  DESTINATION lib/${PROJECT_NAME}
 )
 
 ament_package()

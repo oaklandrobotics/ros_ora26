@@ -69,6 +69,11 @@ bool EpollEventLoop::deregister_event(EvtId evt)
 
 bool EpollEventLoop::run()
 {
+  if (stop_)
+  {
+    stop_ = false;
+  }
+
   // Continue until there are no registered fds (Continue while CAN socket is registered)
   while (n_events_) {
     // Wait indefinitely for events to be triggered
@@ -90,7 +95,6 @@ bool EpollEventLoop::run()
 
     if (stop_)
     {
-      stop_ = false;
       return true;
     }
   }
@@ -119,6 +123,11 @@ void EpollEventLoop::stop_loop()
   {
     throw std::runtime_error("Error occured while writing value to eventfd to break epoll_wait!");
   }
+}
+
+bool EpollEventLoop::is_stopped()
+{
+  return stop_.load();
 }
 
 void EpollEventLoop::on_shutdown_event(uint32_t event_mask)

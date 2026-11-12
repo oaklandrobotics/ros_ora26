@@ -37,6 +37,8 @@ class EpollEventLoop
 
     void stop_loop();
 
+    bool is_stopped();
+
     void on_shutdown_event(uint32_t event_mask);
 
   private:

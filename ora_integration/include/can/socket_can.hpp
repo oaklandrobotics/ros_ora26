@@ -16,7 +16,10 @@ class SocketCanIntf
     void deinit();
     bool send_can_frame(const can_frame& frame);
 
-    bool read_nonblocking();
+    bool read_nonblocking(const bool discard);
+
+    bool discard_pending_frames();
+
   private:
     std::string interface_;
     int socket_id_ = -1;

@@ -98,7 +98,7 @@ void SocketCanIntf::on_socket_event(uint32_t mask)
 {
   if (mask & EPOLLIN)
   {
-    while (read_nonblocking() && !broken_);
+    while (read_nonblocking(false) && !broken_);
   }
   if (mask & EPOLLERR)
   {
@@ -115,7 +115,7 @@ void SocketCanIntf::on_socket_event(uint32_t mask)
   return;
 }
 
-bool SocketCanIntf::read_nonblocking()
+bool SocketCanIntf::read_nonblocking(const bool discard)
 {
   struct can_frame frame;
   struct cmsghdr ctrlmsg;

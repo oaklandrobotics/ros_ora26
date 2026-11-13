@@ -85,6 +85,10 @@ CallbackReturn ImuInterface::on_activate(const State& previous_state)
     "Spinning IO event loop thread..."
   );
 
+  // Flush interface and reset flags
+  can_intf_.discard_pending_frames();
+  imu_data_flags_ = 0;
+
   event_loop_worker_ = std::thread(&EpollEventLoop::run, &this->event_loop_);
 
   // Nothing needed to activate the controller or node at the moment

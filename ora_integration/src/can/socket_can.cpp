@@ -152,6 +152,16 @@ bool SocketCanIntf::read_nonblocking(const bool discard)
     return true;
   }
 
-  process_can_frame(frame);
+  if (!discard)
+  {
+    process_can_frame(frame);
+  }
+  return true;
+}
+
+bool SocketCanIntf::discard_pending_frames()
+{
+  while (read_nonblocking(true) && !broken_);
+
   return true;
 }

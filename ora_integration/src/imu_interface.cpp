@@ -7,28 +7,43 @@ ImuInterface::ImuInterface(const rclcpp::NodeOptions& options) : LifecycleNode("
 {
   // Add a parameter for non-standard can interface
   this->declare_parameter("can_interface", can_intf_name_);
+  this->declare_parameter("imu_topic", imu_topic_);
+  this->declare_parameter("imu_frame", imu_frame_);
+
+  initialize_imu_cov();
 }
 
 CallbackReturn ImuInterface::on_configure(const State &previous_state)
 {
-  // Read interface parameter
+  // Read parameters
   can_intf_name_ = this->get_parameter("can_interface").as_string();
+  imu_topic_ = this->get_parameter("imu_topic").as_string();
+  imu_frame_ = this->get_parameter("imu_frame").as_string();
+
   RCLCPP_INFO(
     this->get_logger(),
     "Configuring using the %s interface...",
     can_intf_name_.c_str()
   );
 
+  RCLCPP_INFO(
+    this->get_logger(),
+    "Publishing to the %s topic using the %s frame",
+    imu_topic_.c_str(), imu_frame_.c_str()
+  );
+
   // Create publisher for IMU
   imu_publisher_ = this->create_publisher<sensor_msgs::msg::Imu>(
-    "/esp/imu",
+    imu_topic_,
     10
   );
+
+  imu_msg_.header.frame_id = imu_frame_;
 
   RCLCPP_INFO(
     this->get_logger(),
     "Created IMU publisher on %s",
-    "/esp/imu"
+    imu_topic_.c_str()
   );
 
   // Initialize can interface
@@ -195,12 +210,130 @@ CallbackReturn ImuInterface::on_error(const State& previous_state)
   return CallbackReturn::SUCCESS;
 }
 
+void ImuInterface::initialize_imu_cov()
+{
+  // Initialize to 0
+  for (int i = 0; i < k_cov_1d_array_size; i++)
+  {
+    imu_msg_.linear_acceleration_covariance[i] = 0.0;
+    imu_msg_.angular_velocity_covariance[i] = 0.0;
+    imu_msg_.orientation_covariance[i] = 0.0;
+  }
+
+  // Setting the variance indices to the proper weight
+  imu_msg_.linear_acceleration_covariance[k_x_variance_index] = k_accel_cov_diag.x;
+  imu_msg_.linear_acceleration_covariance[k_y_variance_index] = k_accel_cov_diag.y;
+  imu_msg_.linear_acceleration_covariance[k_z_variance_index] = k_accel_cov_diag.z;
+
+  imu_msg_.angular_velocity_covariance[k_x_variance_index] = k_gyro_cov_diag.x;
+  imu_msg_.angular_velocity_covariance[k_y_variance_index] = k_gyro_cov_diag.y;
+  imu_msg_.angular_velocity_covariance[k_z_variance_index] = k_gyro_cov_diag.z;
+
+  imu_msg_.orientation_covariance[k_x_variance_index] = k_orient_cov_diag.x;
+  imu_msg_.orientation_covariance[k_y_variance_index] = k_orient_cov_diag.y;
+  imu_msg_.orientation_covariance[k_z_variance_index] = k_orient_cov_diag.z;
+}
+
 void ImuInterface::on_can_msg(const can_frame& frame)
 {
-  RCLCPP_INFO(
-    this->get_logger(),
-    "Got a can msg :D"
+  // Check for invalid frames
+  if (frame.can_id & (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_ERR_FLAG))
+  {
+    return;
+  }
+
+  // Isolate information from the CAN frame
+  const uint16_t can_id = static_cast<uint16_t>(frame.can_id) & CAN_SFF_MASK;
+  const uint8_t dlc = static_cast<uint8_t>(frame.can_dlc);
+
+  // Check that received message is valid for IMU
+  if (
+    (can_id < esp::can::IMU_ACCELERATION_DATA_XY_CAN_ID)
+    || (can_id > esp::can::IMU_QUATERNION_DATA_YZ_CAN_ID)
+    || (dlc != 8)
+  )
+  {
+    return;
+  }
+
+  // Reconstruct data frames
+  const uint32_t data_1 = (
+    (static_cast<uint32_t>(frame.data[0]) << 24) |
+    (static_cast<uint32_t>(frame.data[1]) << 16) |
+    (static_cast<uint32_t>(frame.data[2]) << 8) |
+    (static_cast<uint32_t>(frame.data[3]) << 0)
   );
+  const uint32_t data_2 = (
+    (static_cast<uint32_t>(frame.data[4]) << 24) |
+    (static_cast<uint32_t>(frame.data[5]) << 16) |
+    (static_cast<uint32_t>(frame.data[6]) << 8) |
+    (static_cast<uint32_t>(frame.data[7]) << 0)
+  );
+
+  float float_1;
+  float float_2;
+
+  std::memcpy(&float_1, &data_1, sizeof(float_1));
+  std::memcpy(&float_2, &data_2, sizeof(float_2));
+
+  switch (can_id)
+  {
+    case esp::can::IMU_ACCELERATION_DATA_XY_CAN_ID:
+      imu_msg_.linear_acceleration.x = float_1;
+      imu_msg_.linear_acceleration.y = float_2;
+
+      imu_data_flags_ |= 0b000001;
+      break;
+
+    case esp::can::IMU_ACCELERATION_DATA_Z_CAN_ID:
+      imu_msg_.linear_acceleration.z = float_1;
+
+      imu_data_flags_ |= 0b000010;
+      break;
+
+    case esp::can::IMU_GYROSCOPIC_DATA_XY_CAN_ID:
+      imu_msg_.angular_velocity.x = float_1;
+      imu_msg_.angular_velocity.y = float_2;
+
+      imu_data_flags_ |= 0b000100;
+      break;
+
+    case esp::can::IMU_GYROSCOPIC_DATA_Z_CAN_ID:
+      imu_msg_.angular_velocity.z = float_1;
+
+      imu_data_flags_ |= 0b001000;
+      break;
+
+    case esp::can::IMU_QUATERNION_DATA_WX_CAN_ID:
+      imu_msg_.orientation.w = float_1;
+      imu_msg_.orientation.x = float_2;
+
+      imu_data_flags_ |= 0b010000;
+      break;
+
+    case esp::can::IMU_QUATERNION_DATA_YZ_CAN_ID:
+      imu_msg_.orientation.y = float_1;
+      imu_msg_.orientation.z = float_2;
+
+      imu_data_flags_ |= 0b100000;
+      break;
+  }
+
+  // If the IMU data flags are all set, send off the IMU message
+  if (imu_data_flags_ == 0b111111)
+  {
+    send_imu_message();
+    imu_data_flags_ = 0;
+  }
+}
+
+void ImuInterface::send_imu_message()
+{
+  // Update timestamp on message header
+  imu_msg_.header.stamp = this->get_clock()->now();
+
+  // Publish message
+  imu_publisher_->publish(imu_msg_);
 }
 
 int main(int argc, char** argv)

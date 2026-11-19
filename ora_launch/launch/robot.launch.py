@@ -191,8 +191,7 @@ def generate_launch_description():
     arguments=[
       'diff_cont',
       '--controller-manager',
-      '/controller_manager',
-      '--inactive'
+      '/controller_manager'
     ],
   )
 
@@ -204,8 +203,7 @@ def generate_launch_description():
     arguments=[
       'joint_broad',
       '--controller-manager',
-      '/controller_manager',
-      '--inactive'
+      '/controller_manager'
     ],
   )
 

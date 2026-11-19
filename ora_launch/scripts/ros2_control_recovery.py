@@ -42,6 +42,11 @@ class Ros2ControlRecovery(Node):
       self.get_parameter('check_period_sec').value
     )
 
+    # Flags to only do recovery after components/controllers have been activated initially
+    self.initial_component_active = False
+    self.initial_controller_active = False
+    self.enable_recovery = False
+
     self.hw_future = None
     self.set_hw_future = None
     self.controller_future = None
@@ -78,7 +83,6 @@ class Ros2ControlRecovery(Node):
       for component in self.hw_future.result().component:
         if (component.name in self.hardware_components):
           self.current_component_state[component.name] = component.state.label
-          self.get_logger().info(f'{component.name} is in the \'{component.state.label}\' state.')
 
       self.hw_future = self.list_hw_comps.call_async(req)
 
@@ -92,47 +96,70 @@ class Ros2ControlRecovery(Node):
       for controller in self.controller_future.result().controller:
         if (controller.name in self.controllers):
           self.current_controller_state[controller.name] = controller.state
-          self.get_logger().info(f'{controller.name} is in the \'{controller.state}\' state.')
 
           self.controller_future = self.list_controllers.call_async(req)
 
-    # Activate hardware components
-    for component_name, state in self.current_component_state.items():
-      if state != 'active':
-        self.get_logger().info(f'{component_name} is currently in the \'{state}\' state. Attempting to activate.')
+    # Only enable recovery if the components have reached the initial active state from ros2_control
+    if not self.enable_recovery:
+      if not self.initial_component_active:
+        temp_active = True
 
-        if not self.set_hw_comp_state_cli.service_is_ready():
+        for name, state in self.current_component_state.items():
+          temp_active = (temp_active and (state == 'active'))
+
+        self.initial_component_active = temp_active
+
+      if not self.initial_controller_active:
+        temp_active = True
+
+        for name, state in self.current_controller_state.items():
+          temp_active = (temp_active and state == 'active')
+
+        self.initial_controller_active = temp_active
+
+      self.enable_recovery = (self.initial_component_active and self.initial_controller_active)
+
+      if self.enable_recovery:
+        self.get_logger().info(f'ros2_control initialized for the first time. Enabling recovery node.')
+
+    if self.enable_recovery:
+      # Activate hardware components
+      for component_name, state in self.current_component_state.items():
+        if state != 'active':
+          self.get_logger().info(f'{component_name} is currently in the \'{state}\' state. Attempting to activate.')
+
+          if not self.set_hw_comp_state_cli.service_is_ready():
+            self.get_logger().info('Service not available at this moment.')
+            return
+
+          req = SetHardwareComponentState.Request()
+          req.name = component_name
+          req.target_state = State(id=State.PRIMARY_STATE_ACTIVE, label='active')
+
+          if self.set_hw_future == None or self.set_hw_future.done():
+            self.set_hw_future = self.set_hw_comp_state_cli.call_async(req)
+
+      inactive_controllers = []
+
+      # Check for controllers that aren't activated
+      for controller_name, state in self.current_controller_state.items():
+        if state != 'active':
+          inactive_controllers.append(controller_name)
+
+      # Activate inactive controllers if hardware components are active
+      if inactive_controllers:
+        self.get_logger().info(f'Attempting to activate inactive controllers.')
+
+        if not self.switch_controller_cli.wait_for_service(timeout_sec=2.5):
           self.get_logger().info('Service not available at this moment.')
           return
 
-        req = SetHardwareComponentState.Request()
-        req.name = component_name
-        req.target_state = State(id=State.PRIMARY_STATE_ACTIVE, label='active')
+        req = SwitchController.Request()
+        req.activate_controllers = inactive_controllers
+        req.strictness = SwitchController.Request.STRICT
 
-        if self.set_hw_future == None or self.set_hw_future.done():
-          self.set_hw_future = self.set_hw_comp_state_cli.call_async(req)
-
-    inactive_controllers = []
-
-    # Check for controllers that aren't activated
-    for controller_name, state in self.current_controller_state.items():
-      if state != 'active':
-        inactive_controllers.append(controller_name)
-
-    # Activate inactive controllers if hardware components are active
-    if inactive_controllers:
-      self.get_logger().info(f'Attempting to activate inactive controllers.')
-
-      if not self.switch_controller_cli.wait_for_service(timeout_sec=2.5):
-        self.get_logger().info('Service not available at this moment.')
-        return
-
-      req = SwitchController.Request()
-      req.activate_controllers = inactive_controllers
-      req.strictness = SwitchController.Request.STRICT
-
-      if self.set_controller_future == None or self.set_controller_future.done():
-        self.set_controller_future = self.switch_controller_cli.call_async(req)
+        if self.set_controller_future == None or self.set_controller_future.done():
+          self.set_controller_future = self.switch_controller_cli.call_async(req)
 
 def main():
   rclpy.init()

@@ -56,7 +56,7 @@
   </xacro:if>
 
   <xacro:unless value="$(arg sim_mode)">
-    <ros2_control name="RealRobot" type="system">
+    <ros2_control name="RoboteqControllers" type="system">
       <hardware>
         <plugin>roboteq_ros2_control_plugin/RoboteqHardwareInterface</plugin>
         <param name="can">can0</param>

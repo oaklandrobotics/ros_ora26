@@ -224,6 +224,28 @@ def generate_launch_description():
     condition=UnlessCondition(use_sim_time)
   )
 
+  # ros2_control recovery
+  ros2_cont_recover_node = Node(
+    package='ora_launch',
+    executable='ros2_control_recovery.py',
+    name='ros2_control_recovery',
+    output='screen',
+    parameters=[
+      {
+        'hardware_components': [
+          'RoboteqControllers'
+        ],
+        'hardware_components_default_state': 'unconfigured',
+        'controllers': [
+          'diff_cont',
+          'joint_broad'
+        ],
+        'controllers_default_state': 'inactive',
+        'check_period_sec': 1.0
+      }
+    ]
+  )
+
   edge_detection_node = Node(
     package='ora_perception',
     executable='edge_detection',
@@ -339,6 +361,7 @@ def generate_launch_description():
     controller_manager,
     diff_drive_node,
     joint_broad_node,
+    ros2_cont_recover_node,
 
     # LiDAR
     lidar_launch,
